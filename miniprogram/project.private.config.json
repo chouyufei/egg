@@ -1,0 +1,7 @@
+{
+  "projectname": "dansuda-egg-auction",
+  "setting": {
+    "compileHotReLoad": true,
+    "urlCheck": false
+  }
+}

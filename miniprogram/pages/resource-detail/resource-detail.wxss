@@ -1,0 +1,24 @@
+.banner { width: 100%; height: 460rpx; }
+.banner-img { width: 100%; height: 460rpx; }
+
+.kv {
+  display: flex; justify-content: space-between;
+  padding: 14rpx 0; font-size: 28rpx;
+}
+
+.bid-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18rpx 0; border-bottom: 1px solid #f0f0f0;
+}
+.bid-row:last-child { border-bottom: none; }
+
+.bid-input {
+  flex: 1; background: #f5f6f8; border-radius: 999rpx;
+  padding: 14rpx 24rpx; font-size: 28rpx;
+}
+
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 1000; display: flex; align-items: center; justify-content: center;
+}
+.modal { background: #fff; border-radius: 24rpx; padding: 40rpx; width: 600rpx; }

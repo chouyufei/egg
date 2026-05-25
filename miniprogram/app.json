@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/auction/auction",
+    "pages/orders/orders",
+    "pages/me/me",
+    "pages/resource-detail/resource-detail",
+    "pages/order-detail/order-detail",
+    "pages/publish/publish",
+    "pages/qualify/qualify",
+    "pages/deposit/deposit",
+    "pages/messages/messages"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#f6b821",
+    "navigationBarTitleText": "蛋速达",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#8a8d93",
+    "selectedColor": "#f6b821",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/auction/auction", "text": "竞拍" },
+      { "pagePath": "pages/orders/orders", "text": "订单" },
+      { "pagePath": "pages/me/me", "text": "我的" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

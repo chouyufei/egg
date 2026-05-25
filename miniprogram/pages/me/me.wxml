@@ -1,0 +1,40 @@
+<view wx:if="{{ user }}">
+  <view class="hero">
+    <view class="row" style="gap: 24rpx;">
+      <view class="avatar">{{ user.role === 'farm' ? '🐔' : (user.role === 'buyer' ? '🛒' : '⚙️') }}</view>
+      <view class="flex-1">
+        <view class="hero-title">{{ user.name }}</view>
+        <view class="hero-sub">{{ roleText }} · {{ user.phone }}</view>
+        <view wx:if="{{ user.role === 'farm' }}" class="mt-8">
+          <text class="tag {{ licCls }}">{{ licText }}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card menu-card" style="margin: 32rpx 24rpx;">
+    <view wx:if="{{ user.role === 'farm' }}" class="menu-row" bindtap="goQualify">
+      <text>📜 资质认证</text><text class="muted">{{ licText }} ›</text>
+    </view>
+    <view class="menu-row" bindtap="goDeposit">
+      <text>{{ user.role === 'farm' ? '💰 品质保证金' : '🛡 竞拍保证金' }}</text>
+      <text class="muted">{{ depositText }} ›</text>
+    </view>
+    <view class="menu-row" bindtap="goMessages">
+      <text>📩 消息中心</text><text class="muted">{{ unread ? unread + ' 条未读 ›' : '›' }}</text>
+    </view>
+    <view class="menu-row" bindtap="goOrders">
+      <text>📦 我的订单</text><text class="muted">›</text>
+    </view>
+    <view class="menu-row" bindtap="goAuction">
+      <text>{{ user.role === 'farm' ? '🛍 我的资源' : '🔥 我的竞拍' }}</text>
+      <text class="muted">›</text>
+    </view>
+  </view>
+
+  <view class="card menu-card" style="margin: 24rpx 24rpx;">
+    <view class="menu-row" bindtap="logout">
+      <text>🚪 退出登录</text><text class="muted">›</text>
+    </view>
+  </view>
+</view>

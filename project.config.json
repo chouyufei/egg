@@ -1,0 +1,18 @@
+{
+  "miniprogramRoot": "miniprogram/",
+  "projectname": "dansuda-egg-auction",
+  "description": "蛋速达 · 鸡蛋竞拍撮合平台 微信小程序",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "bigPackageSizeSupport": true,
+    "compileHotReLoad": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.4.0",
+  "condition": {}
+}

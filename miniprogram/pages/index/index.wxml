@@ -1,0 +1,93 @@
+<view wx:if="{{ !user }}" class="empty">未登录，请重新打开应用</view>
+
+<!-- 采购商首页 -->
+<block wx:if="{{ user.role === 'buyer' }}">
+  <view class="hero">
+    <view class="row-between">
+      <view>
+        <view class="hero-title">🥚 蛋速达</view>
+        <view class="hero-sub">{{ user.name }} · 让你的蛋自己定价</view>
+      </view>
+      <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
+    </view>
+    <view class="search-wrap" bindtap="goSearch">🔍 搜地区 / 鸡种 / 蛋色</view>
+  </view>
+
+  <view class="quick-grid">
+    <view class="quick" bindtap="quickFilter" data-color="红壳">
+      <view class="quick-icon">🔴</view><view>红壳</view>
+    </view>
+    <view class="quick" bindtap="quickFilter" data-color="粉壳">
+      <view class="quick-icon">🤎</view><view>粉壳</view>
+    </view>
+    <view class="quick" bindtap="quickFilter" data-sort="ending_soon">
+      <view class="quick-icon">⏰</view><view>将结束</view>
+    </view>
+    <view class="quick" bindtap="quickFilter" data-sort="price_asc">
+      <view class="quick-icon">💰</view><view>低价好货</view>
+    </view>
+  </view>
+
+  <view class="section-title">即将结束</view>
+  <view class="page-pad">
+    <egg-card wx:for="{{ endingSoon }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+    <empty wx:if="{{ !endingSoon.length }}" icon="⏰" text="暂无即将结束的资源" />
+  </view>
+
+  <view class="section-title">新发布</view>
+  <view class="page-pad">
+    <egg-card wx:for="{{ newest }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+  </view>
+</block>
+
+<!-- 养殖场首页（工作台） -->
+<block wx:if="{{ user.role === 'farm' }}">
+  <view class="hero">
+    <view class="row-between">
+      <view>
+        <view class="hero-title">🐔 养殖场工作台</view>
+        <view class="hero-sub">{{ user.name }}</view>
+      </view>
+      <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
+    </view>
+  </view>
+
+  <view wx:if="{{ user.license_status !== 'approved' }}" class="card" style="margin: 32rpx 24rpx; border-left: 8rpx solid #f6b821;">
+    <view class="bold">⚠️ 完成资质认证</view>
+    <view class="muted mt-8">{{ qualifyHint }}</view>
+    <button class="btn mt-8" bindtap="goQualify">前往认证</button>
+  </view>
+  <view wx:elif="{{ !farmDeposit }}" class="card" style="margin: 32rpx 24rpx; border-left: 8rpx solid #f6b821;">
+    <view class="bold">💰 缴纳品质保证金</view>
+    <view class="muted mt-8">需缴纳 1000 元方可发布资源</view>
+    <button class="btn mt-8" bindtap="goDeposit">前往缴纳</button>
+  </view>
+
+  <view class="stat-grid">
+    <view class="stat-cell"><view class="stat-v">{{ stats.active }}</view><view class="stat-l">竞拍中</view></view>
+    <view class="stat-cell"><view class="stat-v">{{ stats.sold }}</view><view class="stat-l">已成交</view></view>
+    <view class="stat-cell"><view class="stat-v price">¥{{ stats.gmv }}</view><view class="stat-l">总成交额</view></view>
+  </view>
+
+  <view class="row-between" style="padding: 0 24rpx;">
+    <view class="section-title" style="margin: 0;">我的资源</view>
+    <button class="btn-plain" style="padding: 6rpx 24rpx;" bindtap="goPublish"
+            disabled="{{ user.license_status !== 'approved' || !farmDeposit }}">+ 发布</button>
+  </view>
+  <view class="page-pad">
+    <egg-card wx:for="{{ myResources }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+    <empty wx:if="{{ !myResources.length }}" icon="📭" text="还没有发布资源" />
+  </view>
+</block>
+
+<!-- 管理员提示 -->
+<block wx:if="{{ user.role === 'admin' }}">
+  <view class="page-pad">
+    <view class="card text-c" style="padding: 80rpx 32rpx;">
+      <view style="font-size: 80rpx;">⚙️</view>
+      <view class="bold mt-8">管理员请使用 Web 后台</view>
+      <view class="muted mt-8">在电脑上访问 http://localhost:5173/#/admin</view>
+      <button class="btn-plain mt-16" bindtap="logout">退出登录</button>
+    </view>
+  </view>
+</block>

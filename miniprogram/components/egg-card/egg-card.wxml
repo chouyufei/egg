@@ -1,0 +1,24 @@
+<view class="ec card" bindtap="tap">
+  <view class="ec-img-wrap">
+    <image class="ec-img" mode="aspectFill" src="{{ cover }}" />
+    <view class="ec-status {{ statusCls }}">{{ statusLabel }}</view>
+    <view wx:if="{{ r.status === 'auctioning' }}" class="ec-time">
+      <text>剩余 </text><countdown end-at="{{ r.end_at }}" />
+    </view>
+  </view>
+  <view class="ec-body">
+    <view class="bold ellipsis">{{ r.title }}</view>
+    <view class="mt-8">
+      <text wx:if="{{ r.egg_color }}" class="tag">{{ r.egg_color }}</text>
+      <text wx:if="{{ r.weight_spec }}" class="tag tag-b">{{ r.weight_spec }}</text>
+      <text wx:if="{{ r.region }}" class="tag tag-g">{{ r.region }}</text>
+    </view>
+    <view class="row-between mt-16">
+      <view>
+        <text class="price-l">¥{{ r.current_price }}</text>
+        <text class="muted" style="margin-left: 10rpx;">起 ¥{{ r.start_price }}</text>
+      </view>
+      <view class="muted">{{ r.bid_count || 0 }} 次出价</view>
+    </view>
+  </view>
+</view>

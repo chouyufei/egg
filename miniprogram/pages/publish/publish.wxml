@@ -1,0 +1,40 @@
+<view class="page-pad">
+  <view class="card">
+    <view class="input-row"><view class="label">标题</view><input model:value="{{ form.title }}" placeholder="如：青州散养土鸡蛋·1万枚" /></view>
+    <view class="input-row"><view class="label">地区</view><input model:value="{{ form.region }}" placeholder="如：山东青州" /></view>
+    <view class="input-row"><view class="label">鸡种</view><input model:value="{{ form.chicken_breed }}" placeholder="如：海兰褐 / 罗曼粉" /></view>
+    <view class="input-row"><view class="label">养殖规模</view><input type="number" model:value="{{ form.farm_size }}" placeholder="只" /></view>
+    <view class="input-row">
+      <view class="label">蛋色</view>
+      <radio-group bindchange="pickColor" style="display: flex; gap: 24rpx;">
+        <label><radio value="红壳" checked="{{ form.egg_color === '红壳' }}" />红壳</label>
+        <label><radio value="粉壳" checked="{{ form.egg_color === '粉壳' }}" />粉壳</label>
+        <label><radio value="杂色" checked="{{ form.egg_color === '杂色' }}" />杂色</label>
+      </radio-group>
+    </view>
+    <view class="input-row"><view class="label">规格</view><input model:value="{{ form.weight_spec }}" placeholder="如：55-65g/枚" /></view>
+    <view class="input-row"><view class="label">蛋壳质量</view><input model:value="{{ form.shell_quality }}" placeholder="如：硬壳-无裂纹" /></view>
+    <view class="input-row"><view class="label">鲜度</view><input type="number" model:value="{{ form.freshness_days }}" placeholder="x 天内" /></view>
+    <view class="input-row"><view class="label">数量(枚)</view><input type="number" model:value="{{ form.quantity }}" placeholder="如 10000" /></view>
+  </view>
+
+  <view class="card">
+    <view class="input-row"><view class="label">起拍价(¥)</view><input type="number" model:value="{{ form.start_price }}" placeholder="如 8500" /></view>
+    <view class="input-row"><view class="label">加价幅度</view><input type="number" model:value="{{ form.min_increment }}" placeholder="≥ 2" /></view>
+    <view class="input-row">
+      <view class="label">竞拍时长</view>
+      <radio-group bindchange="pickDur" style="display: flex; gap: 24rpx;">
+        <label><radio value="1" checked="{{ form.duration_hours == 1 }}" />1 小时</label>
+        <label><radio value="2" checked="{{ form.duration_hours == 2 }}" />2 小时</label>
+        <label><radio value="3" checked="{{ form.duration_hours == 3 }}" />3 小时</label>
+      </radio-group>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="input-row"><view class="label">描述</view><textarea model:value="{{ form.description }}" placeholder="饲养方式、检疫情况..." auto-height /></view>
+    <view class="input-row"><view class="label">图片 URL</view><textarea model:value="{{ photosText }}" placeholder="每行一个图片 URL（演示）" auto-height /></view>
+  </view>
+
+  <button class="btn mt-16" bindtap="submit" loading="{{ loading }}">立即发布</button>
+</view>

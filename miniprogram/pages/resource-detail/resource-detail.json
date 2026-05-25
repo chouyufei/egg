@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "资源详情",
+  "usingComponents": {
+    "countdown": "/components/countdown/countdown",
+    "empty": "/components/empty/empty"
+  }
+}

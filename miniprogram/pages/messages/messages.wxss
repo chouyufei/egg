@@ -1,0 +1,2 @@
+.msg-row { display: flex; gap: 20rpx; }
+.msg-icon { font-size: 48rpx; flex-shrink: 0; }

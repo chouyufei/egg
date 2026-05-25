@@ -1,0 +1,29 @@
+.kv { display: flex; justify-content: space-between; padding: 12rpx 0; font-size: 28rpx; }
+
+.chat-box {
+  height: 500rpx; background: #f5f6f8; border-radius: 16rpx;
+  padding: 16rpx; margin-top: 16rpx;
+}
+.chat-row { margin: 12rpx 0; }
+.chat-meta { color: #8a8d93; font-size: 22rpx; }
+.chat-bubble {
+  display: inline-block; max-width: 70%;
+  padding: 14rpx 20rpx; border-radius: 18rpx; background: #fff;
+  font-size: 28rpx;
+}
+.chat-row.mine { text-align: right; }
+.chat-row.mine .chat-bubble { background: #f6b821; color: #fff; }
+
+.bid-input {
+  flex: 1; background: #f5f6f8; border-radius: 999rpx;
+  padding: 14rpx 24rpx; font-size: 28rpx;
+}
+
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 1000; display: flex; align-items: center; justify-content: center;
+}
+.modal { background: #fff; border-radius: 24rpx; padding: 40rpx; width: 600rpx; }
+.input-row { display: flex; align-items: center; padding: 20rpx 0; border-bottom: 1px solid #f0f0f0; }
+.input-row .label { width: 140rpx; color: #555; font-size: 26rpx; }
+.input-row input, .input-row textarea { flex: 1; }

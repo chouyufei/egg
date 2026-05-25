@@ -1,0 +1,19 @@
+<view class="page-pad">
+  <view class="card">
+    <view class="row-between">
+      <text class="bold">当前状态</text>
+      <text class="tag {{ statusCls }}">{{ statusText }}</text>
+    </view>
+    <view class="muted mt-8" style="line-height: 1.7;">
+      平台审核养殖场营业执照等资质，审核通过后方可缴纳保证金、发布资源。
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="input-row"><view class="label">养殖场名称</view><input model:value="{{ form.name }}" placeholder="如：阳光散养鸡场" /></view>
+    <view class="input-row"><view class="label">所在地区</view><input model:value="{{ form.region }}" placeholder="如：山东青州" /></view>
+    <view class="input-row"><view class="label">营业执照</view><textarea model:value="{{ form.business_license }}" placeholder="请输入营业执照号或上传图片链接（演示）" auto-height /></view>
+  </view>
+
+  <button class="btn" bindtap="submit" loading="{{ loading }}">提交审核</button>
+</view>

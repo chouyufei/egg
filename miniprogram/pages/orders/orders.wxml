@@ -1,0 +1,20 @@
+<view class="page-pad">
+  <view wx:for="{{ orders }}" wx:key="id" class="card" bindtap="open" data-id="{{ item.id }}">
+    <view class="row-between">
+      <text class="bold">订单 #{{ item.id }}</text>
+      <text class="tag {{ item.statusCls }}">{{ item.statusText }}</text>
+    </view>
+    <view class="row mt-8" style="gap: 16rpx;">
+      <image class="thumb" src="{{ item.cover }}" mode="aspectFill" />
+      <view class="flex-1">
+        <view class="ellipsis">{{ item.resource.title }}</view>
+        <view class="muted">{{ otherLabel }}：{{ item.otherName }}</view>
+        <view class="row-between mt-8">
+          <text class="price">¥{{ item.final_price }}</text>
+          <text class="muted">{{ item.timeText }}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <empty wx:if="{{ !orders.length }}" icon="📦" text="暂无订单" />
+</view>

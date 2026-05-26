@@ -1,85 +1,5 @@
 <view wx:if="{{ !user }}" class="empty">未登录，请重新打开应用</view>
 
-<!-- 采购商首页 -->
-<block wx:if="{{ user.role === 'buyer' }}">
-  <view class="hero">
-    <view class="row-between">
-      <view>
-        <view class="hero-title">🥚 蛋速达</view>
-        <view class="hero-sub">{{ user.name }} · 让你的蛋自己定价</view>
-      </view>
-      <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
-    </view>
-    <view class="search-wrap" bindtap="goSearch">🔍 搜地区 / 鸡种 / 蛋色</view>
-  </view>
-
-  <view class="quick-grid">
-    <view class="quick" bindtap="quickFilter" data-color="红壳">
-      <view class="quick-icon">🔴</view><view>红壳</view>
-    </view>
-    <view class="quick" bindtap="quickFilter" data-color="粉壳">
-      <view class="quick-icon">🤎</view><view>粉壳</view>
-    </view>
-    <view class="quick" bindtap="quickFilter" data-sort="ending_soon">
-      <view class="quick-icon">⏰</view><view>将结束</view>
-    </view>
-    <view class="quick" bindtap="quickFilter" data-sort="price_asc">
-      <view class="quick-icon">💰</view><view>低价好货</view>
-    </view>
-  </view>
-
-  <view class="section-title">即将结束</view>
-  <view class="page-pad">
-    <egg-card wx:for="{{ endingSoon }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
-    <empty wx:if="{{ !endingSoon.length }}" icon="⏰" text="暂无即将结束的资源" />
-  </view>
-
-  <view class="section-title">新发布</view>
-  <view class="page-pad">
-    <egg-card wx:for="{{ newest }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
-  </view>
-</block>
-
-<!-- 养殖场首页（工作台） -->
-<block wx:if="{{ user.role === 'farm' }}">
-  <view class="hero">
-    <view class="row-between">
-      <view>
-        <view class="hero-title">🐔 养殖场工作台</view>
-        <view class="hero-sub">{{ user.name }}</view>
-      </view>
-      <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
-    </view>
-  </view>
-
-  <view wx:if="{{ user.license_status !== 'approved' }}" class="card" style="margin: 32rpx 24rpx; border-left: 8rpx solid #f6b821;">
-    <view class="bold">⚠️ 完成资质认证</view>
-    <view class="muted mt-8">{{ qualifyHint }}</view>
-    <button class="btn mt-8" bindtap="goQualify">前往认证</button>
-  </view>
-  <view wx:elif="{{ !farmDeposit }}" class="card" style="margin: 32rpx 24rpx; border-left: 8rpx solid #f6b821;">
-    <view class="bold">💰 缴纳品质保证金</view>
-    <view class="muted mt-8">需缴纳 1000 元方可发布资源</view>
-    <button class="btn mt-8" bindtap="goDeposit">前往缴纳</button>
-  </view>
-
-  <view class="stat-grid">
-    <view class="stat-cell"><view class="stat-v">{{ stats.active }}</view><view class="stat-l">竞拍中</view></view>
-    <view class="stat-cell"><view class="stat-v">{{ stats.sold }}</view><view class="stat-l">已成交</view></view>
-    <view class="stat-cell"><view class="stat-v price">¥{{ stats.gmv }}</view><view class="stat-l">总成交额</view></view>
-  </view>
-
-  <view class="row-between" style="padding: 0 24rpx;">
-    <view class="section-title" style="margin: 0;">我的资源</view>
-    <button class="btn-plain" style="padding: 6rpx 24rpx;" bindtap="goPublish"
-            disabled="{{ user.license_status !== 'approved' || !farmDeposit }}">+ 发布</button>
-  </view>
-  <view class="page-pad">
-    <egg-card wx:for="{{ myResources }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
-    <empty wx:if="{{ !myResources.length }}" icon="📭" text="还没有发布资源" />
-  </view>
-</block>
-
 <!-- 管理员提示 -->
 <block wx:if="{{ user.role === 'admin' }}">
   <view class="page-pad">
@@ -89,5 +9,71 @@
       <view class="muted mt-8">在电脑上访问 http://localhost:5173/#/admin</view>
       <button class="btn-plain mt-16" bindtap="logout">退出登录</button>
     </view>
+  </view>
+</block>
+
+<!-- 卖蛋方 + 买蛋方 共享同一个布局，listKind 控制看到什么 -->
+<block wx:if="{{ user.role === 'farm' || user.role === 'buyer' }}">
+  <view class="hero">
+    <view class="row-between">
+      <view>
+        <view class="hero-title">🥚 蛋速达</view>
+        <view class="hero-sub">{{ user.name }} · {{ user.role === 'farm' ? '我要卖蛋' : '我要买蛋' }}</view>
+      </view>
+      <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
+    </view>
+    <view class="hero-tip">{{ tipText }}</view>
+    <view class="search-wrap" bindtap="goSearch">🔍 搜地区 / 鸡种 / 蛋色</view>
+  </view>
+
+  <!-- 资质/保证金引导 -->
+  <view wx:if="{{ guideText }}" class="card guide-card">
+    <view class="row-between">
+      <view class="flex-1">
+        <view class="bold">{{ guideTitle }}</view>
+        <view class="muted mt-8">{{ guideText }}</view>
+      </view>
+      <button class="btn-plain" style="padding: 6rpx 24rpx;" bindtap="guideAction">{{ guideAction }}</button>
+    </view>
+  </view>
+
+  <!-- 蛋品类目 banner -->
+  <view class="section-title">蛋品类目</view>
+  <scroll-view scroll-x class="cat-scroll">
+    <view class="cat-chip {{ activeColor === item.value ? 'on' : '' }}" wx:for="{{ categories }}" wx:key="value"
+          bindtap="pickColor" data-v="{{ item.value }}">
+      <view class="cat-icon">{{ item.icon }}</view>
+      <view class="cat-label">{{ item.label }}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 区域 banner -->
+  <view class="section-title">区域分类</view>
+  <scroll-view scroll-x class="prov-scroll">
+    <view class="prov-chip {{ activeProvince === '' ? 'on' : '' }}" bindtap="pickProvince" data-v="">📍 推荐</view>
+    <view class="prov-chip {{ activeProvince === item ? 'on' : '' }}" wx:for="{{ provinces }}" wx:key="*this"
+          bindtap="pickProvince" data-v="{{ item }}">{{ item }}</view>
+  </scroll-view>
+
+  <!-- 我看到的（对方发布的） + 我发布的 切换 -->
+  <view class="kind-tabs">
+    <view class="kind-tab {{ viewTab === 'others' ? 'on' : '' }}" bindtap="setViewTab" data-t="others">
+      {{ user.role === 'farm' ? '采购需求' : '货源' }} ({{ othersCount }})
+    </view>
+    <view class="kind-tab {{ viewTab === 'mine' ? 'on' : '' }}" bindtap="setViewTab" data-t="mine">
+      我的{{ user.role === 'farm' ? '货源' : '求购' }} ({{ mine.length }})
+    </view>
+    <view class="kind-tab-pub" bindtap="goPublish">+ 发布</view>
+  </view>
+
+  <view class="page-pad">
+    <block wx:if="{{ viewTab === 'others' }}">
+      <egg-card wx:for="{{ others }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+      <empty wx:if="{{ !others.length }}" icon="📭" text="{{ user.role === 'farm' ? '当前没有采购需求' : '当前没有货源' }}" />
+    </block>
+    <block wx:else>
+      <egg-card wx:for="{{ mine }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+      <empty wx:if="{{ !mine.length }}" icon="📭" text="您还没发布过{{ user.role === 'farm' ? '货源' : '求购' }}" />
+    </block>
   </view>
 </block>

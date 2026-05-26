@@ -5,29 +5,68 @@
   padding: 2rpx 10rpx; border-radius: 16rpx; font-size: 20rpx;
 }
 
+.hero-tip {
+  margin-top: 16rpx; background: rgba(255,255,255,0.18);
+  padding: 12rpx 20rpx; border-radius: 12rpx;
+  color: #fff; font-size: 24rpx;
+}
+
 .search-wrap {
-  margin-top: 24rpx; background: rgba(255,255,255,0.85);
+  margin-top: 16rpx; background: rgba(255,255,255,0.85);
   padding: 16rpx 24rpx; border-radius: 999rpx;
   color: #8a8d93; font-size: 26rpx;
 }
 
-.quick-grid {
-  display: flex; gap: 16rpx;
-  padding: 32rpx 24rpx 0;
-  position: relative; z-index: 2;
+.guide-card {
+  margin: 32rpx 24rpx 0;
+  border-left: 8rpx solid #f6b821;
 }
-.quick {
-  flex: 1; background: #fff; border-radius: 16rpx;
-  padding: 20rpx 0; text-align: center;
-  font-size: 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
-}
-.quick-icon { font-size: 40rpx; margin-bottom: 4rpx; }
 
-.stat-grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16rpx;
-  padding: 24rpx;
+.cat-scroll {
+  white-space: nowrap;
+  padding: 0 24rpx 16rpx;
 }
-.stat-cell { background: #fff; border-radius: 16rpx; padding: 24rpx 12rpx; text-align: center; }
-.stat-v { font-size: 36rpx; font-weight: 700; }
-.stat-l { font-size: 22rpx; color: #8a8d93; margin-top: 4rpx; }
+.cat-chip {
+  display: inline-block; text-align: center;
+  margin-right: 20rpx; padding: 14rpx 8rpx;
+  width: 110rpx; background: #fff; border-radius: 16rpx;
+  vertical-align: top;
+}
+.cat-chip.on { background: #fff7e0; border: 2rpx solid #f6b821; }
+.cat-icon { font-size: 36rpx; }
+.cat-label { font-size: 22rpx; color: #555; margin-top: 4rpx; }
+
+.prov-scroll {
+  white-space: nowrap;
+  padding: 0 24rpx 16rpx;
+}
+.prov-chip {
+  display: inline-block;
+  padding: 10rpx 24rpx; margin-right: 16rpx;
+  background: #fff; border-radius: 999rpx;
+  font-size: 24rpx; color: #555;
+}
+.prov-chip.on { background: #f6b821; color: #fff; font-weight: 600; }
+
+.kind-tabs {
+  display: flex; background: #fff;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+  margin-top: 16rpx;
+}
+.kind-tab {
+  padding: 24rpx 28rpx; font-size: 28rpx; color: #8a8d93;
+  position: relative;
+}
+.kind-tab.on { color: #1d1d1f; font-weight: 700; }
+.kind-tab.on::after {
+  content: ''; position: absolute; bottom: 6rpx; left: 28rpx; right: 28rpx;
+  height: 6rpx; background: #f6b821; border-radius: 3rpx;
+}
+.kind-tab-pub {
+  margin-left: auto; margin-right: 24rpx;
+  background: #f6b821; color: #fff;
+  padding: 10rpx 24rpx; border-radius: 999rpx;
+  font-size: 24rpx; font-weight: 600;
+}

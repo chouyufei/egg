@@ -1,6 +1,7 @@
 <view class="ec card" bindtap="tap">
   <view class="ec-img-wrap">
     <image class="ec-img" mode="aspectFill" src="{{ cover }}" />
+    <view class="ec-kind {{ kindCls }}">{{ kindLabel }}</view>
     <view class="ec-status {{ statusCls }}">{{ statusLabel }}</view>
     <view wx:if="{{ r.status === 'auctioning' }}" class="ec-time">
       <text>剩余 </text><countdown end-at="{{ r.end_at }}" />
@@ -16,9 +17,9 @@
     <view class="row-between mt-16">
       <view>
         <text class="price-l">¥{{ r.current_price }}</text>
-        <text class="muted" style="margin-left: 10rpx;">起 ¥{{ r.start_price }}</text>
+        <text class="muted" style="margin-left: 8rpx;">{{ r.unit_label || '元/箱' }}</text>
       </view>
-      <view class="muted">{{ r.bid_count || 0 }} 次出价</view>
+      <view class="muted">{{ priceHint }} · {{ r.bid_count || 0 }} 次{{ kindBidLabel }}</view>
     </view>
   </view>
 </view>

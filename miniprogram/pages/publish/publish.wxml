@@ -1,9 +1,24 @@
 <view class="page-pad">
+  <view class="card kind-banner {{ isSupply ? '' : 'demand' }}">
+    <view class="kind-icon">{{ isSupply ? '🐔' : '🛒' }}</view>
+    <view>
+      <view class="bold" style="font-size: 32rpx;">{{ isSupply ? '发布货源' : '发布求购需求' }}</view>
+      <view class="muted mt-8" style="font-size: 24rpx;">
+        {{ isSupply ? '采购商竞价出价，价高者得' : '养殖场报价应标，价低者得（反向竞拍）' }}
+      </view>
+    </view>
+  </view>
+
   <view class="card">
-    <view class="input-row"><view class="label">标题</view><input model:value="{{ form.title }}" placeholder="如：青州散养土鸡蛋·1万枚" /></view>
-    <view class="input-row"><view class="label">地区</view><input model:value="{{ form.region }}" placeholder="如：山东青州" /></view>
-    <view class="input-row"><view class="label">鸡种</view><input model:value="{{ form.chicken_breed }}" placeholder="如：海兰褐 / 罗曼粉" /></view>
-    <view class="input-row"><view class="label">养殖规模</view><input type="number" model:value="{{ form.farm_size }}" placeholder="只" /></view>
+    <view class="input-row"><view class="label">标题</view><input model:value="{{ form.title }}" placeholder="{{ isSupply ? '如：青州散养土鸡蛋·30 箱' : '如：求购红壳鸡蛋 20 箱·北京自提' }}" /></view>
+    <view class="input-row"><view class="label">省份</view>
+      <picker bindchange="pickProvince" value="{{ provinceIndex }}" range="{{ provinces }}">
+        <view class="picker-val">{{ provinces[provinceIndex] }} ▾</view>
+      </picker>
+    </view>
+    <view class="input-row"><view class="label">具体地区</view><input model:value="{{ form.region }}" placeholder="如：山东青州 / 河南信阳" /></view>
+    <view class="input-row"><view class="label">鸡种</view><input model:value="{{ form.chicken_breed }}" placeholder="如：海兰褐 / 罗曼粉 / 笨鸡" /></view>
+    <view wx:if="{{ isSupply }}" class="input-row"><view class="label">养殖规模</view><input type="number" model:value="{{ form.farm_size }}" placeholder="只" /></view>
     <view class="input-row">
       <view class="label">蛋色</view>
       <radio-group bindchange="pickColor" style="display: flex; gap: 24rpx;">
@@ -13,14 +28,22 @@
       </radio-group>
     </view>
     <view class="input-row"><view class="label">规格</view><input model:value="{{ form.weight_spec }}" placeholder="如：55-65g/枚" /></view>
-    <view class="input-row"><view class="label">蛋壳质量</view><input model:value="{{ form.shell_quality }}" placeholder="如：硬壳-无裂纹" /></view>
-    <view class="input-row"><view class="label">鲜度</view><input type="number" model:value="{{ form.freshness_days }}" placeholder="x 天内" /></view>
-    <view class="input-row"><view class="label">数量(枚)</view><input type="number" model:value="{{ form.quantity }}" placeholder="如 10000" /></view>
+    <view wx:if="{{ isSupply }}" class="input-row"><view class="label">蛋壳质量</view><input model:value="{{ form.shell_quality }}" placeholder="如：硬壳-无裂纹" /></view>
+    <view wx:if="{{ isSupply }}" class="input-row"><view class="label">鲜度</view><input type="number" model:value="{{ form.freshness_days }}" placeholder="x 天内" /></view>
+    <view class="input-row"><view class="label">数量(箱)</view><input type="number" model:value="{{ form.quantity }}" placeholder="如 20" /></view>
   </view>
 
   <view class="card">
-    <view class="input-row"><view class="label">起拍价(¥)</view><input type="number" model:value="{{ form.start_price }}" placeholder="如 8500" /></view>
-    <view class="input-row"><view class="label">加价幅度</view><input type="number" model:value="{{ form.min_increment }}" placeholder="≥ 2" /></view>
+    <view class="input-row">
+      <view class="label">{{ isSupply ? '起拍价' : '心理价上限' }}</view>
+      <input type="digit" model:value="{{ form.start_price }}" placeholder="{{ isSupply ? '如 85' : '如 95' }}" />
+      <view class="muted" style="margin-left: 8rpx;">元/箱</view>
+    </view>
+    <view class="input-row">
+      <view class="label">{{ isSupply ? '加价幅度' : '降价幅度' }}</view>
+      <input type="digit" model:value="{{ form.min_increment }}" placeholder="≥ 2" />
+      <view class="muted" style="margin-left: 8rpx;">元/箱</view>
+    </view>
     <view class="input-row">
       <view class="label">竞拍时长</view>
       <radio-group bindchange="pickDur" style="display: flex; gap: 24rpx;">
@@ -32,9 +55,12 @@
   </view>
 
   <view class="card">
-    <view class="input-row"><view class="label">描述</view><textarea model:value="{{ form.description }}" placeholder="饲养方式、检疫情况..." auto-height /></view>
+    <view class="input-row"><view class="label">描述</view><textarea model:value="{{ form.description }}" placeholder="{{ isSupply ? '饲养方式、检疫情况、发货时效...' : '需求详情、自提/送货、付款方式...' }}" auto-height /></view>
     <view class="input-row"><view class="label">图片 URL</view><textarea model:value="{{ photosText }}" placeholder="每行一个图片 URL（演示）" auto-height /></view>
   </view>
 
-  <button class="btn mt-16" bindtap="submit" loading="{{ loading }}">立即发布</button>
+  <button class="btn mt-16" bindtap="submit" loading="{{ loading }}">
+    立即发布{{ isSupply ? '货源' : '求购' }}
+  </button>
+  <view class="muted text-c mt-8">发布需缴纳 {{ isSupply ? '1000 元品质' : '200 元采购' }}保证金</view>
 </view>

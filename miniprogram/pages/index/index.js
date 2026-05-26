@@ -1,81 +1,103 @@
 const api = require('../../utils/api');
 const app = getApp();
 
-const QUALIFY_HINT = {
-  pending: '资质审核中，平台一般 1 个工作日内处理',
-  rejected: '资质未通过，请重新提交',
-  none: '请先提交营业执照等资质',
-};
+const CATEGORIES = [
+  { value: '', icon: '🥚', label: '全部' },
+  { value: '红壳', icon: '🔴', label: '红壳' },
+  { value: '粉壳', icon: '🤎', label: '粉壳' },
+  { value: '杂色', icon: '🟡', label: '土鸡蛋' },
+];
+
+const PROVINCES_DEFAULT = ['北京', '山东', '河南', '河北', '江苏', '上海', '广东'];
+
+function inferNearbyProvinces(userRegion) {
+  if (!userRegion) return PROVINCES_DEFAULT;
+  const regionToNeighbors = {
+    '山东': ['山东', '河北', '河南', '江苏', '北京', '天津'],
+    '北京': ['北京', '天津', '河北', '山东', '河南'],
+    '河南': ['河南', '湖北', '山东', '河北', '安徽'],
+    '河北': ['河北', '北京', '山东', '天津', '山西'],
+    '上海': ['上海', '江苏', '浙江', '安徽'],
+    '广东': ['广东', '广西', '湖南', '江西', '福建'],
+    '湖北': ['湖北', '河南', '湖南', '安徽', '江西'],
+  };
+  for (const k of Object.keys(regionToNeighbors)) {
+    if (userRegion.indexOf(k) >= 0) return regionToNeighbors[k];
+  }
+  return PROVINCES_DEFAULT;
+}
 
 Page({
   data: {
     user: null,
     unread: 0,
-    endingSoon: [],
-    newest: [],
-    myResources: [],
-    stats: { active: 0, sold: 0, gmv: 0 },
-    farmDeposit: false,
-    qualifyHint: '',
+    categories: CATEGORIES, activeColor: '',
+    provinces: PROVINCES_DEFAULT, activeProvince: '',
+    viewTab: 'others',
+    others: [], mine: [],
+    othersCount: 0,
+    tipText: '',
+    guideTitle: '', guideText: '', guideAction: '',
+    _guideRoute: '',
   },
   onLoad() {
     const user = app.globalData.user || wx.getStorageSync('user');
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
-    this.setData({ user });
+    this.setData({
+      user,
+      provinces: inferNearbyProvinces(user.region),
+      tipText: user.role === 'farm'
+        ? '默认查看采购需求 → 您可应标，也可点「发布」上架自己的货源'
+        : '默认浏览货源 → 您可竞拍，也可点「发布」发布自己的采购需求',
+    });
   },
   async onShow() {
     if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
     await this.refresh();
   },
-  async onPullDownRefresh() { await this.refresh(); wx.stopPullDownRefresh(); },
   async refresh() {
     try {
       const me = await api.get('/auth/me');
       app.setAuth(app.globalData.token, me.user);
-      this.setData({ user: me.user, qualifyHint: QUALIFY_HINT[me.user.license_status] || '' });
+      this.setData({ user: me.user });
+      this.computeGuide(me.user);
     } catch (e) {}
     try { const m = await api.get('/messages/unread-count'); this.setData({ unread: m.count || 0 }); } catch (e) {}
-    if (this.data.user.role === 'buyer') await this.loadBuyer();
-    if (this.data.user.role === 'farm') await this.loadFarm();
+    await this.load();
   },
-  async loadBuyer() {
-    const { resources } = await api.get('/resources', { status: 'auctioning' });
-    const active = resources.filter(r => r.status === 'auctioning');
-    const endingSoon = [...active].sort((a, b) => a.end_at - b.end_at).slice(0, 3);
-    const newest = [...active].sort((a, b) => b.created_at - a.created_at).slice(0, 6);
-    this.setData({ endingSoon, newest });
-  },
-  async loadFarm() {
-    const { resources } = await api.get('/resources/mine');
-    let active = 0, sold = 0, gmv = 0;
-    for (const r of resources) {
-      if (r.status === 'auctioning') active++;
-      if (r.status === 'sold') { sold++; gmv += r.current_price; }
+  computeGuide(user) {
+    const ds = app.globalData.deposit || {};
+    let title = '', text = '', action = '', route = '';
+    if (user.role === 'farm') {
+      if (user.license_status !== 'approved') {
+        title = '⚠️ 完成资质认证';
+        text = '认证通过后才可发布货源';
+        action = '去认证'; route = '/pages/qualify/qualify';
+      }
     }
-    this.setData({
-      myResources: resources.slice(0, 6),
-      stats: { active, sold, gmv: gmv.toFixed(0) },
-    });
+    this.setData({ guideTitle: title, guideText: text, guideAction: action, _guideRoute: route });
+  },
+  async load() {
+    const params = { status: 'auctioning' };
+    if (this.data.activeColor) params.color = this.data.activeColor;
+    if (this.data.activeProvince) params.province = this.data.activeProvince;
+    params.kind = this.data.user.role === 'farm' ? 'demand' : 'supply';
     try {
-      const ds = await api.get('/deposits/status');
-      this.setData({ farmDeposit: !!ds.farm.paid });
+      const { resources } = await api.get('/resources', params);
+      this.setData({ others: resources, othersCount: resources.length });
+    } catch (e) {}
+    try {
+      const { resources } = await api.get('/resources/mine');
+      this.setData({ mine: resources });
     } catch (e) {}
   },
-  openRes(e) {
-    wx.navigateTo({ url: '/pages/resource-detail/resource-detail?id=' + e.currentTarget.dataset.id });
-  },
+  pickColor(e) { this.setData({ activeColor: e.currentTarget.dataset.v }, () => this.load()); },
+  pickProvince(e) { this.setData({ activeProvince: e.currentTarget.dataset.v }, () => this.load()); },
+  setViewTab(e) { this.setData({ viewTab: e.currentTarget.dataset.t }); },
+  openRes(e) { wx.navigateTo({ url: '/pages/resource-detail/resource-detail?id=' + e.currentTarget.dataset.id }); },
   goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
-  goQualify() { wx.navigateTo({ url: '/pages/qualify/qualify' }); },
-  goDeposit() { wx.navigateTo({ url: '/pages/deposit/deposit' }); },
-  goPublish() { wx.navigateTo({ url: '/pages/publish/publish' }); },
   goSearch() { wx.switchTab({ url: '/pages/auction/auction' }); },
-  quickFilter(e) {
-    const ds = e.currentTarget.dataset;
-    const q = {};
-    if (ds.color) q.color = ds.color;
-    if (ds.sort) q.sort = ds.sort;
-    wx.setStorageSync('filterPreset', q);
-    wx.switchTab({ url: '/pages/auction/auction' });
-  },
+  goPublish() { wx.navigateTo({ url: '/pages/publish/publish' }); },
+  guideAction() { if (this.data._guideRoute) wx.navigateTo({ url: this.data._guideRoute }); },
   logout() { app.logout(); },
 });

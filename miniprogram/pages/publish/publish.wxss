@@ -1,0 +1,9 @@
+.kind-banner {
+  display: flex; align-items: center; gap: 20rpx;
+  background: linear-gradient(135deg, #fff7e0 0%, #ffe9a8 100%);
+}
+.kind-banner.demand {
+  background: linear-gradient(135deg, #e6f0ff 0%, #c5d9ff 100%);
+}
+.kind-icon { font-size: 64rpx; }
+.picker-val { font-size: 28rpx; color: #1d1d1f; }

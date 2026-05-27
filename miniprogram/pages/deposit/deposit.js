@@ -3,12 +3,13 @@ const { formatTime, statusLabel, statusTag } = require('../../utils/format');
 const app = getApp();
 
 Page({
-  data: { isFarm: false, paid: false, approved: false, history: [], paying: false },
+  data: { isFarm: false, paid: false, approved: false, history: [], paying: false, payMode: 'demo' },
   async onShow() {
     const u = app.globalData.user;
     if (!u) return;
     const isFarm = u.role === 'farm';
     this.setData({ isFarm, approved: u.license_status === 'approved' });
+    try { const m = await api.get('/pay/mode'); this.setData({ payMode: m.mode }); } catch (e) {}
     await this.load();
   },
   async load() {
@@ -34,9 +35,30 @@ Page({
     this.setData({ paying: true });
     try {
       const type = this.data.isFarm ? 'farm_quality' : 'buyer_bid';
-      await api.post('/deposits/pay', { type });
-      wx.showToast({ title: '保证金已缴纳' });
+      const res = await api.post('/pay/create-order', { type });
+      if (res.paid) { wx.showToast({ title: '已缴纳' }); return await this.load(); }
+      if (res.demo) {
+        wx.showToast({ title: '已缴纳保证金（演示模式）', icon: 'success' });
+        return await this.load();
+      }
+      // 真实微信支付：res 应该返回 { timeStamp, nonceStr, package, signType, paySign }
+      await new Promise((resolve, reject) => {
+        wx.requestPayment({
+          timeStamp: res.timeStamp,
+          nonceStr: res.nonceStr,
+          package: res.package,
+          signType: res.signType || 'RSA',
+          paySign: res.paySign,
+          success: resolve,
+          fail: reject,
+        });
+      });
+      wx.showToast({ title: '支付成功' });
       await this.load();
-    } catch (e) {} finally { this.setData({ paying: false }); }
+    } catch (e) {
+      if (e && e.errMsg && /cancel/.test(e.errMsg)) {
+        wx.showToast({ title: '已取消支付', icon: 'none' });
+      }
+    } finally { this.setData({ paying: false }); }
   },
 });

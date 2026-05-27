@@ -1,19 +1,123 @@
-<view class="page-pad">
+<view class="qf-page">
+  <!-- 营销 hero -->
+  <view class="qf-hero">
+    <view class="qf-hero-title">蛋速达·鸡场直通车</view>
+    <view class="qf-hero-sub">同区域内首批仅开放 15 个名额 · 严选合作，额满即止</view>
+  </view>
+
+  <view class="qf-intro card">
+    <view class="bold" style="font-size: 30rpx;">尊敬的养殖场合作伙伴：</view>
+    <view class="mt-8" style="line-height: 1.8;">
+      <view>· 您是否希望稳定渠道，提升品牌溢价？</view>
+      <view>· 您是否愿意用品质说话，直接对话实力采购商？</view>
+    </view>
+    <view class="mt-16 muted" style="line-height: 1.8;">
+      平台为最优质的养殖场，精准对接采购客户。通过线上招采会，让您直接向采购商展示实力与产品，砍掉所有中间环节，实现源头直采、面对面直接谈。
+      <text class="brand-text">您卖得越好，我们才越好，和您同坐一条船。</text>
+    </view>
+  </view>
+
+  <view class="qf-feats card">
+    <view class="feat-row">
+      <view class="feat-icon">✅</view>
+      <view class="flex-1">
+        <view class="bold">精准匹配，只为高效成交</view>
+        <view class="muted mt-8">根据您的产能、蛋品特色，从买家库中精准筛选、定向邀请 5-10 家最对口的实力采购商。</view>
+      </view>
+    </view>
+    <view class="feat-row">
+      <view class="feat-icon">✅</view>
+      <view class="flex-1">
+        <view class="bold">专属策划，助您完美亮相</view>
+        <view class="muted mt-8">专属会议经理共同设计流程，打磨展示亮点，制定竞争力"平台标准上车价"。</view>
+      </view>
+    </view>
+    <view class="feat-row">
+      <view class="feat-icon">✅</view>
+      <view class="flex-1">
+        <view class="bold">C 位舞台，深度讲述您的故事</view>
+        <view class="muted mt-8">整场会议您是唯一焦点。30-45 分钟全程由您主导，直播带买家"亲临"现代化鸡场，零距离展示品控细节。</view>
+      </view>
+    </view>
+    <view class="feat-row">
+      <view class="feat-icon">✅</view>
+      <view class="flex-1">
+        <view class="bold">高效对接，杜绝无效社交</view>
+        <view class="muted mt-8">提前为您扫清障碍，到场买家均已知悉您的概况，直接进入实质性洽谈。</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 状态提示 -->
   <view class="card">
     <view class="row-between">
       <text class="bold">当前状态</text>
       <text class="tag {{ statusCls }}">{{ statusText }}</text>
     </view>
-    <view class="muted mt-8" style="line-height: 1.7;">
-      平台审核养殖场营业执照等资质，审核通过后方可缴纳保证金、发布资源。
+  </view>
+
+  <!-- 申请表 -->
+  <view class="qf-form-title">认证鸡场申请填写</view>
+
+  <view class="card">
+    <view class="input-row"><view class="label">鸡场名称 *</view><input model:value="{{ form.name }}" placeholder="如：阳光散养鸡场" /></view>
+    <view class="input-row"><view class="label">联系人 *</view><input model:value="{{ form.contact_name }}" placeholder="鸡场负责人姓名" /></view>
+    <view class="input-row"><view class="label">联系电话 *</view><input type="number" maxlength="11" model:value="{{ form.contact_phone }}" placeholder="登录手机号" /></view>
+    <view class="input-row"><view class="label">所在省份 *</view>
+      <picker bindchange="pickProvince" value="{{ provinceIndex }}" range="{{ provinces }}">
+        <view class="picker-val">{{ provinces[provinceIndex] }} ▾</view>
+      </picker>
     </view>
+    <view class="input-row"><view class="label">详细地址 *</view><input model:value="{{ form.address }}" placeholder="如：青州市某某镇某某村" /></view>
   </view>
 
   <view class="card">
-    <view class="input-row"><view class="label">养殖场名称</view><input model:value="{{ form.name }}" placeholder="如：阳光散养鸡场" /></view>
-    <view class="input-row"><view class="label">所在地区</view><input model:value="{{ form.region }}" placeholder="如：山东青州" /></view>
-    <view class="input-row"><view class="label">营业执照</view><textarea model:value="{{ form.business_license }}" placeholder="请输入营业执照号或上传图片链接（演示）" auto-height /></view>
+    <view class="input-row"><view class="label">养殖规模 *</view>
+      <input type="number" model:value="{{ form.farm_size_int }}" placeholder="存栏只数" /><text class="muted" style="margin-left: 8rpx;">只</text>
+    </view>
+    <view class="input-row"><view class="label">日产量</view>
+      <input type="number" model:value="{{ form.daily_output }}" placeholder="日产量" /><text class="muted" style="margin-left: 8rpx;">箱/天</text>
+    </view>
+    <view class="input-row"><view class="label">主营蛋品 *</view><input model:value="{{ form.main_products }}" placeholder="如：红壳·散养土鸡蛋、粉壳·谷物蛋" /></view>
+  </view>
+
+  <view class="card">
+    <view class="input-row"><view class="label">营业执照号 *</view><input model:value="{{ form.business_license }}" placeholder="统一社会信用代码" /></view>
+
+    <view class="upload-block">
+      <view class="upload-title">营业执照照片 *</view>
+      <view class="upload-grid">
+        <view wx:for="{{ form.license_photos }}" wx:key="*this" class="upload-thumb">
+          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.license_photos }}" data-url="{{ item }}" />
+          <view class="upload-del" catchtap="del" data-k="license_photos" data-i="{{ index }}">×</view>
+        </view>
+        <view wx:if="{{ form.license_photos.length < 2 }}" class="upload-add" bindtap="upload" data-k="license_photos" data-count="2">+</view>
+      </view>
+    </view>
+
+    <view class="upload-block">
+      <view class="upload-title">鸡场实景照（含养殖环境、饲料、检疫等）*</view>
+      <view class="upload-grid">
+        <view wx:for="{{ form.farm_photos }}" wx:key="*this" class="upload-thumb">
+          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.farm_photos }}" data-url="{{ item }}" />
+          <view class="upload-del" catchtap="del" data-k="farm_photos" data-i="{{ index }}">×</view>
+        </view>
+        <view wx:if="{{ form.farm_photos.length < 9 }}" class="upload-add" bindtap="upload" data-k="farm_photos" data-count="9">+</view>
+      </view>
+    </view>
+
+    <view class="upload-block">
+      <view class="upload-title">检疫合格证 / 其他资质（可选）</view>
+      <view class="upload-grid">
+        <view wx:for="{{ form.quarantine_photos }}" wx:key="*this" class="upload-thumb">
+          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.quarantine_photos }}" data-url="{{ item }}" />
+          <view class="upload-del" catchtap="del" data-k="quarantine_photos" data-i="{{ index }}">×</view>
+        </view>
+        <view wx:if="{{ form.quarantine_photos.length < 5 }}" class="upload-add" bindtap="upload" data-k="quarantine_photos" data-count="5">+</view>
+      </view>
+    </view>
   </view>
 
   <button class="btn" bindtap="submit" loading="{{ loading }}">提交审核</button>
+  <view class="muted text-c mt-8" style="margin-bottom: 32rpx;">审核周期 1-3 个工作日，结果以站内消息通知</view>
 </view>

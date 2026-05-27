@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const { chooseAndUpload } = require('../../utils/upload');
 const app = getApp();
 
 const PROVINCES = ['北京', '天津', '河北', '山西', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽',
@@ -15,7 +16,7 @@ Page({
       freshness_days: 3, quantity: '', start_price: '',
       min_increment: 2, duration_hours: 2, description: '',
     },
-    photosText: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=800',
+    photos: [],
     loading: false,
   },
   onLoad() {
@@ -23,10 +24,8 @@ Page({
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
     const isSupply = user.role === 'farm';
     let idx = 0;
-    if (user.region) {
-      for (let i = 0; i < PROVINCES.length; i++) {
-        if (user.region.indexOf(PROVINCES[i]) >= 0) { idx = i; break; }
-      }
+    if (user.region) for (let i = 0; i < PROVINCES.length; i++) {
+      if (user.region.indexOf(PROVINCES[i]) >= 0) { idx = i; break; }
     }
     this.setData({
       isSupply,
@@ -38,10 +37,28 @@ Page({
   pickColor(e) { this.setData({ 'form.egg_color': e.detail.value }); },
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
+
+  async addPhoto() {
+    const remain = 9 - this.data.photos.length;
+    if (remain <= 0) return;
+    try {
+      const urls = await chooseAndUpload({ count: remain });
+      if (urls.length) this.setData({ photos: this.data.photos.concat(urls) });
+    } catch (e) {}
+  },
+  delPhoto(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const arr = this.data.photos.slice();
+    arr.splice(i, 1);
+    this.setData({ photos: arr });
+  },
+  preview(e) {
+    wx.previewImage({ current: e.currentTarget.dataset.url, urls: this.data.photos });
+  },
+
   async submit() {
     this.setData({ loading: true });
     try {
-      const photos = (this.data.photosText || '').split('\n').map(s => s.trim()).filter(Boolean);
       const f = this.data.form;
       const payload = {
         ...f,
@@ -54,7 +71,7 @@ Page({
         min_increment: Number(f.min_increment),
         duration_hours: Number(f.duration_hours),
         unit_label: '元/箱',
-        photos,
+        photos: this.data.photos,
       };
       await api.post('/resources', payload);
       wx.showToast({ title: '发布成功' });

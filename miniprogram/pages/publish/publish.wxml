@@ -56,7 +56,17 @@
 
   <view class="card">
     <view class="input-row"><view class="label">描述</view><textarea model:value="{{ form.description }}" placeholder="{{ isSupply ? '饲养方式、检疫情况、发货时效...' : '需求详情、自提/送货、付款方式...' }}" auto-height /></view>
-    <view class="input-row"><view class="label">图片 URL</view><textarea model:value="{{ photosText }}" placeholder="每行一个图片 URL（演示）" auto-height /></view>
+
+    <view class="upload-block">
+      <view class="upload-title">图片（最多 9 张，拍照或从相册选择）</view>
+      <view class="upload-grid">
+        <view wx:for="{{ photos }}" wx:key="*this" class="upload-thumb">
+          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-url="{{ item }}" />
+          <view class="upload-del" catchtap="delPhoto" data-i="{{ index }}">×</view>
+        </view>
+        <view wx:if="{{ photos.length < 9 }}" class="upload-add" bindtap="addPhoto">+</view>
+      </view>
+    </view>
   </view>
 
   <button class="btn mt-16" bindtap="submit" loading="{{ loading }}">

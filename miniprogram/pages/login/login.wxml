@@ -5,9 +5,9 @@
     <view class="brand-slogan">让你的蛋，自己定价</view>
   </view>
 
-  <!-- 选身份阶段：两个大按钮 -->
+  <!-- 选身份 -->
   <view wx:if="{{ stage === 'pick' }}" class="pick-card">
-    <view class="pick-title">您是?</view>
+    <view class="pick-title">您是？</view>
     <view class="pick-btn pick-sell" bindtap="pickRole" data-r="farm">
       <view class="pick-icon">🐔</view>
       <view class="pick-main">我要卖蛋</view>
@@ -21,31 +21,59 @@
     <view class="muted text-c mt-16" bindtap="adminLogin">管理员入口 ›</view>
   </view>
 
-  <!-- 输入手机号 + 验证码 -->
+  <!-- 登录方式 -->
   <view wx:else class="login-card">
     <view class="row-between" style="margin-bottom: 24rpx;">
       <view class="bold">{{ roleLabel }} · 登录</view>
       <text class="muted" bindtap="backToPick">‹ 重选</text>
     </view>
+
+    <!-- 微信一键登录（最显眼） -->
+    <button class="btn btn-wx" bindtap="wechatLogin" loading="{{ wxLoading }}" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+      <text class="wx-icon">💬</text> 微信一键登录
+    </button>
+    <view wx:if="{{ !modes.wechat.live }}" class="muted text-c" style="font-size: 22rpx; margin-top: 6rpx;">
+      （演示模式：使用沙箱账号）
+    </view>
+
+    <view class="divider"><text>或 手机号登录</text></view>
+
     <view class="input-row">
       <view class="label">手机号</view>
       <input model:value="{{ phone }}" type="number" maxlength="11" placeholder="请输入手机号" />
     </view>
     <view class="input-row">
       <view class="label">验证码</view>
-      <input model:value="{{ otp }}" type="number" maxlength="6" placeholder="演示请输 123456" />
-      <view class="otp-btn" bindtap="sendOtp">{{ cd > 0 ? (cd + 's') : '获取' }}</view>
+      <input model:value="{{ otp }}" type="number" maxlength="6" placeholder="{{ modes.sms.live ? '请输入收到的 6 位验证码' : '演示请输 123456' }}" />
+      <button class="otp-btn" bindtap="sendOtp" disabled="{{ cd > 0 || sendingOtp }}" size="mini" plain="true" loading="{{ sendingOtp }}">{{ cd > 0 ? (cd + 's') : '获取' }}</button>
     </view>
 
     <button class="btn mt-16" bindtap="login" loading="{{ loading }}">登录 / 注册</button>
 
-    <view class="muted text-c mt-16" style="line-height: 1.8;">
-      <view>演示账号（验证码统一 123456）：</view>
-      <view wx:if="{{ role === 'farm' }}">养殖场: 13800000001、13800000002（已认证）</view>
-      <view wx:if="{{ role === 'buyer' }}">采购商: 13900000001、13900000002</view>
-      <view wx:if="{{ role === 'admin' }}">管理员: 13800000000</view>
+    <view class="muted text-c mt-16" style="line-height: 1.8; font-size: 22rpx;">
+      <view wx:if="{{ modes.sms.live }}">短信由 {{ modes.sms.provider }} 真实下发</view>
+      <view wx:else>演示验证码统一为 123456</view>
+      <view wx:if="{{ role === 'farm' }}">测试号: 13800000001 / 13800000003</view>
+      <view wx:if="{{ role === 'buyer' }}">测试号: 13900000001</view>
+      <view wx:if="{{ role === 'admin' }}">测试号: 13800000000</view>
     </view>
   </view>
 
   <view class="login-foot">✓ 自主竞拍 · ✓ 双向保证金 · ✓ 7 天自动结算</view>
+</view>
+
+<!-- 微信登录后绑定手机号弹窗 -->
+<view wx:if="{{ showBindPhone }}" class="modal-mask">
+  <view class="modal">
+    <view class="bold" style="font-size: 32rpx;">绑定手机号</view>
+    <view class="muted mt-8">微信登录后建议绑定手机号，用于交易短信通知</view>
+    <view class="input-row mt-16"><view class="label">手机号</view><input type="number" maxlength="11" model:value="{{ bindPhone }}" placeholder="请输入手机号" /></view>
+    <view class="input-row"><view class="label">验证码</view><input type="number" maxlength="6" model:value="{{ bindOtp }}" placeholder="验证码" />
+      <button class="otp-btn" bindtap="sendBindOtp" disabled="{{ bindCd > 0 }}" size="mini" plain="true">{{ bindCd > 0 ? (bindCd + 's') : '获取' }}</button>
+    </view>
+    <view class="row mt-16" style="gap: 16rpx;">
+      <button class="btn-plain flex-1" bindtap="skipBind">稍后绑定</button>
+      <button class="btn flex-1" bindtap="submitBind">确认绑定</button>
+    </view>
+  </view>
 </view>

@@ -32,9 +32,38 @@
 
 .login-card { background: #fff; border-radius: 24rpx; padding: 40rpx 32rpx; box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.08); }
 
-.otp-btn {
-  background: #fff7e0; color: #b78300; padding: 10rpx 20rpx;
-  border-radius: 16rpx; font-size: 24rpx;
+.btn-wx {
+  background: #07c160 !important;
+  color: #fff !important;
+  border: none !important;
 }
+.wx-icon { margin-right: 8rpx; }
+
+.divider {
+  display: flex; align-items: center;
+  margin: 32rpx 0 24rpx;
+  color: #b0b0b0; font-size: 22rpx;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: #e0e0e0;
+}
+.divider text { padding: 0 20rpx; }
+
+.otp-btn {
+  background: #fff7e0; color: #b78300;
+  padding: 0 20rpx; min-height: 60rpx; line-height: 60rpx;
+  border-radius: 16rpx; font-size: 24rpx;
+  border: none;
+}
+.otp-btn[disabled] { background: #f0f0f0; color: #aaa; }
 
 .login-foot { text-align: center; color: #fff; margin-top: 60rpx; opacity: .9; font-size: 24rpx; }
+
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 1000; display: flex; align-items: center; justify-content: center;
+}
+.modal { background: #fff; border-radius: 24rpx; padding: 40rpx; width: 640rpx; }
+.input-row { display: flex; align-items: center; padding: 20rpx 0; border-bottom: 1px solid #f0f0f0; }
+.input-row .label { width: 140rpx; color: #555; font-size: 26rpx; }
+.input-row input { flex: 1; }

@@ -41,7 +41,6 @@ Page({
         wx.showToast({ title: '已缴纳保证金（演示模式）', icon: 'success' });
         return await this.load();
       }
-      // 真实微信支付：res 应该返回 { timeStamp, nonceStr, package, signType, paySign }
       await new Promise((resolve, reject) => {
         wx.requestPayment({
           timeStamp: res.timeStamp,
@@ -53,12 +52,31 @@ Page({
           fail: reject,
         });
       });
-      wx.showToast({ title: '支付成功' });
+      wx.showLoading({ title: '确认支付结果…' });
+      const ok = await this.pollPayResult(res.out_trade_no, 8);
+      wx.hideLoading();
+      if (ok) {
+        wx.showToast({ title: '支付成功', icon: 'success' });
+      } else {
+        wx.showToast({ title: '支付已提交，结果稍后同步', icon: 'none', duration: 3000 });
+      }
       await this.load();
     } catch (e) {
+      wx.hideLoading();
       if (e && e.errMsg && /cancel/.test(e.errMsg)) {
         wx.showToast({ title: '已取消支付', icon: 'none' });
       }
     } finally { this.setData({ paying: false }); }
+  },
+
+  async pollPayResult(outTradeNo, maxTries) {
+    for (let i = 0; i < maxTries; i++) {
+      await new Promise(r => setTimeout(r, 1000));
+      try {
+        const r = await api.get('/pay/check/' + encodeURIComponent(outTradeNo));
+        if (r.paid) return true;
+      } catch (e) {}
+    }
+    return false;
   },
 });

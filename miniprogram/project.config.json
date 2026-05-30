@@ -1,6 +1,6 @@
 {
-  "projectname": "dansuda-egg-auction",
-  "description": "蛋速达 · 鸡蛋竞拍撮合平台 微信小程序",
+  "projectname": "fengbole-egg-auction",
+  "description": "风伯乐 · 鸡蛋竞拍撮合平台 微信小程序",
   "appid": "touristappid",
   "setting": {
     "urlCheck": false,

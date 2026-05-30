@@ -1,7 +1,7 @@
 <template>
   <div class="admin-shell">
     <aside class="admin-sidebar">
-      <h1>🥚 蛋速达 · 管理后台</h1>
+      <h1>🥚 风伯乐 · 管理后台</h1>
       <router-link to="/admin" exact-active-class="active" :class="{ active: $route.path === '/admin' }">📊 数据看板</router-link>
       <router-link to="/admin/users" active-class="active">👤 用户管理</router-link>
       <router-link to="/admin/resources" active-class="active">🛒 资源监管</router-link>

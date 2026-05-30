@@ -3,7 +3,7 @@
     <div class="hero-banner">
       <div class="row-between">
         <div>
-          <div class="hero-title">🥚 蛋速达</div>
+          <div class="hero-title">🥚 风伯乐</div>
           <div class="hero-sub">让你的蛋，自己定价</div>
         </div>
         <van-icon name="bell-o" size="22" color="#fff" :badge="store.unreadCount || ''" @click="$router.push('/buyer/messages')" />

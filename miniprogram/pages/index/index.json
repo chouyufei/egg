@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "蛋速达",
+  "navigationBarTitleText": "风伯乐",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "egg-card": "/components/egg-card/egg-card",

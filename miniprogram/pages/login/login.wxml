@@ -1,7 +1,7 @@
 <view class="login-page">
   <view class="brand">
     <view class="brand-egg">🥚</view>
-    <view class="brand-name">风伯乐</view>
+    <view class="brand-name">凤伯乐</view>
     <view class="brand-slogan">让你的蛋，自己定价</view>
   </view>
 

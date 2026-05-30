@@ -2,7 +2,7 @@
   <div class="page" style="background: linear-gradient(180deg, #ffd84d 0%, #f6b821 40%, #fff 100%); min-height: 100vh; padding: 24px;">
     <div style="text-align: center; padding: 40px 0 16px;">
       <div style="font-size: 56px;">🥚</div>
-      <h1 style="margin: 8px 0 4px; font-size: 28px; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,.1);">风伯乐</h1>
+      <h1 style="margin: 8px 0 4px; font-size: 28px; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,.1);">凤伯乐</h1>
       <p style="margin: 0; color: #fff; opacity: .9;">让你的蛋，自己定价</p>
     </div>
 

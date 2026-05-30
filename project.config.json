@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "miniprogram/",
   "projectname": "fengbole-egg-auction",
-  "description": "风伯乐 · 鸡蛋竞拍撮合平台 微信小程序",
+  "description": "凤伯乐 · 鸡蛋竞拍撮合平台 微信小程序",
   "appid": "touristappid",
   "setting": {
     "urlCheck": false,

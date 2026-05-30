@@ -17,7 +17,7 @@
   <view class="hero">
     <view class="row-between">
       <view>
-        <view class="hero-title">🥚 风伯乐</view>
+        <view class="hero-title">🥚 凤伯乐</view>
         <view class="hero-sub">{{ user.name }} · {{ user.role === 'farm' ? '我要卖蛋' : '我要买蛋' }}</view>
       </view>
       <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>

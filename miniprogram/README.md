@@ -1,4 +1,4 @@
-# 风伯乐 · 微信小程序
+# 凤伯乐 · 微信小程序
 
 养殖场（卖方）和采购商（买方）两端的原生微信小程序，对接 `chouyufei/rest` 仓库下的 `egg-platform/` 后端。
 
@@ -14,7 +14,7 @@ npm install
 npm start              # 默认监听 :3000
 ```
 
-看到 `风伯乐 API running on http://localhost:3000` 即成功。
+看到 `凤伯乐 API running on http://localhost:3000` 即成功。
 
 ### 2. 用「微信开发者工具」打开小程序
 

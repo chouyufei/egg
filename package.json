@@ -1,7 +1,7 @@
 {
   "name": "egg-platform-web",
   "version": "1.0.0",
-  "description": "风伯乐 · 鸡蛋竞拍撮合平台前端 (养殖场/采购商/管理后台)",
+  "description": "凤伯乐 · 鸡蛋竞拍撮合平台前端 (养殖场/采购商/管理后台)",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5173",

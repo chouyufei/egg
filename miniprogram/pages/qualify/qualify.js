@@ -52,6 +52,12 @@ Page({
   },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
 
+  onInput(e) {
+    const key = e.currentTarget.dataset.k;
+    if (!key) return;
+    this.setData({ ['form.' + key]: e.detail.value });
+  },
+
   async upload(e) {
     const key = e.currentTarget.dataset.k;
     const max = Number(e.currentTarget.dataset.count) || 1;

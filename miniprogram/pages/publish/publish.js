@@ -38,6 +38,12 @@ Page({
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
 
+  onInput(e) {
+    const key = e.currentTarget.dataset.k;
+    if (!key) return;
+    this.setData({ ['form.' + key]: e.detail.value });
+  },
+
   async addPhoto() {
     const remain = 9 - this.data.photos.length;
     if (remain <= 0) return;

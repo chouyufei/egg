@@ -3,7 +3,7 @@ const { formatTime, statusLabel, statusTag } = require('../../utils/format');
 const app = getApp();
 
 Page({
-  data: { isFarm: false, paid: false, approved: false, history: [], paying: false, payMode: 'demo' },
+  data: { isFarm: false, paid: false, approved: false, history: [], paying: false, payMode: 'demo', requiredAmount: 0 },
   async onShow() {
     const u = app.globalData.user;
     if (!u) return;
@@ -15,8 +15,8 @@ Page({
   async load() {
     try {
       const ds = await api.get('/deposits/status');
-      const paid = this.data.isFarm ? ds.farm.paid : ds.buyer.paid;
-      this.setData({ paid });
+      const side = this.data.isFarm ? ds.farm : ds.buyer;
+      this.setData({ paid: side.paid, requiredAmount: side.required });
     } catch (e) {}
     try {
       const { deposits } = await api.get('/deposits');

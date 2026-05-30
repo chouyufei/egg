@@ -21,12 +21,12 @@
     <view class="row-between">
       <view>
         <view class="muted">应缴保证金</view>
-        <view class="price-l">¥ {{ isFarm ? '1000' : '200' }}</view>
+        <view class="price-l">¥ {{ requiredAmount }}</view>
       </view>
       <text class="tag {{ paid ? 'tag-g' : '' }}" style="font-size: 26rpx;">{{ paid ? '已缴纳' : '未缴纳' }}</text>
     </view>
     <button class="btn mt-16" bindtap="pay" disabled="{{ paid || (isFarm && !approved) }}" loading="{{ paying }}">
-      {{ paid ? '已缴纳' : (payMode === 'wechat_pay' ? '微信支付 ¥' : '立即缴纳 ¥') + (isFarm ? '1000' : '200') }}
+      {{ paid ? '已缴纳' : (payMode === 'wechat_pay' ? '微信支付 ¥' : '立即缴纳 ¥') + requiredAmount }}
     </button>
     <view wx:if="{{ payMode === 'demo' && !paid }}" class="muted text-c mt-8" style="font-size: 22rpx;">
       ⚠️ 当前为演示模式，未接入真实微信支付

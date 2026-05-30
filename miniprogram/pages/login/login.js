@@ -1,12 +1,8 @@
 const api = require('../../utils/api');
 const app = getApp();
 
-const ROLE_LABEL = { farm: '🐔 我要卖蛋', buyer: '🛒 我要买蛋', admin: '⚙️ 管理员' };
-
 Page({
   data: {
-    stage: 'pick',
-    role: '', roleLabel: '',
     phone: '', otp: '',
     loading: false, sendingOtp: false, cd: 0,
     wxLoading: false,
@@ -19,15 +15,6 @@ Page({
   async loadModes() {
     try { const m = await api.get('/auth/login-modes'); this.setData({ modes: m }); } catch (e) {}
   },
-
-  pickRole(e) {
-    const role = e.currentTarget.dataset.r;
-    this.setData({ role, roleLabel: ROLE_LABEL[role], stage: 'input' });
-  },
-  adminLogin() {
-    this.setData({ role: 'admin', roleLabel: ROLE_LABEL.admin, stage: 'input' });
-  },
-  backToPick() { this.setData({ stage: 'pick', role: '', phone: '', otp: '' }); },
 
   async sendOtp() {
     if (!/^1\d{10}$/.test(this.data.phone)) {
@@ -60,11 +47,10 @@ Page({
       const res = await api.post('/auth/login', {
         phone: this.data.phone,
         otp: this.data.otp,
-        role: this.data.role,
       });
       app.setAuth(res.token, res.user);
       wx.showToast({ title: '登录成功', icon: 'success' });
-      setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 300);
+      setTimeout(() => this.afterAuth(res.user), 300);
     } catch (e) {} finally { this.setData({ loading: false }); }
   },
 
@@ -74,20 +60,26 @@ Page({
       const code = await new Promise((resolve, reject) => {
         wx.login({ success: r => r.code ? resolve(r.code) : reject(new Error('未获取到 code')), fail: reject });
       });
-      const res = await api.post('/auth/wechat-login', { code, role: this.data.role });
+      const res = await api.post('/auth/wechat-login', { code });
       app.setAuth(res.token, res.user);
       wx.showToast({ title: '微信登录成功', icon: 'success' });
       if (res.needs_phone) {
         setTimeout(() => this.setData({ showBindPhone: true }), 500);
       } else {
-        setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 300);
+        setTimeout(() => this.afterAuth(res.user), 300);
       }
     } catch (e) {
       wx.showToast({ title: e.message || '微信登录失败', icon: 'none' });
     } finally { this.setData({ wxLoading: false }); }
   },
 
-  onGetUserInfo() {},
+  afterAuth(user) {
+    if (user && user.role === 'admin') {
+      wx.switchTab({ url: '/pages/index/index' });
+    } else {
+      wx.redirectTo({ url: '/pages/select-mode/select-mode' });
+    }
+  },
 
   async sendBindOtp() {
     if (!/^1\d{10}$/.test(this.data.bindPhone)) return wx.showToast({ title: '手机号格式错误', icon: 'none' });
@@ -106,13 +98,13 @@ Page({
       const res = await api.post('/auth/bind-phone', { phone: this.data.bindPhone, otp: this.data.bindOtp });
       app.setAuth(app.globalData.token, res.user);
       wx.showToast({ title: '已绑定', icon: 'success' });
-      setTimeout(() => { this.setData({ showBindPhone: false }); wx.switchTab({ url: '/pages/index/index' }); }, 500);
+      setTimeout(() => { this.setData({ showBindPhone: false }); this.afterAuth(res.user); }, 500);
     } catch (e) {}
   },
 
   skipBind() {
     this.setData({ showBindPhone: false });
-    wx.switchTab({ url: '/pages/index/index' });
+    this.afterAuth(app.globalData.user);
   },
 
   onUnload() {

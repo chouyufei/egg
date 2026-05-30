@@ -5,31 +5,8 @@
     <view class="brand-slogan">让你的蛋，自己定价</view>
   </view>
 
-  <!-- 选身份 -->
-  <view wx:if="{{ stage === 'pick' }}" class="pick-card">
-    <view class="pick-title">您是？</view>
-    <view class="pick-btn pick-sell" bindtap="pickRole" data-r="farm">
-      <view class="pick-icon">🐔</view>
-      <view class="pick-main">我要卖蛋</view>
-      <view class="pick-sub">发布货源 / 接采购商订单</view>
-    </view>
-    <view class="pick-btn pick-buy" bindtap="pickRole" data-r="buyer">
-      <view class="pick-icon">🛒</view>
-      <view class="pick-main">我要买蛋</view>
-      <view class="pick-sub">竞拍货源 / 发布求购需求</view>
-    </view>
-    <view class="muted text-c mt-16" bindtap="adminLogin">管理员入口 ›</view>
-  </view>
-
-  <!-- 登录方式 -->
-  <view wx:else class="login-card">
-    <view class="row-between" style="margin-bottom: 24rpx;">
-      <view class="bold">{{ roleLabel }} · 登录</view>
-      <text class="muted" bindtap="backToPick">‹ 重选</text>
-    </view>
-
-    <!-- 微信一键登录（最显眼） -->
-    <button class="btn btn-wx" bindtap="wechatLogin" loading="{{ wxLoading }}" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+  <view class="login-card">
+    <button class="btn btn-wx" bindtap="wechatLogin" loading="{{ wxLoading }}">
       <text class="wx-icon">💬</text> 微信一键登录
     </button>
     <view wx:if="{{ !modes.wechat.live }}" class="muted text-c" style="font-size: 22rpx; margin-top: 6rpx;">
@@ -53,16 +30,12 @@
     <view class="muted text-c mt-16" style="line-height: 1.8; font-size: 22rpx;">
       <view wx:if="{{ modes.sms.live }}">短信由 {{ modes.sms.provider }} 真实下发</view>
       <view wx:else>演示验证码统一为 123456</view>
-      <view wx:if="{{ role === 'farm' }}">测试号: 13800000001 / 13800000003</view>
-      <view wx:if="{{ role === 'buyer' }}">测试号: 13900000001</view>
-      <view wx:if="{{ role === 'admin' }}">测试号: 13800000000</view>
     </view>
   </view>
 
   <view class="login-foot">✓ 自主竞拍 · ✓ 双向保证金 · ✓ 7 天自动结算</view>
 </view>
 
-<!-- 微信登录后绑定手机号弹窗 -->
 <view wx:if="{{ showBindPhone }}" class="modal-mask">
   <view class="modal">
     <view class="bold" style="font-size: 32rpx;">绑定手机号</view>

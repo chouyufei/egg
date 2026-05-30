@@ -33,6 +33,7 @@ Page({
   goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
   goOrders() { wx.switchTab({ url: '/pages/orders/orders' }); },
   goAuction() { wx.switchTab({ url: '/pages/auction/auction' }); },
+  switchMode() { wx.navigateTo({ url: '/pages/select-mode/select-mode' }); },
   logout() {
     wx.showModal({ title: '退出登录', content: '确认退出？', success: r => { if (r.confirm) app.logout(); } });
   },

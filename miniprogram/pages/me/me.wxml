@@ -32,6 +32,13 @@
     </view>
   </view>
 
+  <view wx:if="{{ user.role !== 'admin' }}" class="card menu-card" style="margin: 24rpx 24rpx;">
+    <view class="menu-row" bindtap="switchMode">
+      <text>🔄 切换身份</text>
+      <text class="muted">当前 {{ user.role === 'farm' ? '卖蛋' : '买蛋' }} ›</text>
+    </view>
+  </view>
+
   <view class="card menu-card" style="margin: 24rpx 24rpx;">
     <view class="menu-row" bindtap="logout">
       <text>🚪 退出登录</text><text class="muted">›</text>

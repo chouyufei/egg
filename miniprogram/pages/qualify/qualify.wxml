@@ -60,31 +60,31 @@
   <view class="qf-form-title">认证鸡场申请填写</view>
 
   <view class="card">
-    <view class="input-row"><view class="label">鸡场名称 *</view><input model:value="{{ form.name }}" placeholder="如：阳光散养鸡场" /></view>
-    <view class="input-row"><view class="label">联系人 *</view><input model:value="{{ form.contact_name }}" placeholder="鸡场负责人姓名" /></view>
-    <view class="input-row"><view class="label">联系电话 *</view><input type="number" maxlength="11" model:value="{{ form.contact_phone }}" placeholder="登录手机号" /></view>
+    <view class="input-row" id="field-name"><view class="label">鸡场名称 *</view><input model:value="{{ form.name }}" placeholder="如：阳光散养鸡场" /></view>
+    <view class="input-row" id="field-contact_name"><view class="label">联系人 *</view><input model:value="{{ form.contact_name }}" placeholder="鸡场负责人姓名" /></view>
+    <view class="input-row" id="field-contact_phone"><view class="label">联系电话 *</view><input type="number" maxlength="11" model:value="{{ form.contact_phone }}" placeholder="登录手机号" /></view>
     <view class="input-row"><view class="label">所在省份 *</view>
       <picker bindchange="pickProvince" value="{{ provinceIndex }}" range="{{ provinces }}">
         <view class="picker-val">{{ provinces[provinceIndex] }} ▾</view>
       </picker>
     </view>
-    <view class="input-row"><view class="label">详细地址 *</view><input model:value="{{ form.address }}" placeholder="如：青州市某某镇某某村" /></view>
+    <view class="input-row" id="field-address"><view class="label">详细地址 *</view><input model:value="{{ form.address }}" placeholder="如：青州市某某镇某某村" /></view>
   </view>
 
   <view class="card">
-    <view class="input-row"><view class="label">养殖规模 *</view>
+    <view class="input-row" id="field-farm_size_int"><view class="label">养殖规模 *</view>
       <input type="number" model:value="{{ form.farm_size_int }}" placeholder="存栏只数" /><text class="muted" style="margin-left: 8rpx;">只</text>
     </view>
     <view class="input-row"><view class="label">日产量</view>
       <input type="number" model:value="{{ form.daily_output }}" placeholder="日产量" /><text class="muted" style="margin-left: 8rpx;">箱/天</text>
     </view>
-    <view class="input-row"><view class="label">主营蛋品 *</view><input model:value="{{ form.main_products }}" placeholder="如：红壳·散养土鸡蛋、粉壳·谷物蛋" /></view>
+    <view class="input-row" id="field-main_products"><view class="label">主营蛋品 *</view><input model:value="{{ form.main_products }}" placeholder="如：红壳·散养土鸡蛋、粉壳·谷物蛋" /></view>
   </view>
 
   <view class="card">
-    <view class="input-row"><view class="label">营业执照号 *</view><input model:value="{{ form.business_license }}" placeholder="统一社会信用代码" /></view>
+    <view class="input-row" id="field-business_license"><view class="label">营业执照号 *</view><input model:value="{{ form.business_license }}" placeholder="统一社会信用代码" /></view>
 
-    <view class="upload-block">
+    <view class="upload-block" id="field-license_photos">
       <view class="upload-title">营业执照照片 *</view>
       <view class="upload-grid">
         <view wx:for="{{ form.license_photos }}" wx:key="*this" class="upload-thumb">
@@ -95,7 +95,7 @@
       </view>
     </view>
 
-    <view class="upload-block">
+    <view class="upload-block" id="field-farm_photos">
       <view class="upload-title">鸡场实景照（含养殖环境、饲料、检疫等）*</view>
       <view class="upload-grid">
         <view wx:for="{{ form.farm_photos }}" wx:key="*this" class="upload-thumb">

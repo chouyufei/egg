@@ -75,14 +75,43 @@ Page({
     wx.previewImage({ current: url, urls: list });
   },
 
+  scrollToField(id) {
+    const q = wx.createSelectorQuery();
+    q.select('#' + id).boundingClientRect();
+    q.selectViewport().scrollOffset();
+    q.exec((res) => {
+      const rect = res[0];
+      const vp = res[1];
+      if (!rect || !vp) return;
+      const target = Math.max(0, rect.top + vp.scrollTop - 100);
+      wx.pageScrollTo({ scrollTop: target, duration: 300 });
+    });
+  },
+
   async submit() {
     const f = this.data.form;
-    if (!f.name) return wx.showToast({ title: '请填写鸡场名称', icon: 'none' });
-    if (!f.contact_name) return wx.showToast({ title: '请填写联系人', icon: 'none' });
-    if (!f.address) return wx.showToast({ title: '请填写详细地址', icon: 'none' });
-    if (!f.business_license) return wx.showToast({ title: '请填写营业执照号', icon: 'none' });
-    if (!f.license_photos.length) return wx.showToast({ title: '请上传营业执照照片', icon: 'none' });
-    if (!f.farm_photos.length) return wx.showToast({ title: '请至少上传 1 张鸡场实景照', icon: 'none' });
+    const checks = [
+      { key: 'name', label: '鸡场名称', missing: !f.name },
+      { key: 'contact_name', label: '联系人', missing: !f.contact_name },
+      { key: 'contact_phone', label: '联系电话', missing: !f.contact_phone },
+      { key: 'address', label: '详细地址', missing: !f.address },
+      { key: 'farm_size_int', label: '养殖规模', missing: !f.farm_size_int },
+      { key: 'main_products', label: '主营蛋品', missing: !f.main_products },
+      { key: 'business_license', label: '营业执照号', missing: !f.business_license },
+      { key: 'license_photos', label: '营业执照照片', missing: !f.license_photos.length },
+      { key: 'farm_photos', label: '鸡场实景照', missing: !f.farm_photos.length },
+    ];
+    const missing = checks.filter(c => c.missing);
+    if (missing.length) {
+      wx.showModal({
+        title: '资料未填完整',
+        content: '请补充以下信息：\n· ' + missing.map(c => c.label).join('\n· '),
+        showCancel: false,
+        confirmText: '去补充',
+      });
+      this.scrollToField('field-' + missing[0].key);
+      return;
+    }
 
     this.setData({ loading: true });
     try {

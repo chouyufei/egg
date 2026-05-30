@@ -18,7 +18,7 @@ Page({
     statusText: '未提交', statusCls: 'tag-d',
     loading: false,
   },
-  onShow() {
+  onLoad() {
     const u = app.globalData.user;
     if (!u) return;
     let idx = 0;
@@ -38,6 +38,14 @@ Page({
       'form.license_photos': safeParse(u.license_photos),
       'form.farm_photos': safeParse(u.farm_photos),
       'form.quarantine_photos': safeParse(u.quarantine_photos),
+      statusText: statusLabel(u.license_status),
+      statusCls: statusTag(u.license_status),
+    });
+  },
+  onShow() {
+    const u = app.globalData.user;
+    if (!u) return;
+    this.setData({
       statusText: statusLabel(u.license_status),
       statusCls: statusTag(u.license_status),
     });

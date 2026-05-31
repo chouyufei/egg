@@ -4,6 +4,7 @@
       <h1>🥚 凤伯乐 · 管理后台</h1>
       <router-link to="/admin" exact-active-class="active" :class="{ active: $route.path === '/admin' }">📊 数据看板</router-link>
       <router-link to="/admin/users" active-class="active">👤 用户管理</router-link>
+      <router-link to="/admin/qualifications" active-class="active">📜 资质审核</router-link>
       <router-link to="/admin/resources" active-class="active">🛒 资源监管</router-link>
       <router-link to="/admin/deposits" active-class="active">💰 保证金</router-link>
       <router-link to="/admin/disputes" active-class="active">⚖️ 纠纷仲裁</router-link>

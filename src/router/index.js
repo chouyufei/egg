@@ -33,6 +33,7 @@ const routes = [
       { path: 'resources', component: () => import('../views/admin/Resources.vue') },
       { path: 'deposits', component: () => import('../views/admin/Deposits.vue') },
       { path: 'disputes', component: () => import('../views/admin/Disputes.vue') },
+      { path: 'settings', component: () => import('../views/admin/Settings.vue') },
     ],
   },
 ];

@@ -78,9 +78,6 @@ async function onLogin() {
   if (!phone.value || !otp.value) return showFailToast('请填写手机号和验证码');
   loading.value = true;
   try {
-    if (isDemo.value) {
-      try { await api.post('/auth/send-otp', { phone: phone.value }); } catch (e) {}
-    }
     const u = await store.login(phone.value, otp.value);
     if (u.role !== 'admin') {
       store.logout();

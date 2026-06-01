@@ -62,7 +62,7 @@ page {
   border-radius: 999rpx; font-size: 28rpx; padding: 14rpx 0;
   text-align: center;
 }
-.btn-danger { background: #ee0a24; }
+.btn-danger { background: #ee0a24; color: #fff; border-color: #ee0a24; }
 
 .fixed-bottom-bar {
   position: fixed; left: 0; right: 0; bottom: 0;

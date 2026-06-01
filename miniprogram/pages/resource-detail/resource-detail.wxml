@@ -65,7 +65,7 @@
 
   <!-- 发布者自己 + 无人出价时可取消 -->
   <view wx:if="{{ isMine && r.status === 'auctioning' && bids.length === 0 }}" class="fixed-bottom-bar">
-    <button class="btn-plain btn-danger" style="flex: 1; padding: 14rpx 0; color: #ee0a24; border-color: #ee0a24;" bindtap="cancel">取消竞拍</button>
+    <button class="btn btn-danger" style="flex: 1; padding: 14rpx 0;" bindtap="cancel">取消竞拍</button>
   </view>
 
   <view wx:if="{{ !canBid && !isMine }}" class="fixed-bottom-bar">

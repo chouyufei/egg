@@ -1,4 +1,4 @@
-<view class="ec card" bindtap="tap">
+<view class="ec card" catchtap="tap">
   <view class="ec-img-wrap">
     <image class="ec-img" mode="aspectFill" src="{{ cover }}" />
     <view class="ec-kind {{ kindCls }}">{{ kindLabel }}</view>

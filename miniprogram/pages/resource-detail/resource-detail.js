@@ -9,7 +9,7 @@ Page({
     isSupply: true,
     kindLabel: '货源', kindCls: 'tag',
     canBid: false, blockReason: '',
-    bidPrice: '', nextLimit: 0, bidding: false,
+    bidPrice: '', nextLimit: 0, bidding: false, ending: false,
     showAuto: false, autoMax: '',
     statusLabel: '',
   },
@@ -161,6 +161,24 @@ Page({
         if (!r.confirm) return;
         try { await api.post('/resources/' + this.data.id + '/cancel'); wx.showToast({ title: '已取消' }); setTimeout(() => wx.navigateBack(), 500); }
         catch (e) {}
+      },
+    });
+  },
+
+  endNow() {
+    const price = this.data.r.current_price;
+    wx.showModal({
+      title: '结束竞拍并成交',
+      content: `确认以当前最高价 ¥${price} 成交？后续不再接受出价。`,
+      confirmText: '确认成交',
+      success: async (r) => {
+        if (!r.confirm) return;
+        this.setData({ ending: true });
+        try {
+          await api.post('/resources/' + this.data.id + '/end-now');
+          wx.showToast({ title: '已成交', icon: 'success' });
+          await this.load();
+        } catch (e) {} finally { this.setData({ ending: false }); }
       },
     });
   },

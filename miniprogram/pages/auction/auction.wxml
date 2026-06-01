@@ -21,7 +21,7 @@
         <view class="filter-chip">蛋色：{{ colorOptions[colorIndex] }} ▾</view>
       </picker>
     </view>
-    <egg-card wx:for="{{ all }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+    <egg-card wx:for="{{ all }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
     <empty wx:if="{{ !all.length }}" icon="🔍" text="{{ isFarm ? '当前没有采购需求' : '当前没有货源' }}" />
   </view>
 </block>

@@ -68,11 +68,11 @@
 
   <view class="page-pad">
     <block wx:if="{{ viewTab === 'others' }}">
-      <egg-card wx:for="{{ others }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+      <egg-card wx:for="{{ others }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
       <empty wx:if="{{ !others.length }}" icon="📭" text="{{ user.role === 'farm' ? '当前没有采购需求' : '当前没有货源' }}" />
     </block>
     <block wx:else>
-      <egg-card wx:for="{{ mine }}" wx:key="id" r="{{ item }}" bindtap="openRes" data-id="{{ item.id }}" />
+      <egg-card wx:for="{{ mine }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
       <empty wx:if="{{ !mine.length }}" icon="📭" text="您还没发布过{{ user.role === 'farm' ? '货源' : '求购' }}" />
     </block>
   </view>

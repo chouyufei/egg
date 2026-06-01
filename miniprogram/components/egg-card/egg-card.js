@@ -19,6 +19,6 @@ Component({
     },
   },
   methods: {
-    tap() { this.triggerEvent('tap'); },
+    tap() { this.triggerEvent('cardtap'); },
   },
 });

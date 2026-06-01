@@ -67,17 +67,25 @@ Page({
 
   async placeBid() {
     if (!this.data.canBid) return wx.showToast({ title: this.data.blockReason, icon: 'none' });
-    const me = this.data.user;
+
+    // 竞拍保证金按场缴纳：先查本场是否已缴，未缴则引导支付本场保证金
+    let required = 0.1;
     try {
-      const ds = await api.get('/deposits/status');
-      const needPaid = me.role === 'farm' ? ds.farm.paid : ds.buyer.paid;
-      if (!needPaid) {
-        wx.showModal({
-          title: '需要保证金',
-          content: me.role === 'farm' ? '需缴纳 1000 元品质保证金' : '需缴纳 200 元采购保证金',
-          success(r) { if (r.confirm) wx.navigateTo({ url: '/pages/deposit/deposit' }); },
+      const ds = await api.get('/deposits/status', { resource_id: this.data.id });
+      required = ds.buyer.required;
+      if (!ds.buyer.paid) {
+        const ok = await new Promise((resolve) => {
+          wx.showModal({
+            title: '缴纳本场竞拍保证金',
+            content: `每个货源需单独缴纳 ${required} 元竞拍保证金，是否立即缴纳？`,
+            confirmText: '立即缴纳',
+            success: (r) => resolve(r.confirm),
+            fail: () => resolve(false),
+          });
         });
-        return;
+        if (!ok) return;
+        const paid = await this.payDeposit();
+        if (!paid) return;
       }
     } catch (e) { return; }
 
@@ -97,6 +105,39 @@ Page({
       this.setData({ bidPrice: '' });
       await this.load();
     } catch (e) {} finally { this.setData({ bidding: false }); }
+  },
+
+  // 为本场缴纳竞拍保证金（demo 直接成功；正式微信支付拉起钱包）。返回是否成功
+  async payDeposit() {
+    try {
+      wx.showLoading({ title: '缴纳保证金…', mask: true });
+      const res = await api.post('/pay/create-order', { type: 'buyer_bid', resource_id: this.data.id });
+      if (res.paid || res.demo) {
+        wx.hideLoading();
+        wx.showToast({ title: '保证金已缴纳', icon: 'success' });
+        return true;
+      }
+      // 正式微信支付
+      await new Promise((resolve, reject) => {
+        wx.requestPayment({
+          timeStamp: res.timeStamp, nonceStr: res.nonceStr, package: res.package,
+          signType: res.signType || 'RSA', paySign: res.paySign,
+          success: resolve, fail: reject,
+        });
+      });
+      // 轮询确认
+      for (let i = 0; i < 8; i++) {
+        await new Promise(r => setTimeout(r, 1000));
+        try { const r = await api.get('/pay/check/' + encodeURIComponent(res.out_trade_no)); if (r.paid) break; } catch (e) {}
+      }
+      wx.hideLoading();
+      wx.showToast({ title: '保证金已缴纳', icon: 'success' });
+      return true;
+    } catch (e) {
+      wx.hideLoading();
+      if (e && e.errMsg && /cancel/.test(e.errMsg)) wx.showToast({ title: '已取消支付', icon: 'none' });
+      return false;
+    }
   },
 
   async setAuto() {

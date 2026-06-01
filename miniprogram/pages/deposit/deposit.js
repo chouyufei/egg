@@ -15,8 +15,8 @@ Page({
   async load() {
     try {
       const ds = await api.get('/deposits/status');
-      const side = this.data.isFarm ? ds.farm : ds.buyer;
-      this.setData({ paid: side.paid, requiredAmount: side.required });
+      // 买家竞拍保证金按场缴纳，此页不预缴；只用 required 展示单价
+      this.setData({ paid: this.data.isFarm ? ds.farm.paid : false, requiredAmount: (this.data.isFarm ? ds.farm.required : ds.buyer.required) });
     } catch (e) {}
     try {
       const { deposits } = await api.get('/deposits');

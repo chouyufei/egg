@@ -19,12 +19,13 @@ Page({
       licCls: statusTag(user.license_status),
     });
     try { const m = await api.get('/messages/unread-count'); this.setData({ unread: m.count || 0 }); } catch (e) {}
-    if (user.role !== 'admin') {
+    if (user.role === 'farm') {
       try {
         const ds = await api.get('/deposits/status');
-        const paid = user.role === 'farm' ? ds.farm.paid : ds.buyer.paid;
-        this.setData({ depositText: paid ? '已缴纳' : '未缴纳 →' });
+        this.setData({ depositText: ds.farm.paid ? '已缴纳' : '未缴纳 →' });
       } catch (e) {}
+    } else if (user.role === 'buyer') {
+      this.setData({ depositText: '按场缴纳 →' });
     }
   },
   async onPullDownRefresh() { await this.onShow(); wx.stopPullDownRefresh(); },

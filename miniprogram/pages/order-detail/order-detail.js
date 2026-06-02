@@ -56,6 +56,11 @@ Page({
   openDispute() { this.setData({ showDispute: true }); },
   closeDispute() { this.setData({ showDispute: false }); },
   noop() {},
+  onDisputeInput(e) {
+    const key = e.currentTarget.dataset.k;
+    if (!key) return;
+    this.setData({ ['dispute.' + key]: e.detail.value });
+  },
   async submitDispute() {
     if (!this.data.dispute.type) return wx.showToast({ title: '请填写类型', icon: 'none' });
     try {

@@ -43,8 +43,8 @@
 <view wx:if="{{ showDispute }}" class="modal-mask" bindtap="closeDispute">
   <view class="modal" catchtap="noop">
     <view class="bold">发起纠纷</view>
-    <view class="input-row mt-8"><view class="label">类型</view><input model:value="{{ dispute.type }}" placeholder="如：货不对板/数量不足" /></view>
-    <view class="input-row"><view class="label">描述</view><textarea model:value="{{ dispute.description }}" placeholder="请详细描述" auto-height /></view>
+    <view class="input-row mt-8"><view class="label">类型</view><input value="{{ dispute.type }}" data-k="type" bindinput="onDisputeInput" bindblur="onDisputeInput" placeholder="如：货不对板/数量不足" /></view>
+    <view class="input-row"><view class="label">描述</view><textarea value="{{ dispute.description }}" data-k="description" bindinput="onDisputeInput" bindblur="onDisputeInput" placeholder="请详细描述" auto-height /></view>
     <view class="row mt-16" style="gap: 16rpx;">
       <button class="btn-plain flex-1" bindtap="closeDispute">取消</button>
       <button class="btn flex-1" bindtap="submitDispute">提交</button>

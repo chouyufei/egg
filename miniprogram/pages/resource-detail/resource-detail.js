@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const { formatDateTime, statusLabel } = require('../../utils/format');
+const { requestSubscribe } = require('../../utils/subscribe');
 const app = getApp();
 
 Page({
@@ -97,6 +98,9 @@ Page({
     if (!this.data.isSupply && price > this.data.nextLimit) {
       return wx.showToast({ title: '报价至多 ¥' + this.data.nextLimit, icon: 'none' });
     }
+
+    // 出价前先请求微信订阅消息授权（中标 / 未中标 两个模板），用户拒绝也不影响出价
+    await requestSubscribe(['auction_won', 'auction_lost']);
 
     this.setData({ bidding: true });
     try {

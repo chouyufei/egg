@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const { chooseAndUpload } = require('../../utils/upload');
+const { requestSubscribe } = require('../../utils/subscribe');
 const app = getApp();
 
 const PROVINCES = ['北京', '天津', '河北', '山西', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽',
@@ -63,6 +64,8 @@ Page({
   },
 
   async submit() {
+    // 发布前请求"订单已被拍下"订阅消息授权
+    await requestSubscribe(['order_received']);
     this.setData({ loading: true });
     try {
       const f = this.data.form;

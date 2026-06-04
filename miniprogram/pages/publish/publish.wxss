@@ -27,3 +27,9 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 64rpx; color: #b0b0b0;
 }
+.video-preview { position: relative; }
+.video-del {
+  display: inline-block; margin-top: 12rpx;
+  font-size: 24rpx; color: #ee0a24;
+  padding: 4rpx 12rpx; border: 1px solid #ee0a24; border-radius: 8rpx;
+}

@@ -1,5 +1,5 @@
 const api = require('../../utils/api');
-const { chooseAndUpload } = require('../../utils/upload');
+const { chooseAndUpload, uploadOne } = require('../../utils/upload');
 const { requestSubscribe } = require('../../utils/subscribe');
 const app = getApp();
 
@@ -12,12 +12,14 @@ Page({
     isSupply: true,
     provinces: PROVINCES, provinceIndex: 0,
     form: {
-      title: '', region: '', chicken_breed: '', farm_size: '',
+      title: '', region: '', chicken_breed: '',
+      farm_size_wan: '',
       egg_color: '红壳', weight_spec: '', shell_quality: '',
-      freshness_days: 3, quantity: '', start_price: '',
+      freshness_days: 3, quantity: '', unit_size: '车', start_price: '',
       min_increment: 2, duration_hours: 2, description: '',
     },
     photos: [],
+    video: '',
     loading: false,
   },
   onLoad() {
@@ -38,6 +40,7 @@ Page({
   pickColor(e) { this.setData({ 'form.egg_color': e.detail.value }); },
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
+  pickUnitSize(e) { this.setData({ 'form.unit_size': e.detail.value }); },
 
   onInput(e) {
     const key = e.currentTarget.dataset.k;
@@ -63,25 +66,59 @@ Page({
     wx.previewImage({ current: e.currentTarget.dataset.url, urls: this.data.photos });
   },
 
+  addVideo() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['video'],
+      sourceType: ['album', 'camera'],
+      maxDuration: 60,
+      camera: 'back',
+      success: async (res) => {
+        const tempPath = res.tempFiles && res.tempFiles[0] && res.tempFiles[0].tempFilePath;
+        if (!tempPath) return;
+        wx.showLoading({ title: '上传视频…', mask: true });
+        try {
+          const url = await uploadOne(tempPath);
+          this.setData({ video: url });
+          wx.hideLoading();
+          wx.showToast({ title: '已上传' });
+        } catch (e) {
+          wx.hideLoading();
+          wx.showToast({ title: '视频上传失败', icon: 'none' });
+        }
+      },
+    });
+  },
+  delVideo() { this.setData({ video: '' }); },
+
   async submit() {
-    // 发布前请求"订单已被拍下"订阅消息授权
+    const f = this.data.form;
+    // 简单必填校验
+    if (!f.title || !f.quantity || !f.start_price) {
+      return wx.showToast({ title: '请填写标题/数量/起拍价', icon: 'none' });
+    }
+
     await requestSubscribe(['order_received']);
     this.setData({ loading: true });
     try {
-      const f = this.data.form;
+      const farmSizeWan = Number(f.farm_size_wan) || 0;
       const payload = {
         ...f,
         kind: this.data.isSupply ? 'supply' : 'demand',
         province: this.data.provinces[this.data.provinceIndex],
-        farm_size: Number(f.farm_size) || null,
+        // 养殖规模：用户填 1.5 (万只) → 存 15000 (只)
+        farm_size: farmSizeWan ? Math.round(farmSizeWan * 10000) : null,
         freshness_days: Number(f.freshness_days) || null,
         quantity: Number(f.quantity),
         start_price: Number(f.start_price),
         min_increment: Number(f.min_increment),
         duration_hours: Number(f.duration_hours),
-        unit_label: '元/箱',
+        unit_label: '元/' + (f.unit_size || '车'),
+        unit_size: f.unit_size || '车',
+        intro_video: this.data.video || null,
         photos: this.data.photos,
       };
+      delete payload.farm_size_wan;
       await api.post('/resources', payload);
       wx.showToast({ title: '发布成功' });
       setTimeout(() => wx.navigateBack(), 500);

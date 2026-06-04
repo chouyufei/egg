@@ -47,6 +47,10 @@ Page({
       }
 
       const bidsMapped = bids.map(b => ({ ...b, timeText: formatDateTime(b.created_at) }));
+      const sizeNum = Number(resource.farm_size);
+      const farmSizeText = sizeNum >= 10000
+        ? (sizeNum / 10000).toFixed(sizeNum % 10000 === 0 ? 0 : 1) + ' 万只'
+        : (sizeNum ? sizeNum + ' 只' : '');
       this.setData({
         r: resource,
         bids: bidsMapped,
@@ -58,6 +62,7 @@ Page({
         bidPrice: this.data.bidPrice || String(nextLimit),
         isMine, canBid, blockReason,
         statusLabel: statusLabel(resource.status),
+        farmSizeText,
       });
     } catch (e) {}
   },

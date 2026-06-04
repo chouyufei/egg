@@ -28,12 +28,16 @@
     </view>
   </view>
 
+  <view wx:if="{{ r.intro_video }}" class="card" style="margin: 0 24rpx 24rpx; padding: 0; overflow: hidden;">
+    <video src="{{ r.intro_video }}" controls style="width: 100%; height: 420rpx; display: block;"></video>
+  </view>
+
   <view class="card" style="margin: 0 24rpx 24rpx;">
     <view class="section-title" style="margin: 0 0 16rpx;">参数明细</view>
-    <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} 箱</text></view>
+    <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} {{ r.unit_size || '车' }}</text></view>
     <view wx:if="{{ r.shell_quality }}" class="kv"><text class="muted">蛋壳质量</text><text>{{ r.shell_quality }}</text></view>
     <view wx:if="{{ r.freshness_days }}" class="kv"><text class="muted">鲜度</text><text>{{ r.freshness_days }} 天内</text></view>
-    <view wx:if="{{ r.farm_size }}" class="kv"><text class="muted">规模</text><text>{{ r.farm_size }} 只</text></view>
+    <view wx:if="{{ r.farm_size }}" class="kv"><text class="muted">规模</text><text>{{ farmSizeText }}</text></view>
     <view class="kv"><text class="muted">{{ isSupply ? '养殖场' : '采购方' }}</text><text>{{ r.farm.name }}</text></view>
     <view wx:if="{{ r.description }}" class="mt-16" style="line-height: 1.7;">{{ r.description }}</view>
   </view>

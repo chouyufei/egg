@@ -47,8 +47,8 @@ Page({
       user,
       provinces: inferNearbyProvinces(user.region),
       tipText: user.role === 'farm'
-        ? '默认查看采购需求 → 您可应标，也可点「发布」上架自己的货源'
-        : '默认浏览货源 → 您可竞拍，也可点「发布」发布自己的采购需求',
+        ? '上架货源 → 采购商竞价 → 价高者得，5 分钟无新出价即成交'
+        : '默认浏览货源 → 您可竞拍，也可点「+发布求购」让卖方应标',
     });
   },
   async onShow() {
@@ -78,10 +78,17 @@ Page({
     this.setData({ guideTitle: title, guideText: text, guideAction: action, _guideRoute: route });
   },
   async load() {
-    const params = { status: 'auctioning' };
+    // 卖方只看自己的货源，不再加载求购列表
+    if (this.data.user.role === 'farm') {
+      try {
+        const { resources } = await api.get('/resources/mine');
+        this.setData({ mine: resources, others: [], othersCount: 0 });
+      } catch (e) {}
+      return;
+    }
+    const params = { status: 'auctioning', kind: 'supply' };
     if (this.data.activeColor) params.color = this.data.activeColor;
     if (this.data.activeProvince) params.province = this.data.activeProvince;
-    params.kind = this.data.user.role === 'farm' ? 'demand' : 'supply';
     try {
       const { resources } = await api.get('/resources', params);
       this.setData({ others: resources, othersCount: resources.length });

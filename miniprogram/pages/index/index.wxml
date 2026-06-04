@@ -55,25 +55,39 @@
           bindtap="pickProvince" data-v="{{ item }}">{{ item }}</view>
   </scroll-view>
 
-  <!-- 我看到的（对方发布的） + 我发布的 切换 -->
-  <view class="kind-tabs">
-    <view class="kind-tab {{ viewTab === 'others' ? 'on' : '' }}" bindtap="setViewTab" data-t="others">
-      {{ user.role === 'farm' ? '采购需求' : '货源' }} ({{ othersCount }})
+  <!-- 卖方：只显示「我的货源」 + 醒目发布按钮，不显示采购需求 -->
+  <block wx:if="{{ user.role === 'farm' }}">
+    <view class="row-between" style="padding: 16rpx 24rpx 0;">
+      <view class="bold" style="font-size: 30rpx;">我的货源 ({{ mine.length }})</view>
+      <view class="kind-tab-pub" bindtap="goPublish">+ 发布货源</view>
     </view>
-    <view class="kind-tab {{ viewTab === 'mine' ? 'on' : '' }}" bindtap="setViewTab" data-t="mine">
-      我的{{ user.role === 'farm' ? '货源' : '求购' }} ({{ mine.length }})
-    </view>
-    <view class="kind-tab-pub" bindtap="goPublish">+ 发布</view>
-  </view>
-
-  <view class="page-pad">
-    <block wx:if="{{ viewTab === 'others' }}">
-      <egg-card wx:for="{{ others }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
-      <empty wx:if="{{ !others.length }}" icon="📭" text="{{ user.role === 'farm' ? '当前没有采购需求' : '当前没有货源' }}" />
-    </block>
-    <block wx:else>
+    <view class="page-pad">
       <egg-card wx:for="{{ mine }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
-      <empty wx:if="{{ !mine.length }}" icon="📭" text="您还没发布过{{ user.role === 'farm' ? '货源' : '求购' }}" />
-    </block>
-  </view>
+      <empty wx:if="{{ !mine.length }}" icon="🐔" text="还没发布过货源，点上方按钮立即发布" />
+    </view>
+  </block>
+
+  <!-- 买方：货源 + 我的求购 切换 -->
+  <block wx:else>
+    <view class="kind-tabs">
+      <view class="kind-tab {{ viewTab === 'others' ? 'on' : '' }}" bindtap="setViewTab" data-t="others">
+        货源 ({{ othersCount }})
+      </view>
+      <view class="kind-tab {{ viewTab === 'mine' ? 'on' : '' }}" bindtap="setViewTab" data-t="mine">
+        我的求购 ({{ mine.length }})
+      </view>
+      <view class="kind-tab-pub" bindtap="goPublish">+ 发布求购</view>
+    </view>
+
+    <view class="page-pad">
+      <block wx:if="{{ viewTab === 'others' }}">
+        <egg-card wx:for="{{ others }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        <empty wx:if="{{ !others.length }}" icon="📭" text="当前没有货源" />
+      </block>
+      <block wx:else>
+        <egg-card wx:for="{{ mine }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        <empty wx:if="{{ !mine.length }}" icon="📭" text="您还没发布过求购" />
+      </block>
+    </view>
+  </block>
 </block>

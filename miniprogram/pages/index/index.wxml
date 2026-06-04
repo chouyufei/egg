@@ -62,7 +62,11 @@
       <view class="kind-tab-pub" bindtap="goPublish">+ 发布货源</view>
     </view>
     <view class="page-pad">
-      <egg-card wx:for="{{ mine }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+      <view class="grid">
+        <view class="grid-cell" wx:for="{{ mine }}" wx:key="id">
+          <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        </view>
+      </view>
       <empty wx:if="{{ !mine.length }}" icon="🐔" text="还没发布过货源，点上方按钮立即发布" />
     </view>
   </block>
@@ -81,11 +85,19 @@
 
     <view class="page-pad">
       <block wx:if="{{ viewTab === 'others' }}">
-        <egg-card wx:for="{{ others }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        <view class="grid">
+          <view class="grid-cell" wx:for="{{ others }}" wx:key="id">
+            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+          </view>
+        </view>
         <empty wx:if="{{ !others.length }}" icon="📭" text="当前没有货源" />
       </block>
       <block wx:else>
-        <egg-card wx:for="{{ mine }}" wx:key="id" r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        <view class="grid">
+          <view class="grid-cell" wx:for="{{ mine }}" wx:key="id">
+            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+          </view>
+        </view>
         <empty wx:if="{{ !mine.length }}" icon="📭" text="您还没发布过求购" />
       </block>
     </view>

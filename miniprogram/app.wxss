@@ -79,6 +79,11 @@ page {
 }
 .empty-icon { font-size: 80rpx; margin-bottom: 16rpx; }
 
+/* 两列宫格容器：用于货源 / 求购等卡片列表 */
+.grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.grid-cell { width: calc(50% - 8rpx); }
+.grid-cell > * { margin-bottom: 0 !important; }
+
 .input-row {
   display: flex; align-items: center; padding: 24rpx 0;
   border-bottom: 1px solid #f0f0f0;

@@ -1,25 +1,24 @@
-<view class="ec card" catchtap="tap">
+<view class="ec" catchtap="tap">
   <view class="ec-img-wrap">
     <image class="ec-img" mode="aspectFill" src="{{ cover }}" />
     <view class="ec-kind {{ kindCls }}">{{ kindLabel }}</view>
     <view class="ec-status {{ statusCls }}">{{ statusLabel }}</view>
     <view wx:if="{{ r.status === 'auctioning' }}" class="ec-time">
-      <text>剩余 </text><countdown end-at="{{ r.end_at }}" />
+      <text>剩 </text><countdown end-at="{{ r.end_at }}" />
     </view>
   </view>
   <view class="ec-body">
-    <view class="bold ellipsis">{{ r.title }}</view>
-    <view class="mt-8">
-      <text wx:if="{{ r.egg_color }}" class="tag">{{ r.egg_color }}</text>
-      <text wx:if="{{ r.weight_spec }}" class="tag tag-b">{{ r.weight_spec }}</text>
-      <text wx:if="{{ r.region }}" class="tag tag-g">{{ r.region }}</text>
+    <view class="ec-title">{{ r.title }}</view>
+    <view class="ec-tags">
+      <text wx:if="{{ r.egg_color }}" class="ec-tag">{{ r.egg_color }}</text>
+      <text wx:if="{{ r.region }}" class="ec-tag ec-tag-g">{{ r.region }}</text>
     </view>
-    <view class="row-between mt-16">
+    <view class="ec-foot">
       <view>
-        <text class="price-l">¥{{ r.current_price }}</text>
-        <text class="muted" style="margin-left: 8rpx;">{{ r.unit_label || '元/箱' }}</text>
+        <text class="ec-price">¥{{ r.current_price }}</text>
+        <text class="ec-unit">{{ r.unit_label || '元/箱' }}</text>
       </view>
-      <view class="muted">{{ priceHint }} · {{ r.bid_count || 0 }} 次{{ kindBidLabel }}</view>
+      <view class="ec-meta">{{ r.bid_count || 0 }} 次{{ kindBidLabel }}</view>
     </view>
   </view>
 </view>

@@ -2,16 +2,17 @@
 
 .cat-grid {
   display: flex; flex-wrap: wrap;
+  justify-content: space-between;
 }
 .cat-card {
-  width: calc(50% - 8rpx);
+  width: 49%;
   background: #fff; border-radius: 20rpx;
   padding: 32rpx 24rpx; box-sizing: border-box;
   border: 2rpx solid transparent;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
   margin-bottom: 16rpx;
 }
-.cat-card:nth-child(2n-1) { margin-right: 16rpx; }
+.cat-grid::after { content: ''; width: 49%; }
 .cat-card.on {
   border-color: #f6b821;
   background: #fff7e0;

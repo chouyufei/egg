@@ -79,11 +79,22 @@ page {
 }
 .empty-icon { font-size: 80rpx; margin-bottom: 16rpx; }
 
-/* 两列宫格容器：用于货源 / 求购等卡片列表。
-   用 margin 而非 gap，避开部分 Android WebView 不支持 flex gap 的坑 */
-.grid { display: flex; flex-wrap: wrap; }
-.grid-cell { width: calc(50% - 8rpx); margin-bottom: 16rpx; }
-.grid-cell:nth-child(2n-1) { margin-right: 16rpx; }
+/* 两列宫格容器：纯百分比 + justify-content space-between
+   避免 calc() 在部分 Android XWeb 上失效导致单列 */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.grid-cell {
+  width: 49%;
+  margin-bottom: 16rpx;
+}
+/* 兜底：cell 个数为奇数时最后一个不被拉伸 */
+.grid::after {
+  content: '';
+  width: 49%;
+}
 
 .input-row {
   display: flex; align-items: center; padding: 24rpx 0;

@@ -64,55 +64,24 @@
     </scroll-view>
   </view>
 
-  <!-- 卖方：只显示「我的货源」 -->
-  <block wx:if="{{ user.role === 'farm' }}">
-    <view class="row-between" style="padding: 16rpx 24rpx 0;">
-      <view class="bold" style="font-size: 30rpx;">我的货源 ({{ mine.length }})</view>
+  <!-- 「+ 发布」大按钮（替代原"货源/我的求购" tab 行） -->
+  <view class="publish-cta" bindtap="goPublish">
+    <view class="publish-plus">+</view>
+    <view class="flex-1">
+      <view class="publish-title">{{ user.role === 'farm' ? '发布货源' : '发布求购' }}</view>
+      <view class="publish-sub">{{ user.role === 'farm' ? '上架我的鸡蛋等买家竞拍' : '说出我要的，让养殖场来报价' }}</view>
     </view>
-    <view class="page-pad">
-      <view class="grid">
-        <view class="grid-cell" wx:for="{{ mine }}" wx:key="id">
-          <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
-        </view>
-      </view>
-      <empty wx:if="{{ !mine.length }}" icon="🐔" text="还没发布过货源，点底部发布按钮立即发布" />
-    </view>
-  </block>
+    <view class="publish-arrow">›</view>
+  </view>
 
-  <!-- 买方：货源 + 我的求购 切换 -->
-  <block wx:else>
-    <view class="kind-tabs">
-      <view class="kind-tab {{ viewTab === 'others' ? 'on' : '' }}" bindtap="setViewTab" data-t="others">
-        货源 ({{ othersCount }})
-      </view>
-      <view class="kind-tab {{ viewTab === 'mine' ? 'on' : '' }}" bindtap="setViewTab" data-t="mine">
-        我的求购 ({{ mine.length }})
+  <view class="section-head">{{ user.role === 'farm' ? '我的货源' : '我的求购' }} ({{ mine.length }})</view>
+  <view class="page-pad">
+    <view class="grid">
+      <view class="grid-cell" wx:for="{{ mine }}" wx:key="id">
+        <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
       </view>
     </view>
-
-    <view class="page-pad">
-      <block wx:if="{{ viewTab === 'others' }}">
-        <view class="grid">
-          <view class="grid-cell" wx:for="{{ others }}" wx:key="id">
-            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
-          </view>
-        </view>
-        <empty wx:if="{{ !others.length }}" icon="📭" text="当前没有货源" />
-      </block>
-      <block wx:else>
-        <view class="grid">
-          <view class="grid-cell" wx:for="{{ mine }}" wx:key="id">
-            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
-          </view>
-        </view>
-        <empty wx:if="{{ !mine.length }}" icon="📭" text="您还没发布过求购" />
-      </block>
-    </view>
-  </block>
-
-  <!-- 浮动「发布」按钮（底部居中） -->
-  <view class="fab" bindtap="goPublish">
-    <view class="fab-plus">+</view>
-    <view class="fab-label">{{ user.role === 'farm' ? '发布货源' : '发求购' }}</view>
+    <empty wx:if="{{ !mine.length }}" icon="{{ user.role === 'farm' ? '🐔' : '🛒' }}"
+           text="还没发布过{{ user.role === 'farm' ? '货源' : '求购' }}，点上方按钮立即发布" />
   </view>
 </block>

@@ -27,7 +27,6 @@
     "borderStyle": "white",
     "list": [
       { "pagePath": "pages/index/index", "text": "首页" },
-      { "pagePath": "pages/auction/auction", "text": "竞拍" },
       { "pagePath": "pages/orders/orders", "text": "订单" },
       { "pagePath": "pages/me/me", "text": "我的" }
     ]

@@ -77,35 +77,26 @@
 }
 .prov-chip.on { background: #06883b; color: #fff; font-weight: 600; }
 
-.kind-tabs {
-  display: flex; background: #fff;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-  align-items: center;
-  margin-top: 16rpx;
+/* 「+ 发布」大按钮（替代原 kind-tabs 一行） */
+.publish-cta {
+  display: flex; align-items: center; gap: 20rpx;
+  margin: 0 24rpx 24rpx; padding: 28rpx 28rpx;
+  background: linear-gradient(135deg, #ffd84d 0%, #f6b821 100%);
+  border-radius: 18rpx;
+  box-shadow: 0 6rpx 18rpx rgba(246,184,33,0.35);
+  color: #1d1d1f;
 }
-.kind-tab {
-  padding: 24rpx 28rpx; font-size: 28rpx; color: #8a8d93;
-  position: relative;
+.publish-plus {
+  width: 72rpx; height: 72rpx; border-radius: 18rpx;
+  background: rgba(255,255,255,0.9); color: #e0a40d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56rpx; line-height: 1; font-weight: 300;
 }
-.kind-tab.on { color: #1d1d1f; font-weight: 700; }
-.kind-tab.on::after {
-  content: ''; position: absolute; bottom: 6rpx; left: 28rpx; right: 28rpx;
-  height: 6rpx; background: #f6b821; border-radius: 3rpx;
-}
+.publish-title { font-size: 32rpx; font-weight: 700; }
+.publish-sub { font-size: 22rpx; opacity: 0.75; margin-top: 4rpx; }
+.publish-arrow { font-size: 44rpx; color: rgba(0,0,0,0.5); }
 
-/* 浮动发布按钮 */
-.fab {
-  position: fixed;
-  left: 50%; transform: translateX(-50%);
-  bottom: calc(40rpx + env(safe-area-inset-bottom));
-  width: 130rpx; height: 130rpx;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ffb800 0%, #ee0a24 100%);
-  box-shadow: 0 8rpx 24rpx rgba(238,10,36,0.35);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: #fff;
-  z-index: 999;
+.section-head {
+  padding: 8rpx 24rpx 16rpx;
+  font-size: 30rpx; font-weight: 700;
 }
-.fab-plus { font-size: 50rpx; line-height: 1; font-weight: 300; }
-.fab-label { font-size: 18rpx; margin-top: 4rpx; letter-spacing: 1rpx; }

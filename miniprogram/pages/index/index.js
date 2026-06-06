@@ -84,45 +84,44 @@ Page({
     this.setData({ guideTitle: title, guideText: text, guideAction: action, _guideRoute: route });
   },
   async load() {
-    // 卖方只看自己的货源，不再加载求购列表
-    if (this.data.user.role === 'farm') {
-      try {
-        const { resources } = await api.get('/resources/mine');
-        this.setData({ mine: resources, others: [], othersCount: 0 });
-      } catch (e) {}
-      return;
-    }
-    const params = { status: 'auctioning', kind: 'supply' };
-    if (this.data.activeColor) params.color = this.data.activeColor;
-    if (this.data.activeProvince) params.province = this.data.activeProvince;
-    try {
-      const { resources } = await api.get('/resources', params);
-      this.setData({ others: resources, othersCount: resources.length });
-    } catch (e) {}
+    // 首页只展示「我的发布」（卖方=我的货源，买方=我的求购）；
+    // 浏览对方的发布走「买」二级页（auction）。
     try {
       const { resources } = await api.get('/resources/mine');
-      this.setData({ mine: resources });
+      this.setData({ mine: resources, others: [], othersCount: 0 });
     } catch (e) {}
   },
   pickProvince(e) { this.setData({ activeProvince: e.currentTarget.dataset.v }, () => this.load()); },
   setViewTab(e) { this.setData({ viewTab: e.currentTarget.dataset.t }); },
   openRes(e) { wx.navigateTo({ url: '/pages/resource-detail/resource-detail?id=' + e.currentTarget.dataset.id }); },
   goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
-  goSearch() { wx.switchTab({ url: '/pages/auction/auction' }); },
+  goSearch() { wx.navigateTo({ url: '/pages/auction/auction' }); },
   goPublish() { wx.navigateTo({ url: '/pages/publish/publish' }); },
   goCategory() {
     wx.navigateTo({ url: '/pages/category/category?current=' + (this.data.activeColor || '') });
   },
   goMore() { wx.navigateTo({ url: '/pages/select-mode/select-mode' }); },
+  // 顶部三段：
+  //   卖 → 切到养殖场身份（留在首页）
+  //   买 → 跳到「竞拍」二级页（浏览/出价），带上当前首页选的类目/省份过滤
+  //   其他 → 选模式页
   async switchToMode(e) {
     const role = e.currentTarget.dataset.r;
-    if (!role || role === this.data.user.role) return;
-    try {
-      const res = await api.post('/auth/switch-role', { role });
-      app.setAuth(app.globalData.token, res.user);
-      this.setData({ user: res.user });
-      await this.load();
-    } catch (e) {}
+    if (role === 'buyer') {
+      const qs = [];
+      if (this.data.activeColor) qs.push('color=' + encodeURIComponent(this.data.activeColor));
+      if (this.data.activeProvince) qs.push('province=' + encodeURIComponent(this.data.activeProvince));
+      return wx.navigateTo({ url: '/pages/auction/auction' + (qs.length ? '?' + qs.join('&') : '') });
+    }
+    if (role === 'farm') {
+      if (this.data.user.role === 'farm') return;
+      try {
+        const res = await api.post('/auth/switch-role', { role: 'farm' });
+        app.setAuth(app.globalData.token, res.user);
+        this.setData({ user: res.user });
+        await this.load();
+      } catch (e) {}
+    }
   },
   guideAction() { if (this.data._guideRoute) wx.navigateTo({ url: this.data._guideRoute }); },
   logout() { app.logout(); },

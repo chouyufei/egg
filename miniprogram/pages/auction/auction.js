@@ -20,10 +20,17 @@ Page({
     mineRaw: [],
     filteredMine: [],
   },
-  onLoad() {
+  onLoad(opts) {
     const user = app.globalData.user || wx.getStorageSync('user');
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
-    this.setData({ user, isFarm: user.role === 'farm' });
+    const patch = { user, isFarm: user.role === 'farm' };
+    if (opts.color) {
+      patch['filters.color'] = opts.color;
+      const i = COLOR_OPTIONS.indexOf(opts.color);
+      if (i > 0) patch.colorIndex = i;
+    }
+    if (opts.province) patch['filters.region'] = opts.province;
+    this.setData(patch);
   },
   onShow() { this.reload(); },
   async onPullDownRefresh() { await this.reload(); wx.stopPullDownRefresh(); },

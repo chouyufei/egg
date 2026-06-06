@@ -77,7 +77,8 @@ Page({
     if (user && user.role === 'admin') {
       wx.switchTab({ url: '/pages/index/index' });
     } else {
-      wx.redirectTo({ url: '/pages/select-mode/select-mode' });
+      // 直接进首页，默认显示"买"视角，不再强制选模式
+      wx.switchTab({ url: '/pages/index/index' });
     }
   },
 

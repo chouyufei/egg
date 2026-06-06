@@ -74,6 +74,22 @@
     <view class="publish-arrow">›</view>
   </view>
 
+  <!-- 买家：可竞拍货源（最多展示一屏，"更多"进二级页） -->
+  <block wx:if="{{ user.role === 'buyer' }}">
+    <view class="section-head row-between">
+      <text>可竞拍货源 ({{ others.length }})</text>
+      <text class="section-more" bindtap="goAuction">更多 ›</text>
+    </view>
+    <view class="page-pad">
+      <view class="grid">
+        <view class="grid-cell" wx:for="{{ othersTop }}" wx:key="id">
+          <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        </view>
+      </view>
+      <empty wx:if="{{ !others.length }}" icon="🛒" text="暂无在拍货源" />
+    </view>
+  </block>
+
   <view class="section-head">{{ user.role === 'farm' ? '我的货源' : '我的求购' }} ({{ mine.length }})</view>
   <view class="page-pad">
     <view class="grid">

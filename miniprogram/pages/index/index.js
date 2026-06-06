@@ -34,7 +34,7 @@ Page({
     categories: CATEGORIES, activeColor: '',
     provinces: PROVINCES_DEFAULT, activeProvince: '',
     viewTab: 'others',
-    others: [], mine: [],
+    others: [], othersTop: [], mine: [],
     othersCount: 0,
     tipText: '',
     guideTitle: '', guideText: '', guideAction: '',
@@ -84,12 +84,34 @@ Page({
     this.setData({ guideTitle: title, guideText: text, guideAction: action, _guideRoute: route });
   },
   async load() {
-    // 首页只展示「我的发布」（卖方=我的货源，买方=我的求购）；
-    // 浏览对方的发布走「买」二级页（auction）。
+    // 我的发布（卖方=我的货源，买方=我的求购）
     try {
       const { resources } = await api.get('/resources/mine');
-      this.setData({ mine: resources, others: [], othersCount: 0 });
+      this.setData({ mine: resources });
     } catch (e) {}
+
+    // 买方首页额外展示「可竞拍货源」一屏（最多 6 张，"更多"进 auction 二级页）
+    if (this.data.user.role === 'buyer') {
+      const params = { status: 'auctioning', kind: 'supply' };
+      if (this.data.activeColor) params.color = this.data.activeColor;
+      if (this.data.activeProvince) params.province = this.data.activeProvince;
+      try {
+        const { resources } = await api.get('/resources', params);
+        this.setData({
+          others: resources,
+          othersCount: resources.length,
+          othersTop: resources.slice(0, 6),
+        });
+      } catch (e) {}
+    } else {
+      this.setData({ others: [], othersCount: 0, othersTop: [] });
+    }
+  },
+  goAuction() {
+    const qs = [];
+    if (this.data.activeColor) qs.push('color=' + encodeURIComponent(this.data.activeColor));
+    if (this.data.activeProvince) qs.push('province=' + encodeURIComponent(this.data.activeProvince));
+    wx.navigateTo({ url: '/pages/auction/auction' + (qs.length ? '?' + qs.join('&') : '') });
   },
   pickProvince(e) { this.setData({ activeProvince: e.currentTarget.dataset.v }, () => this.load()); },
   setViewTab(e) { this.setData({ viewTab: e.currentTarget.dataset.t }); },

@@ -1,7 +1,7 @@
 .hint { padding: 8rpx 8rpx 24rpx; font-size: 24rpx; }
 
 .cat-grid {
-  display: flex; flex-wrap: wrap; gap: 16rpx;
+  display: flex; flex-wrap: wrap;
 }
 .cat-card {
   width: calc(50% - 8rpx);
@@ -9,7 +9,9 @@
   padding: 32rpx 24rpx; box-sizing: border-box;
   border: 2rpx solid transparent;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  margin-bottom: 16rpx;
 }
+.cat-card:nth-child(2n-1) { margin-right: 16rpx; }
 .cat-card.on {
   border-color: #f6b821;
   background: #fff7e0;

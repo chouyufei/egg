@@ -5,15 +5,26 @@
   padding: 2rpx 10rpx; border-radius: 16rpx; font-size: 20rpx;
 }
 
-.hero-tip {
-  margin-top: 16rpx; background: rgba(255,255,255,0.18);
-  padding: 12rpx 20rpx; border-radius: 12rpx;
-  color: #fff; font-size: 24rpx;
+/* 顶部三段切换：卖 / 买 / 其他 */
+.mode-bar {
+  display: flex; gap: 12rpx;
+  background: rgba(255,255,255,0.18);
+  padding: 8rpx; border-radius: 999rpx;
+}
+.mode-seg {
+  flex: 1; text-align: center;
+  padding: 14rpx 0; border-radius: 999rpx;
+  font-size: 26rpx; font-weight: 600;
+  color: #fff;
+}
+.mode-seg.on {
+  background: #fff; color: #e0a40d;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.08);
 }
 
 .search-wrap {
-  margin-top: 16rpx; background: rgba(255,255,255,0.85);
-  padding: 16rpx 24rpx; border-radius: 999rpx;
+  margin-top: 20rpx; background: rgba(255,255,255,0.9);
+  padding: 18rpx 24rpx; border-radius: 999rpx;
   color: #8a8d93; font-size: 26rpx;
 }
 
@@ -22,31 +33,49 @@
   border-left: 8rpx solid #f6b821;
 }
 
-.cat-scroll {
-  white-space: nowrap;
-  padding: 0 24rpx 16rpx;
+/* 蛋品类目 — 入口卡 */
+.cat-entry {
+  display: flex; align-items: center; gap: 16rpx;
+  margin: 24rpx; padding: 24rpx 28rpx;
+  background: #fff; border-radius: 18rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
 }
-.cat-chip {
-  display: inline-block; text-align: center;
-  margin-right: 20rpx; padding: 14rpx 8rpx;
-  width: 110rpx; background: #fff; border-radius: 16rpx;
-  vertical-align: top;
+.cat-entry-icon {
+  width: 80rpx; height: 80rpx; border-radius: 20rpx;
+  background: #fff7e0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44rpx;
 }
-.cat-chip.on { background: #fff7e0; border: 2rpx solid #f6b821; }
-.cat-icon { font-size: 36rpx; }
-.cat-label { font-size: 22rpx; color: #555; margin-top: 4rpx; }
+.cat-entry-title { font-size: 30rpx; font-weight: 700; }
+.cat-entry-sub { font-size: 22rpx; margin-top: 4rpx; }
+.cat-entry-arrow { color: #b0b0b0; font-size: 44rpx; }
 
+/* 区域分类（绿色） */
+.region-block {
+  margin: 0 24rpx 24rpx;
+  background: linear-gradient(135deg, #e7f7eb 0%, #d2f0d8 100%);
+  border-radius: 18rpx; padding: 20rpx 0 16rpx;
+}
+.region-head {
+  padding: 0 24rpx 12rpx;
+  font-size: 26rpx; font-weight: 700; color: #06883b;
+  display: flex; align-items: center; gap: 8rpx;
+}
+.region-dot { font-size: 28rpx; }
+.region-active {
+  margin-left: auto; font-weight: 400; font-size: 22rpx; color: #06883b;
+}
 .prov-scroll {
   white-space: nowrap;
-  padding: 0 24rpx 16rpx;
+  padding: 0 24rpx;
 }
 .prov-chip {
   display: inline-block;
-  padding: 10rpx 24rpx; margin-right: 16rpx;
-  background: #fff; border-radius: 999rpx;
-  font-size: 24rpx; color: #555;
+  padding: 10rpx 24rpx; margin-right: 14rpx;
+  background: rgba(255,255,255,0.7); border-radius: 999rpx;
+  font-size: 24rpx; color: #1d6a3e;
 }
-.prov-chip.on { background: #f6b821; color: #fff; font-weight: 600; }
+.prov-chip.on { background: #06883b; color: #fff; font-weight: 600; }
 
 .kind-tabs {
   display: flex; background: #fff;
@@ -64,9 +93,19 @@
   content: ''; position: absolute; bottom: 6rpx; left: 28rpx; right: 28rpx;
   height: 6rpx; background: #f6b821; border-radius: 3rpx;
 }
-.kind-tab-pub {
-  margin-left: auto; margin-right: 24rpx;
-  background: #f6b821; color: #fff;
-  padding: 10rpx 24rpx; border-radius: 999rpx;
-  font-size: 24rpx; font-weight: 600;
+
+/* 浮动发布按钮 */
+.fab {
+  position: fixed;
+  left: 50%; transform: translateX(-50%);
+  bottom: calc(40rpx + env(safe-area-inset-bottom));
+  width: 130rpx; height: 130rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb800 0%, #ee0a24 100%);
+  box-shadow: 0 8rpx 24rpx rgba(238,10,36,0.35);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #fff;
+  z-index: 999;
 }
+.fab-plus { font-size: 50rpx; line-height: 1; font-weight: 300; }
+.fab-label { font-size: 18rpx; margin-top: 4rpx; letter-spacing: 1rpx; }

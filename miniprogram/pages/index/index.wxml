@@ -12,17 +12,20 @@
   </view>
 </block>
 
-<!-- 卖蛋方 + 买蛋方 共享同一个布局，listKind 控制看到什么 -->
 <block wx:if="{{ user.role === 'farm' || user.role === 'buyer' }}">
+  <!-- 顶部：3 段 卖/买/其他 -->
   <view class="hero">
-    <view class="row-between">
-      <view>
-        <view class="hero-title">🥚 凤伯乐</view>
-        <view class="hero-sub">{{ user.name }} · {{ user.role === 'farm' ? '我要卖蛋' : '我要买蛋' }}</view>
-      </view>
+    <view class="row-between" style="margin-bottom: 16rpx;">
+      <view class="hero-title">🥚 凤伯乐</view>
       <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
     </view>
-    <view class="hero-tip">{{ tipText }}</view>
+
+    <view class="mode-bar">
+      <view class="mode-seg {{ user.role === 'farm' ? 'on' : '' }}" bindtap="switchToMode" data-r="farm">🐔 卖</view>
+      <view class="mode-seg {{ user.role === 'buyer' ? 'on' : '' }}" bindtap="switchToMode" data-r="buyer">🛒 买</view>
+      <view class="mode-seg" bindtap="goMore">⋯ 其他</view>
+    </view>
+
     <view class="search-wrap" bindtap="goSearch">🔍 搜地区 / 鸡种 / 蛋色</view>
   </view>
 
@@ -37,29 +40,34 @@
     </view>
   </view>
 
-  <!-- 蛋品类目 banner -->
-  <view class="section-title">蛋品类目</view>
-  <scroll-view scroll-x class="cat-scroll">
-    <view class="cat-chip {{ activeColor === item.value ? 'on' : '' }}" wx:for="{{ categories }}" wx:key="value"
-          bindtap="pickColor" data-v="{{ item.value }}">
-      <view class="cat-icon">{{ item.icon }}</view>
-      <view class="cat-label">{{ item.label }}</view>
+  <!-- 蛋品类目：入口卡（点了进二级页选） -->
+  <view class="cat-entry" bindtap="goCategory">
+    <view class="cat-entry-icon">🥚</view>
+    <view class="flex-1">
+      <view class="cat-entry-title">蛋品类目</view>
+      <view class="cat-entry-sub muted">{{ activeColor ? '当前：' + activeColor : '红壳 · 粉壳 · 土鸡蛋 · 全部' }}</view>
     </view>
-  </scroll-view>
+    <view class="cat-entry-arrow">›</view>
+  </view>
 
-  <!-- 区域 banner -->
-  <view class="section-title">区域分类</view>
-  <scroll-view scroll-x class="prov-scroll">
-    <view class="prov-chip {{ activeProvince === '' ? 'on' : '' }}" bindtap="pickProvince" data-v="">📍 推荐</view>
-    <view class="prov-chip {{ activeProvince === item ? 'on' : '' }}" wx:for="{{ provinces }}" wx:key="*this"
-          bindtap="pickProvince" data-v="{{ item }}">{{ item }}</view>
-  </scroll-view>
+  <!-- 区域分类（绿色块） -->
+  <view class="region-block">
+    <view class="region-head">
+      <text class="region-dot">📍</text>
+      <text>区域分类</text>
+      <text wx:if="{{ activeProvince }}" class="region-active">当前：{{ activeProvince }}</text>
+    </view>
+    <scroll-view scroll-x class="prov-scroll">
+      <view class="prov-chip {{ activeProvince === '' ? 'on' : '' }}" bindtap="pickProvince" data-v="">推荐</view>
+      <view class="prov-chip {{ activeProvince === item ? 'on' : '' }}" wx:for="{{ provinces }}" wx:key="*this"
+            bindtap="pickProvince" data-v="{{ item }}">{{ item }}</view>
+    </scroll-view>
+  </view>
 
-  <!-- 卖方：只显示「我的货源」 + 醒目发布按钮，不显示采购需求 -->
+  <!-- 卖方：只显示「我的货源」 -->
   <block wx:if="{{ user.role === 'farm' }}">
     <view class="row-between" style="padding: 16rpx 24rpx 0;">
       <view class="bold" style="font-size: 30rpx;">我的货源 ({{ mine.length }})</view>
-      <view class="kind-tab-pub" bindtap="goPublish">+ 发布货源</view>
     </view>
     <view class="page-pad">
       <view class="grid">
@@ -67,7 +75,7 @@
           <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
         </view>
       </view>
-      <empty wx:if="{{ !mine.length }}" icon="🐔" text="还没发布过货源，点上方按钮立即发布" />
+      <empty wx:if="{{ !mine.length }}" icon="🐔" text="还没发布过货源，点底部发布按钮立即发布" />
     </view>
   </block>
 
@@ -80,7 +88,6 @@
       <view class="kind-tab {{ viewTab === 'mine' ? 'on' : '' }}" bindtap="setViewTab" data-t="mine">
         我的求购 ({{ mine.length }})
       </view>
-      <view class="kind-tab-pub" bindtap="goPublish">+ 发布求购</view>
     </view>
 
     <view class="page-pad">
@@ -102,4 +109,10 @@
       </block>
     </view>
   </block>
+
+  <!-- 浮动「发布」按钮（底部居中） -->
+  <view class="fab" bindtap="goPublish">
+    <view class="fab-plus">+</view>
+    <view class="fab-label">{{ user.role === 'farm' ? '发布货源' : '发求购' }}</view>
+  </view>
 </block>

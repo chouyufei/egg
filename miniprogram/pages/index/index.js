@@ -53,6 +53,12 @@ Page({
   },
   async onShow() {
     if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
+    // 二级类目页选完后会写到 storage，回到首页时同步过来
+    const picked = wx.getStorageSync('selectedColor');
+    if (picked !== undefined && picked !== this.data.activeColor) {
+      this.setData({ activeColor: picked });
+    }
+    wx.removeStorageSync('selectedColor');
     await this.refresh();
   },
   async refresh() {
@@ -98,13 +104,26 @@ Page({
       this.setData({ mine: resources });
     } catch (e) {}
   },
-  pickColor(e) { this.setData({ activeColor: e.currentTarget.dataset.v }, () => this.load()); },
   pickProvince(e) { this.setData({ activeProvince: e.currentTarget.dataset.v }, () => this.load()); },
   setViewTab(e) { this.setData({ viewTab: e.currentTarget.dataset.t }); },
   openRes(e) { wx.navigateTo({ url: '/pages/resource-detail/resource-detail?id=' + e.currentTarget.dataset.id }); },
   goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
   goSearch() { wx.switchTab({ url: '/pages/auction/auction' }); },
   goPublish() { wx.navigateTo({ url: '/pages/publish/publish' }); },
+  goCategory() {
+    wx.navigateTo({ url: '/pages/category/category?current=' + (this.data.activeColor || '') });
+  },
+  goMore() { wx.navigateTo({ url: '/pages/select-mode/select-mode' }); },
+  async switchToMode(e) {
+    const role = e.currentTarget.dataset.r;
+    if (!role || role === this.data.user.role) return;
+    try {
+      const res = await api.post('/auth/switch-role', { role });
+      app.setAuth(app.globalData.token, res.user);
+      this.setData({ user: res.user });
+      await this.load();
+    } catch (e) {}
+  },
   guideAction() { if (this.data._guideRoute) wx.navigateTo({ url: this.data._guideRoute }); },
   logout() { app.logout(); },
 });

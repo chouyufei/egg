@@ -1,0 +1,42 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGold" cx="0.35" cy="0.3" r="0.9">
+      <stop offset="0" stop-color="#ffd84d"/>
+      <stop offset="0.55" stop-color="#f6b821"/>
+      <stop offset="1" stop-color="#f08a00"/>
+    </radialGradient>
+    <radialGradient id="eggHi" cx="0.35" cy="0.3" r="0.45">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fff4d6"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 圆形底（公众号头像） -->
+  <circle cx="256" cy="256" r="256" fill="url(#bgGold)"/>
+
+  <!-- 内圈描边，类似徽章 -->
+  <circle cx="256" cy="256" r="232" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="4"/>
+
+  <!-- 蛋身 -->
+  <path d="M 256 158
+           C 178 158 144 264 144 332
+           C 144 394 192 428 256 428
+           C 320 428 368 394 368 332
+           C 368 264 334 158 256 158 Z"
+        fill="url(#eggHi)"/>
+
+  <!-- 凤羽 -->
+  <path d="M 248 168
+           C 230 132 234 92 262 70
+           C 254 90 264 104 280 108
+           C 270 122 278 134 294 132
+           C 280 148 290 162 302 160
+           C 286 176 270 180 248 168 Z"
+        fill="#f08a00"/>
+
+  <!-- 凤 字 -->
+  <text x="256" y="378"
+        font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="120" font-weight="900" text-anchor="middle"
+        fill="#e0a40d">凤</text>
+</svg>

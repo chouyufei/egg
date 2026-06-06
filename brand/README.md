@@ -4,10 +4,13 @@
 
 | 文件 | 用途 | 推荐尺寸 |
 |---|---|---|
-| `logo-app.svg` | 小程序图标 / favicon / 头像 | 512×512（导出为 PNG） |
+| `logo-app.svg` | 小程序图标 / favicon | 512×512（导出为 PNG） |
+| `logo-minimal.svg` | 极简版 app 图标（不含「凤」字） | 512×512 |
+| `logo-avatar.svg` | 公众号 / 朋友圈头像（圆形底） | 512×512 |
 | `logo-horizontal.svg` | Web 后台页眉、名片、邮件签名 | 900×280 |
 | `logo-vertical.svg` | 启动屏、海报、易拉宝 | 480×640 |
 | `logo-mono.svg` | 印章、水印、传真、单色印刷 | 任意 |
+| `poster.svg` | 推广海报 / 易拉宝 / 公众号推文头图 | 800×1200 |
 
 ## 配色
 

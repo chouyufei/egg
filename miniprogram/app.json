@@ -12,7 +12,8 @@
     "pages/publish/publish",
     "pages/qualify/qualify",
     "pages/deposit/deposit",
-    "pages/messages/messages"
+    "pages/messages/messages",
+    "pages/seller-profile/seller-profile"
   ],
   "window": {
     "backgroundTextStyle": "light",

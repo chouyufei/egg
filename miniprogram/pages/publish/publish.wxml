@@ -17,12 +17,8 @@
       </picker>
     </view>
     <view class="input-row"><view class="label">具体地区</view><input value="{{ form.region }}" data-k="region" bindinput="onInput" bindblur="onInput" placeholder="如：山东青州 / 河南信阳" /></view>
-    <view class="input-row"><view class="label">鸡种</view><input value="{{ form.chicken_breed }}" data-k="chicken_breed" bindinput="onInput" bindblur="onInput" placeholder="如：海兰褐 / 罗曼粉 / 笨鸡" /></view>
-    <view wx:if="{{ isSupply }}" class="input-row">
-      <view class="label">养殖规模</view>
-      <input type="digit" value="{{ form.farm_size_wan }}" data-k="farm_size_wan" bindinput="onInput" bindblur="onInput" placeholder="如 1.5" />
-      <text class="muted" style="margin-left: 8rpx;">万只</text>
-    </view>
+
+    <!-- 先蛋色 -->
     <view class="input-row">
       <view class="label">蛋色</view>
       <radio-group bindchange="pickColor" style="display: flex; gap: 24rpx;">
@@ -31,9 +27,37 @@
         <label><radio value="杂色" checked="{{ form.egg_color === '杂色' }}" />杂色</label>
       </radio-group>
     </view>
-    <view class="input-row"><view class="label">规格</view><input value="{{ form.weight_spec }}" data-k="weight_spec" bindinput="onInput" bindblur="onInput" placeholder="如：中码 50-55g / 大码 55-60g / 特大 ≥60g" /></view>
+
+    <!-- 再鸡种 -->
+    <view class="input-row"><view class="label">鸡种</view><input value="{{ form.chicken_breed }}" data-k="chicken_breed" bindinput="onInput" bindblur="onInput" placeholder="如：海兰褐 / 罗曼粉 / 笨鸡" /></view>
+
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">养殖规模</view>
+      <input type="digit" value="{{ form.farm_size_wan }}" data-k="farm_size_wan" bindinput="onInput" bindblur="onInput" placeholder="如 1.5" />
+      <text class="muted" style="margin-left: 8rpx;">万只</text>
+    </view>
+
+    <!-- 规格码数：单箱净重区间 -->
+    <view class="input-row">
+      <view class="label">单箱净重</view>
+      <input type="digit" value="{{ form.weight_min }}" data-k="weight_min" bindinput="onInput" bindblur="onInput" placeholder="如 38" style="width: 120rpx;" />
+      <text class="muted" style="margin: 0 8rpx;">—</text>
+      <input type="digit" value="{{ form.weight_max }}" data-k="weight_max" bindinput="onInput" bindblur="onInput" placeholder="如 42" style="width: 120rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">斤/箱</text>
+    </view>
+
     <view wx:if="{{ isSupply }}" class="input-row"><view class="label">蛋壳质量</view><input value="{{ form.shell_quality }}" data-k="shell_quality" bindinput="onInput" bindblur="onInput" placeholder="如：硬壳-无裂纹" /></view>
+
+    <!-- 次品率 -->
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">次品率</view>
+      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="如 0.5" style="width: 140rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">%</text>
+    </view>
+    <view wx:if="{{ isSupply }}" class="input-row"><view class="label">次品包含</view><input value="{{ form.defect_note }}" data-k="defect_note" bindinput="onInput" bindblur="onInput" placeholder="如：裂纹蛋 / 沙皮蛋 / 软壳蛋" /></view>
+
     <view wx:if="{{ isSupply }}" class="input-row"><view class="label">鲜度</view><input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="x 天内" /></view>
+
     <view class="input-row">
       <view class="label">数量</view>
       <input type="digit" value="{{ form.quantity }}" data-k="quantity" bindinput="onInput" bindblur="onInput" placeholder="如 1" />
@@ -42,6 +66,17 @@
         <label><radio value="箱" checked="{{ form.unit_size === '箱' }}" />箱</label>
         <label><radio value="万枚" checked="{{ form.unit_size === '万枚' }}" />万枚</label>
       </radio-group>
+    </view>
+
+    <!-- 车型快速档 -->
+    <view wx:if="{{ form.unit_size === '车' }}" class="quick-row">
+      <view class="quick-tip">常用车型（点击填入）</view>
+      <view class="quick-chips">
+        <view class="quick-chip" wx:for="{{ truckPresets }}" wx:key="value" bindtap="pickTruck" data-v="{{ item.value }}">
+          <text class="quick-val">{{ item.value }} 车</text>
+          <text class="quick-sub">≈ {{ item.boxes }} 箱</text>
+        </view>
+      </view>
     </view>
   </view>
 

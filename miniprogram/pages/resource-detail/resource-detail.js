@@ -125,6 +125,15 @@ Page({
     });
   },
 
+  openSeller() {
+    if (!this.data.r || !this.data.r.farm) return;
+    wx.navigateTo({ url: '/pages/seller-profile/seller-profile?id=' + this.data.r.farm.id });
+  },
+
+  relist() {
+    wx.navigateTo({ url: '/pages/publish/publish?from=' + this.data.id });
+  },
+
   endNow() {
     const price = this.data.r.current_price;
     wx.showModal({

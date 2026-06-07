@@ -4,26 +4,46 @@ const { requestSubscribe } = require('../../utils/subscribe');
 const { ensureFarmDeposit } = require('../../utils/deposit');
 const app = getApp();
 
+// 从 "38-42 斤/箱" 反解出 [min, max]
+function parseWeightSpec(s) {
+  if (!s) return ['', ''];
+  const m = String(s).match(/(\d+(?:\.\d+)?)\s*[-~—]\s*(\d+(?:\.\d+)?)/);
+  return m ? [m[1], m[2]] : ['', ''];
+}
+
 const PROVINCES = ['北京', '天津', '河北', '山西', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽',
   '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州', '云南',
   '陕西', '甘肃', '青海', '宁夏', '新疆', '内蒙古', '西藏'];
+
+// 常用车型对照（4.2/6.8/9.6/13.5 米厢货 → 标准箱数）
+const TRUCK_PRESETS = [
+  { value: 4.2, boxes: 250 },
+  { value: 6.8, boxes: 450 },
+  { value: 9.6, boxes: 720 },
+  { value: 13.5, boxes: 1250 },
+];
 
 Page({
   data: {
     isSupply: true,
     provinces: PROVINCES, provinceIndex: 0,
+    truckPresets: TRUCK_PRESETS,
     form: {
       title: '', region: '', chicken_breed: '',
       farm_size_wan: '',
-      egg_color: '红壳', weight_spec: '', shell_quality: '',
+      egg_color: '红壳',
+      weight_min: '', weight_max: '',
+      shell_quality: '',
+      defect_rate: '', defect_note: '',
       freshness_days: 3, quantity: '', unit_size: '车', start_price: '',
       min_increment: 2, duration_hours: 2, description: '',
     },
     photos: [],
     video: '',
     loading: false,
+    fromId: 0,
   },
-  onLoad() {
+  async onLoad(opt) {
     const user = app.globalData.user;
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
     const isSupply = user.role === 'farm';
@@ -37,11 +57,46 @@ Page({
       'form.region': user.region || '',
     });
     wx.setNavigationBarTitle({ title: isSupply ? '发布货源' : '发布求购' });
+
+    // 流拍重新上架：?from=<resource_id> → 拉旧数据预填
+    if (opt && opt.from) {
+      this.setData({ fromId: Number(opt.from) });
+      try {
+        const { resource: r } = await api.get('/resources/' + Number(opt.from));
+        const [minW, maxW] = parseWeightSpec(r.weight_spec);
+        let pIdx = 0;
+        if (r.province) for (let i = 0; i < PROVINCES.length; i++) {
+          if (PROVINCES[i] === r.province) { pIdx = i; break; }
+        }
+        this.setData({
+          provinceIndex: pIdx,
+          'form.title': r.title || '',
+          'form.region': r.region || '',
+          'form.chicken_breed': r.chicken_breed || '',
+          'form.farm_size_wan': r.farm_size ? +(r.farm_size / 10000).toFixed(2) : '',
+          'form.egg_color': r.egg_color || '红壳',
+          'form.weight_min': minW,
+          'form.weight_max': maxW,
+          'form.shell_quality': r.shell_quality || '',
+          'form.defect_rate': r.defect_rate != null ? String(r.defect_rate) : '',
+          'form.defect_note': r.defect_note || '',
+          'form.freshness_days': r.freshness_days || 3,
+          'form.quantity': r.quantity || '',
+          'form.unit_size': r.unit_size || '车',
+          'form.start_price': r.start_price || '',
+          'form.min_increment': r.min_increment || 2,
+          'form.description': r.description || '',
+          photos: r.photos || [],
+          video: r.intro_video || '',
+        });
+      } catch (e) {}
+    }
   },
   pickColor(e) { this.setData({ 'form.egg_color': e.detail.value }); },
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
   pickUnitSize(e) { this.setData({ 'form.unit_size': e.detail.value }); },
+  pickTruck(e) { this.setData({ 'form.quantity': String(e.currentTarget.dataset.v) }); },
 
   onInput(e) {
     const key = e.currentTarget.dataset.k;
@@ -109,12 +164,18 @@ Page({
     this.setData({ loading: true });
     try {
       const farmSizeWan = Number(f.farm_size_wan) || 0;
+      const wMin = String(f.weight_min || '').trim();
+      const wMax = String(f.weight_max || '').trim();
+      const weightSpec = (wMin && wMax) ? `${wMin}-${wMax} 斤/箱` : (wMin || wMax || '');
       const payload = {
         ...f,
         kind: this.data.isSupply ? 'supply' : 'demand',
         province: this.data.provinces[this.data.provinceIndex],
         // 养殖规模：用户填 1.5 (万只) → 存 15000 (只)
         farm_size: farmSizeWan ? Math.round(farmSizeWan * 10000) : null,
+        weight_spec: weightSpec,
+        defect_rate: f.defect_rate !== '' ? Number(f.defect_rate) : null,
+        defect_note: f.defect_note || null,
         freshness_days: Number(f.freshness_days) || null,
         quantity: Number(f.quantity),
         start_price: Number(f.start_price),
@@ -126,6 +187,8 @@ Page({
         photos: this.data.photos,
       };
       delete payload.farm_size_wan;
+      delete payload.weight_min;
+      delete payload.weight_max;
       await api.post('/resources', payload);
       wx.showToast({ title: '发布成功' });
       setTimeout(() => wx.navigateBack(), 500);

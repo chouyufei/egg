@@ -1,0 +1,72 @@
+<view wx:if="{{ seller }}">
+  <view class="hero">
+    <view class="row" style="gap: 24rpx;">
+      <view class="avatar">🐔</view>
+      <view class="flex-1">
+        <view class="hero-title">{{ seller.name }}</view>
+        <view class="hero-sub">{{ seller.region || '—' }}</view>
+        <view class="mt-8">
+          <text class="tag {{ seller.license_status === 'approved' ? 'tag-g' : 'tag-d' }}">{{ licText }}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card stats-card" style="margin: 24rpx;">
+    <view class="stat">
+      <view class="stat-num">{{ stats.sold_cnt }}</view>
+      <view class="stat-lbl">成交</view>
+    </view>
+    <view class="stat-sep"></view>
+    <view class="stat">
+      <view class="stat-num">{{ stats.active_cnt }}</view>
+      <view class="stat-lbl">在拍</view>
+    </view>
+    <view class="stat-sep"></view>
+    <view class="stat">
+      <view class="stat-num">{{ stats.success_rate == null ? '—' : stats.success_rate + '%' }}</view>
+      <view class="stat-lbl">成交率</view>
+    </view>
+    <view class="stat-sep"></view>
+    <view class="stat">
+      <view class="stat-num">{{ stats.total_cnt }}</view>
+      <view class="stat-lbl">总发布</view>
+    </view>
+  </view>
+
+  <view wx:if="{{ seller.main_products || seller.daily_output || seller.farm_size_int }}" class="card" style="margin: 0 24rpx 24rpx;">
+    <view class="section-title" style="margin: 0 0 12rpx;">养殖场信息</view>
+    <view wx:if="{{ seller.contact_name }}" class="kv"><text class="muted">联系人</text><text>{{ seller.contact_name }}</text></view>
+    <view wx:if="{{ seller.farm_size_int }}" class="kv"><text class="muted">养殖规模</text><text>{{ seller.farm_size_int }} 只</text></view>
+    <view wx:if="{{ seller.daily_output }}" class="kv"><text class="muted">日产蛋</text><text>{{ seller.daily_output }} 枚</text></view>
+    <view wx:if="{{ seller.main_products }}" class="kv"><text class="muted">主营</text><text>{{ seller.main_products }}</text></view>
+  </view>
+
+  <view class="sub-tabs">
+    <view class="sub-tab {{ tab === 'active' ? 'on' : '' }}" bindtap="setTab" data-t="active">
+      在拍货源 ({{ active.length }})
+    </view>
+    <view class="sub-tab {{ tab === 'sold' ? 'on' : '' }}" bindtap="setTab" data-t="sold">
+      历史成交 ({{ sold.length }})
+    </view>
+  </view>
+
+  <view class="page-pad">
+    <block wx:if="{{ tab === 'active' }}">
+      <view class="grid">
+        <view class="grid-cell" wx:for="{{ active }}" wx:key="id">
+          <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        </view>
+      </view>
+      <empty wx:if="{{ !active.length }}" icon="🛒" text="暂无在拍货源" />
+    </block>
+    <block wx:else>
+      <view class="grid">
+        <view class="grid-cell" wx:for="{{ sold }}" wx:key="id">
+          <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+        </view>
+      </view>
+      <empty wx:if="{{ !sold.length }}" icon="📦" text="还没有成交记录" />
+    </block>
+  </view>
+</view>

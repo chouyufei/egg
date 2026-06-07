@@ -33,3 +33,15 @@
   font-size: 24rpx; color: #ee0a24;
   padding: 4rpx 12rpx; border: 1px solid #ee0a24; border-radius: 8rpx;
 }
+
+.quick-row { padding: 16rpx 0 8rpx; }
+.quick-tip { font-size: 24rpx; color: #8a8d93; margin-bottom: 12rpx; }
+.quick-chips { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.quick-chip {
+  display: flex; flex-direction: column; align-items: center;
+  background: #fff7e0; border: 2rpx solid #f6b821;
+  border-radius: 16rpx; padding: 12rpx 20rpx;
+  min-width: 140rpx;
+}
+.quick-val { font-size: 28rpx; font-weight: 700; color: #b78300; }
+.quick-sub { font-size: 22rpx; color: #8a6b15; margin-top: 4rpx; }

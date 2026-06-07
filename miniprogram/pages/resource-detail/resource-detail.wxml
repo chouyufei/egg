@@ -35,10 +35,19 @@
   <view class="card" style="margin: 0 24rpx 24rpx;">
     <view class="section-title" style="margin: 0 0 16rpx;">参数明细</view>
     <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} {{ r.unit_size || '车' }}</text></view>
+    <view wx:if="{{ r.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ r.weight_spec }}</text></view>
     <view wx:if="{{ r.shell_quality }}" class="kv"><text class="muted">蛋壳质量</text><text>{{ r.shell_quality }}</text></view>
+    <view wx:if="{{ r.defect_rate != null }}" class="kv">
+      <text class="muted">次品率</text>
+      <text>{{ r.defect_rate }}%<text wx:if="{{ r.defect_note }}" class="muted" style="font-size: 22rpx;"> · {{ r.defect_note }}</text></text>
+    </view>
     <view wx:if="{{ r.freshness_days }}" class="kv"><text class="muted">鲜度</text><text>{{ r.freshness_days }} 天内</text></view>
     <view wx:if="{{ r.farm_size }}" class="kv"><text class="muted">规模</text><text>{{ farmSizeText }}</text></view>
-    <view class="kv"><text class="muted">{{ isSupply ? '养殖场' : '采购方' }}</text><text>{{ r.farm.name }}</text></view>
+    <view wx:if="{{ isSupply }}" class="kv kv-link" bindtap="openSeller">
+      <text class="muted">养殖场</text>
+      <text>{{ r.farm.name }} <text class="muted" style="font-size: 22rpx;">查看信用 / 在拍 ›</text></text>
+    </view>
+    <view wx:else class="kv"><text class="muted">采购方</text><text>{{ r.farm.name }}</text></view>
     <view wx:if="{{ r.description }}" class="mt-16" style="line-height: 1.7;">{{ r.description }}</view>
   </view>
 
@@ -77,6 +86,11 @@
     <button class="btn" style="flex: 1; padding: 14rpx 0; background: #07c160; color: #fff;" bindtap="endNow" loading="{{ ending }}">
       ✓ 结束竞拍 · 以 ¥{{ r.current_price }} 成交
     </button>
+  </view>
+
+  <!-- 流拍 / 已取消 + 发布者：可快速重新上架 -->
+  <view wx:if="{{ isMine && (r.status === 'failed' || r.status === 'cancelled') }}" class="fixed-bottom-bar">
+    <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="relist">↻ 重新上架</button>
   </view>
 
   <view wx:if="{{ !canBid && !isMine }}" class="fixed-bottom-bar">

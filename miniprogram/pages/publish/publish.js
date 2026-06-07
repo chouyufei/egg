@@ -98,6 +98,12 @@ Page({
       return wx.showToast({ title: '请填写标题/数量/起拍价', icon: 'none' });
     }
 
+    // 发布货源前：检查品质保证金。未缴则弹窗直接拉起支付，支付完留在本页继续发布
+    if (this.data.isSupply) {
+      const ok = await this.ensureFarmDeposit();
+      if (!ok) return;
+    }
+
     await requestSubscribe(['order_received']);
     this.setData({ loading: true });
     try {
@@ -123,5 +129,74 @@ Page({
       wx.showToast({ title: '发布成功' });
       setTimeout(() => wx.navigateBack(), 500);
     } catch (e) {} finally { this.setData({ loading: false }); }
+  },
+
+  // 检查并按需引导缴纳品质保证金。返回 true=已就绪 / false=未完成（中止发布）
+  async ensureFarmDeposit() {
+    let required = 0;
+    try {
+      const ds = await api.get('/deposits/status');
+      if (ds.farm && ds.farm.paid) return true;
+      required = (ds.farm && ds.farm.required) || 0;
+    } catch (e) { return false; }
+
+    const confirmed = await new Promise(resolve => {
+      wx.showModal({
+        title: '请先缴纳品质保证金',
+        content: `发布货源需缴纳 ${required} 元品质保证金（一次性，符合条件可申请退还）。\n现在去缴纳吗？支付完成后会自动回到本页继续发布。`,
+        confirmText: '立即缴纳',
+        cancelText: '稍后再说',
+        confirmColor: '#e0a40d',
+        success: r => resolve(!!r.confirm),
+        fail: () => resolve(false),
+      });
+    });
+    if (!confirmed) return false;
+
+    try {
+      const res = await api.post('/pay/create-order', { type: 'farm_quality' });
+      if (res.paid) { wx.showToast({ title: '已缴纳' }); return true; }
+      if (res.demo) {
+        wx.showToast({ title: '已缴纳保证金（演示模式）', icon: 'success' });
+        return true;
+      }
+      await new Promise((resolve, reject) => {
+        wx.requestPayment({
+          timeStamp: res.timeStamp,
+          nonceStr: res.nonceStr,
+          package: res.package,
+          signType: res.signType || 'RSA',
+          paySign: res.paySign,
+          success: resolve,
+          fail: reject,
+        });
+      });
+      wx.showLoading({ title: '确认支付结果…' });
+      const ok = await this.pollPayResult(res.out_trade_no, 8);
+      wx.hideLoading();
+      if (ok) {
+        wx.showToast({ title: '支付成功，继续发布', icon: 'success' });
+        return true;
+      }
+      wx.showToast({ title: '支付未到账，请稍后重试', icon: 'none', duration: 3000 });
+      return false;
+    } catch (e) {
+      wx.hideLoading();
+      if (e && e.errMsg && /cancel/.test(e.errMsg)) {
+        wx.showToast({ title: '已取消支付', icon: 'none' });
+      }
+      return false;
+    }
+  },
+
+  async pollPayResult(outTradeNo, maxTries) {
+    for (let i = 0; i < maxTries; i++) {
+      await new Promise(r => setTimeout(r, 1000));
+      try {
+        const r = await api.get('/pay/check/' + encodeURIComponent(outTradeNo));
+        if (r.paid) return true;
+      } catch (e) {}
+    }
+    return false;
   },
 });

@@ -1,7 +1,7 @@
 const api = require('../../utils/api');
 const { chooseAndUpload, uploadOne } = require('../../utils/upload');
 const { requestSubscribe } = require('../../utils/subscribe');
-const { ensureFarmDeposit } = require('../../utils/deposit');
+const { ensureFarmDeposit, ensureDemandDeposit } = require('../../utils/deposit');
 const app = getApp();
 
 // 从 "38-42 斤/箱" 反解出 [min, max]
@@ -47,12 +47,13 @@ Page({
   },
 
   async refreshDepositStatus() {
-    if (!this.data.isSupply) return;
+    const qty = Math.max(1, Number(this.data.form.quantity) || 1);
     try {
-      const ds = await api.get('/deposits/status');
+      const ds = await api.get('/deposits/status', { qty });
+      const bucket = this.data.isSupply ? ds.supply : ds.demand;
       this.setData({
-        depositPaid: !!(ds.farm && ds.farm.paid),
-        depositAmount: (ds.farm && ds.farm.required) || 0,
+        depositPaid: !!(bucket && bucket.paid),
+        depositAmount: (bucket && bucket.required) || 0,
       });
     } catch (e) {}
   },
@@ -64,7 +65,10 @@ Page({
 
   async onDepositTap() {
     if (this.data.depositPaid) return;
-    const ok = await ensureFarmDeposit();
+    const qty = Math.max(1, Number(this.data.form.quantity) || 1);
+    const ok = this.data.isSupply
+      ? await ensureFarmDeposit(qty)
+      : await ensureDemandDeposit(qty);
     if (ok) await this.refreshDepositStatus();
   },
   async onLoad(opt) {
@@ -119,12 +123,21 @@ Page({
   pickColor(e) { this.setData({ 'form.egg_color': e.detail.value }); },
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
-  pickTruck(e) { this.setData({ 'form.quantity': String(e.currentTarget.dataset.v) }); },
 
   onInput(e) {
     const key = e.currentTarget.dataset.k;
     if (!key) return;
     this.setData({ ['form.' + key]: e.detail.value });
+    // 数量变化 → 保证金金额随之变化
+    if (key === 'quantity') {
+      clearTimeout(this._qtyTimer);
+      this._qtyTimer = setTimeout(() => this.refreshDepositStatus(), 300);
+    }
+  },
+
+  pickTruck(e) {
+    this.setData({ 'form.quantity': String(e.currentTarget.dataset.v) });
+    this.refreshDepositStatus();
   },
 
   async addPhoto() {
@@ -177,11 +190,13 @@ Page({
       return wx.showToast({ title: '请填写标题/数量/起拍价', icon: 'none' });
     }
 
-    // 发布货源前：检查品质保证金。未缴则弹窗直接拉起支付，支付完留在本页继续发布
-    if (this.data.isSupply) {
-      const ok = await ensureFarmDeposit();
-      if (!ok) return;
-    }
+    // 发布前：检查保证金（货源 → 品质保证金；求购 → 求购保证金），按数量动态计算
+    const qty = Math.max(1, Number(f.quantity) || 1);
+    const ok = this.data.isSupply
+      ? await ensureFarmDeposit(qty)
+      : await ensureDemandDeposit(qty);
+    if (!ok) return;
+    await this.refreshDepositStatus();
 
     await requestSubscribe(['order_received']);
     this.setData({ loading: true });

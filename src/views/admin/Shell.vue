@@ -7,6 +7,7 @@
       <router-link to="/admin/qualifications" active-class="active">📜 资质审核</router-link>
       <router-link to="/admin/resources" active-class="active">🛒 资源监管</router-link>
       <router-link to="/admin/deposits" active-class="active">💰 保证金</router-link>
+      <router-link to="/admin/deposit-settings" active-class="active">💴 保证金金额规则</router-link>
       <router-link to="/admin/disputes" active-class="active">⚖️ 纠纷仲裁</router-link>
       <router-link to="/admin/notice" active-class="active">🔔 通知设置</router-link>
       <router-link to="/admin/settings" active-class="active">⚙️ 管理员设置</router-link>

@@ -53,22 +53,22 @@ function confirmModal({ title, content }) {
   });
 }
 
-// 养殖场：发布货源前的品质保证金（一次性、通用）
-async function ensureFarmDeposit() {
+// 养殖场：发布货源前的品质保证金（按数量动态计算）
+async function ensureFarmDeposit(qty) {
   let required = 0;
   try {
-    const ds = await api.get('/deposits/status');
-    if (ds.farm && ds.farm.paid) return true;
-    required = (ds.farm && ds.farm.required) || 0;
+    const ds = await api.get('/deposits/status', { qty });
+    if (ds.supply && ds.supply.paid) return true;
+    required = (ds.supply && ds.supply.required) || 0;
   } catch (e) { return false; }
 
   const ok = await confirmModal({
     title: '请先缴纳品质保证金',
-    content: `发布货源需缴纳 ${required} 元品质保证金（一次性，符合条件可申请退还）。\n现在去缴纳吗？支付完成后会自动回到本页继续发布。`,
+    content: `本次发布 ${qty} 车，需缴 ${required} 元品质保证金（竞拍结束后自动释放）。\n现在去缴纳吗？支付完成后会自动回到本页继续发布。`,
   });
   if (!ok) return false;
 
-  const r = await payAndConfirm({ type: 'farm_quality' });
+  const r = await payAndConfirm({ type: 'farm_quality', qty });
   wx.showToast({
     title: r.ok ? r.msg + '，继续发布' : r.msg,
     icon: r.ok ? 'success' : 'none',
@@ -77,18 +77,42 @@ async function ensureFarmDeposit() {
   return r.ok;
 }
 
-// 出价方：竞拍保证金（按场缴纳，每个货源单独一次）
+// 采购商：发布求购前的求购保证金（按数量动态计算）
+async function ensureDemandDeposit(qty) {
+  let required = 0;
+  try {
+    const ds = await api.get('/deposits/status', { qty });
+    if (ds.demand && ds.demand.paid) return true;
+    required = (ds.demand && ds.demand.required) || 0;
+  } catch (e) { return false; }
+
+  const ok = await confirmModal({
+    title: '请先缴纳求购保证金',
+    content: `本次发布求购 ${qty} 车，需缴 ${required} 元保证金（无人应标 / 竞拍结束后自动释放）。\n现在去缴纳吗？`,
+  });
+  if (!ok) return false;
+
+  const r = await payAndConfirm({ type: 'demand_quality', qty });
+  wx.showToast({
+    title: r.ok ? r.msg + '，继续发布' : r.msg,
+    icon: r.ok ? 'success' : 'none',
+    duration: r.ok ? 1500 : 3000,
+  });
+  return r.ok;
+}
+
+// 出价方：竞拍保证金（按场缴纳，金额按该场 quantity 动态计算）
 async function ensureBuyerBidDeposit(resourceId) {
   let required = 0;
   try {
     const ds = await api.get('/deposits/status', { resource_id: resourceId });
-    if (ds.buyer && ds.buyer.paid) return true;
-    required = (ds.buyer && ds.buyer.required) || 0;
+    if (ds.bid && ds.bid.paid) return true;
+    required = (ds.bid && ds.bid.required) || 0;
   } catch (e) { return false; }
 
   const ok = await confirmModal({
     title: '请先缴纳本场竞拍保证金',
-    content: `每个货源需单独缴纳 ${required} 元竞拍保证金（成交后抵货款，未中标自动退还）。\n现在去缴纳吗？支付完成后会自动回到本页继续出价。`,
+    content: `本场需缴 ${required} 元竞拍保证金（成交后抵货款，未中标 / 流拍自动退还）。\n现在去缴纳吗？支付完成后会自动回到本页继续出价。`,
   });
   if (!ok) return false;
 
@@ -101,4 +125,4 @@ async function ensureBuyerBidDeposit(resourceId) {
   return r.ok;
 }
 
-module.exports = { ensureFarmDeposit, ensureBuyerBidDeposit };
+module.exports = { ensureFarmDeposit, ensureDemandDeposit, ensureBuyerBidDeposit };

@@ -9,15 +9,15 @@
     </view>
   </view>
 
-  <!-- 品质保证金状态条：仅发布货源时显示 -->
-  <view wx:if="{{ isSupply }}" class="deposit-bar {{ depositPaid ? 'paid' : 'unpaid' }}" bindtap="onDepositTap">
+  <!-- 保证金状态条：货源 → 品质保证金；求购 → 求购保证金。金额随数量动态变化 -->
+  <view class="deposit-bar {{ depositPaid ? 'paid' : 'unpaid' }}" bindtap="onDepositTap">
     <view class="deposit-icon">{{ depositPaid ? '✓' : '⚠' }}</view>
     <view class="flex-1">
       <view class="deposit-title">
-        {{ depositPaid ? '品质保证金已缴纳' : '品质保证金未缴纳' }}
+        {{ depositPaid ? (isSupply ? '品质' : '求购') + '保证金已缴' : '本次需缴' + (isSupply ? '品质' : '求购') + '保证金' }}
       </view>
       <view class="deposit-sub">
-        {{ depositPaid ? '已缴 ' + depositAmount + ' 元，可直接发布' : '需缴 ' + depositAmount + ' 元，点击立即缴纳' }}
+        {{ depositPaid ? '已缴金额覆盖本次数量，可直接发布' : depositAmount + ' 元（按本次车数计算，点击立即缴纳）' }}
       </view>
     </view>
     <view wx:if="{{ !depositPaid }}" class="deposit-arrow">›</view>

@@ -75,15 +75,11 @@
     <view class="input-row">
       <view class="label">数量</view>
       <input type="digit" value="{{ form.quantity }}" data-k="quantity" bindinput="onInput" bindblur="onInput" placeholder="如 1" />
-      <radio-group bindchange="pickUnitSize" style="display: flex; gap: 12rpx; margin-left: 8rpx;">
-        <label><radio value="车" checked="{{ form.unit_size === '车' }}" />车</label>
-        <label><radio value="箱" checked="{{ form.unit_size === '箱' }}" />箱</label>
-        <label><radio value="万枚" checked="{{ form.unit_size === '万枚' }}" />万枚</label>
-      </radio-group>
+      <text class="muted" style="margin-left: 8rpx;">车</text>
     </view>
 
     <!-- 车型快速档 -->
-    <view wx:if="{{ form.unit_size === '车' }}" class="quick-row">
+    <view class="quick-row">
       <view class="quick-tip">常用车型（点击填入）</view>
       <view class="quick-chips">
         <view class="quick-chip" wx:for="{{ truckPresets }}" wx:key="value" bindtap="pickTruck" data-v="{{ item.value }}">

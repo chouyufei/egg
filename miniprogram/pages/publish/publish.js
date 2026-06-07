@@ -119,7 +119,6 @@ Page({
   pickColor(e) { this.setData({ 'form.egg_color': e.detail.value }); },
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
-  pickUnitSize(e) { this.setData({ 'form.unit_size': e.detail.value }); },
   pickTruck(e) { this.setData({ 'form.quantity': String(e.currentTarget.dataset.v) }); },
 
   onInput(e) {

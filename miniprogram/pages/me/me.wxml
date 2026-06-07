@@ -16,6 +16,10 @@
     <view wx:if="{{ user.role === 'farm' }}" class="menu-row" bindtap="goQualify">
       <text>📜 资质认证</text><text class="muted">{{ licText }} ›</text>
     </view>
+    <view class="menu-row" bindtap="goWallet">
+      <text>💴 我的钱包</text>
+      <text class="muted">余额 ¥{{ walletBalance }} ›</text>
+    </view>
     <view class="menu-row" bindtap="goDeposit">
       <text>{{ user.role === 'farm' ? '💰 品质保证金' : '🛡 竞拍保证金' }}</text>
       <text class="muted">{{ depositText }} ›</text>

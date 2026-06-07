@@ -13,7 +13,9 @@
     "pages/qualify/qualify",
     "pages/deposit/deposit",
     "pages/messages/messages",
-    "pages/seller-profile/seller-profile"
+    "pages/seller-profile/seller-profile",
+    "pages/wallet/wallet",
+    "pages/withdraw/withdraw"
   ],
   "window": {
     "backgroundTextStyle": "light",

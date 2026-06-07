@@ -1,0 +1,58 @@
+<view class="hero">
+  <view class="muted" style="color: rgba(255,255,255,0.8); font-size: 24rpx;">账户余额（元）</view>
+  <view class="big-bal">¥ {{ balance }}</view>
+  <view class="row" style="margin-top: 16rpx; gap: 32rpx; color: rgba(255,255,255,0.92); font-size: 24rpx;">
+    <view>可用：{{ available }}</view>
+    <view>提现冻结：{{ locked }}</view>
+  </view>
+</view>
+
+<view class="page-pad" style="margin-top: -32rpx; position: relative; z-index: 2;">
+  <view class="card text-c">
+    <button class="btn" bindtap="goWithdraw">💸 申请提现</button>
+    <view class="muted mt-8" style="font-size: 22rpx;">余额由保证金释放自动入账</view>
+  </view>
+</view>
+
+<view class="sub-tabs">
+  <view class="sub-tab {{ tab === 'tx' ? 'on' : '' }}" bindtap="setTab" data-t="tx">
+    余额流水 ({{ transactions.length }})
+  </view>
+  <view class="sub-tab {{ tab === 'withdraw' ? 'on' : '' }}" bindtap="setTab" data-t="withdraw">
+    提现记录 ({{ withdrawals.length }})
+  </view>
+</view>
+
+<view class="page-pad">
+  <block wx:if="{{ tab === 'tx' }}">
+    <view class="card" wx:if="{{ transactions.length }}">
+      <view wx:for="{{ transactions }}" wx:key="id" class="tx-row">
+        <view class="flex-1">
+          <view class="bold">{{ item.type_label }}</view>
+          <view class="muted" style="font-size: 22rpx;">{{ item.time_str }}<text wx:if="{{ item.note }}"> · {{ item.note }}</text></view>
+        </view>
+        <view class="{{ item.amount_cls }}">{{ item.amount_str }}</view>
+      </view>
+    </view>
+    <empty wx:else icon="💴" text="还没有任何余额变动" />
+  </block>
+
+  <block wx:else>
+    <view class="card" wx:if="{{ withdrawals.length }}">
+      <view wx:for="{{ withdrawals }}" wx:key="id" class="tx-row">
+        <view class="flex-1">
+          <view class="bold">¥ {{ item.amount }} · {{ item.method === 'wechat' ? '微信零钱' : '银行卡' }}</view>
+          <view class="muted" style="font-size: 22rpx;">{{ item.time_str }}</view>
+          <view wx:if="{{ item.failure_reason }}" class="muted" style="font-size: 22rpx; color: #ee0a24;">{{ item.failure_reason }}</view>
+        </view>
+        <view style="text-align: right;">
+          <text class="tag {{ item.status_cls }}">{{ item.status_label }}</text>
+          <view wx:if="{{ item.status === 'pending' }}" class="mt-8">
+            <text class="muted" style="font-size: 22rpx; color: #ee0a24;" bindtap="cancelWithdraw" data-id="{{ item.id }}">取消</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <empty wx:else icon="📭" text="还没有提现申请" />
+  </block>
+</view>

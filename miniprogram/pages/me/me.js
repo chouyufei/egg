@@ -7,6 +7,7 @@ Page({
     user: null, unread: 0,
     licText: '', licCls: '', depositText: '未缴纳 →',
     roleText: '',
+    walletBalance: '0.00',
   },
   async onShow() {
     if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
@@ -19,6 +20,7 @@ Page({
       licCls: statusTag(user.license_status),
     });
     try { const m = await api.get('/messages/unread-count'); this.setData({ unread: m.count || 0 }); } catch (e) {}
+    try { const b = await api.get('/wallet/balance'); this.setData({ walletBalance: Number(b.balance || 0).toFixed(2) }); } catch (e) {}
     if (user.role === 'farm') {
       try {
         const ds = await api.get('/deposits/status');
@@ -34,6 +36,7 @@ Page({
   goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
   goOrders() { wx.switchTab({ url: '/pages/orders/orders' }); },
   goAuction() { wx.navigateTo({ url: '/pages/auction/auction' }); },
+  goWallet() { wx.navigateTo({ url: '/pages/wallet/wallet' }); },
   logout() {
     wx.showModal({ title: '退出登录', content: '确认退出？', success: r => { if (r.confirm) app.logout(); } });
   },

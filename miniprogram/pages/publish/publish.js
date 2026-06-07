@@ -42,6 +42,30 @@ Page({
     video: '',
     loading: false,
     fromId: 0,
+    depositPaid: false,
+    depositAmount: 0,
+  },
+
+  async refreshDepositStatus() {
+    if (!this.data.isSupply) return;
+    try {
+      const ds = await api.get('/deposits/status');
+      this.setData({
+        depositPaid: !!(ds.farm && ds.farm.paid),
+        depositAmount: (ds.farm && ds.farm.required) || 0,
+      });
+    } catch (e) {}
+  },
+
+  async onShow() {
+    // 每次回到本页都重新查保证金状态（缴纳 / 退还后即时反映）
+    await this.refreshDepositStatus();
+  },
+
+  async onDepositTap() {
+    if (this.data.depositPaid) return;
+    const ok = await ensureFarmDeposit();
+    if (ok) await this.refreshDepositStatus();
   },
   async onLoad(opt) {
     const user = app.globalData.user;

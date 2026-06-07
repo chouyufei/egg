@@ -9,6 +9,20 @@
     </view>
   </view>
 
+  <!-- 品质保证金状态条：仅发布货源时显示 -->
+  <view wx:if="{{ isSupply }}" class="deposit-bar {{ depositPaid ? 'paid' : 'unpaid' }}" bindtap="onDepositTap">
+    <view class="deposit-icon">{{ depositPaid ? '✓' : '⚠' }}</view>
+    <view class="flex-1">
+      <view class="deposit-title">
+        {{ depositPaid ? '品质保证金已缴纳' : '品质保证金未缴纳' }}
+      </view>
+      <view class="deposit-sub">
+        {{ depositPaid ? '已缴 ' + depositAmount + ' 元，可直接发布' : '需缴 ' + depositAmount + ' 元，点击立即缴纳' }}
+      </view>
+    </view>
+    <view wx:if="{{ !depositPaid }}" class="deposit-arrow">›</view>
+  </view>
+
   <view class="card">
     <view class="input-row"><view class="label">标题</view><input value="{{ form.title }}" data-k="title" bindinput="onInput" bindblur="onInput" placeholder="{{ isSupply ? '如：青州散养土鸡蛋·30 箱' : '如：求购红壳鸡蛋 20 箱·北京自提' }}" /></view>
     <view class="input-row"><view class="label">省份</view>

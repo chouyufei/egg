@@ -69,6 +69,26 @@ Page({
     } finally { this.setData({ paying: false }); }
   },
 
+  async refund() {
+    const dep = this.data.history.find(d => d.status === 'available');
+    if (!dep) return wx.showToast({ title: '没有可退还的保证金', icon: 'none' });
+    const confirmed = await new Promise(resolve => {
+      wx.showModal({
+        title: '退还品质保证金',
+        content: '退还后再次发布货源将需要重新缴纳。仅演示模式下可用。',
+        confirmText: '确认退还',
+        success: r => resolve(!!r.confirm),
+        fail: () => resolve(false),
+      });
+    });
+    if (!confirmed) return;
+    try {
+      await api.post('/deposits/refund/' + dep.id);
+      wx.showToast({ title: '已退还', icon: 'success' });
+      await this.load();
+    } catch (e) {}
+  },
+
   async pollPayResult(outTradeNo, maxTries) {
     for (let i = 0; i < maxTries; i++) {
       await new Promise(r => setTimeout(r, 1000));

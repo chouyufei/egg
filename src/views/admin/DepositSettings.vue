@@ -57,6 +57,20 @@
         💡 修改后立即生效，作用于"修改后"的新发布 / 新出价；已生成的保证金记录不变动。
       </p>
     </div>
+
+    <div class="admin-card">
+      <h3 style="margin-top: 0;">🔁 历史保证金对账</h3>
+      <p class="muted" style="margin-top: 0; line-height: 1.7;">
+        修复钱包系统上线"之前"已经释放、但未入账到用户钱包的历史保证金。
+        会扫描所有 <code>available</code> 未绑定记录 + 绑定到已结束资源（流拍/取消/成交）
+        但仍 <code>frozen</code> 的记录，统一补释放 + 入账户余额。<br/>
+        <strong>幂等</strong>：已入账的不会重复。可在任何时候安全运行。
+      </p>
+      <button class="btn-secondary" @click="reconcile" :disabled="reconciling">
+        {{ reconciling ? '对账中…' : '一键重新对账' }}
+      </button>
+      <span v-if="lastReconcileAt" class="muted" style="margin-left: 12px;">最后对账：{{ lastReconcileAt }}</span>
+    </div>
   </div>
 </template>
 
@@ -74,6 +88,17 @@ const s = reactive({
 });
 const saving = ref(false);
 const lastSavedAt = ref('');
+const reconciling = ref(false);
+const lastReconcileAt = ref('');
+
+async function reconcile() {
+  reconciling.value = true;
+  try {
+    await api.post('/admin/reconcile-deposits');
+    showSuccessToast('对账完成，钱包余额已更新');
+    lastReconcileAt.value = dayjs().format('HH:mm:ss');
+  } catch (e) { showFailToast(e?.message); } finally { reconciling.value = false; }
+}
 
 function calc(qty, perStep) {
   const step = Math.max(1, Number(s.deposit_step_qty) || 1);
@@ -131,6 +156,11 @@ onMounted(load);
   padding: 10px 28px; border-radius: 6px; cursor: pointer; font-size: 14px;
 }
 .btn-primary:disabled { background: #ccc; }
+.btn-secondary {
+  background: #fff; color: #f6b821; border: 2px solid #f6b821;
+  padding: 8px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;
+}
+.btn-secondary:disabled { background: #f5f5f5; color: #aaa; border-color: #ccc; }
 code {
   background: #f5f6f8; padding: 2px 6px; border-radius: 4px;
   font-family: 'SF Mono', Menlo, monospace; font-size: 13px;

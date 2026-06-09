@@ -11,6 +11,20 @@
     <view class="kv"><text class="muted">联系电话</text><text>{{ otherPhone }}</text></view>
   </view>
 
+  <!-- 客服企业微信二维码：成交后下发，买卖双方都加客服后由客服拉群 -->
+  <view wx:if="{{ serviceQr.url }}" class="card qr-card">
+    <view class="qr-title">📲 添加客服企业微信</view>
+    <view class="qr-sub">{{ serviceQr.owner || '凤伯乐 · 客服' }}</view>
+    <image src="{{ serviceQr.url }}" mode="aspectFit" class="qr-img" bindtap="previewQr" />
+    <view class="qr-tip">
+      买卖双方都扫码加好友后，客服会拉建沟通群，负责对接发货、对货、回款等流程。
+    </view>
+    <view class="row" style="gap: 16rpx; margin-top: 16rpx;">
+      <button class="btn-plain flex-1" bindtap="previewQr">查看大图</button>
+      <button class="btn flex-1" bindtap="saveQr">保存到相册</button>
+    </view>
+  </view>
+
   <view class="card">
     <view class="section-title" style="margin: 0 0 16rpx;">沟通群</view>
     <view wx:if="{{ !order.group_id }}" class="text-c" style="padding: 20rpx 0;">

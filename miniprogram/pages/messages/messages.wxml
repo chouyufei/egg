@@ -8,6 +8,10 @@
         <text class="muted" style="font-size: 22rpx;">{{ item.timeText }}</text>
       </view>
       <view class="muted mt-8">{{ item.content }}</view>
+      <image wx:if="{{ item.image_url }}" src="{{ item.image_url }}" mode="aspectFit"
+             bindtap="previewQr" data-url="{{ item.image_url }}"
+             class="msg-qr" />
+      <view wx:if="{{ item.image_url }}" class="muted mt-8" style="font-size: 22rpx;">点击图片放大，长按可保存</view>
     </view>
   </view>
 </view>

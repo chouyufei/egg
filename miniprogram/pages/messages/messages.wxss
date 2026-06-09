@@ -1,2 +1,8 @@
 .msg-row { display: flex; gap: 20rpx; }
 .msg-icon { font-size: 48rpx; flex-shrink: 0; }
+.msg-qr {
+  margin-top: 20rpx;
+  width: 360rpx; height: 360rpx;
+  background: #f5f6f8; border-radius: 16rpx;
+  display: block;
+}

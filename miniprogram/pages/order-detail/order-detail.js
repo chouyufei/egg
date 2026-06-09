@@ -9,6 +9,7 @@ Page({
     statusText: '', statusCls: '',
     otherLabel: '', otherName: '', otherPhone: '',
     showDispute: false, dispute: { type: '', description: '' },
+    serviceQr: { url: '', owner: '' },
   },
   onLoad(opt) {
     this.setData({ id: Number(opt.id), user: app.globalData.user });
@@ -18,7 +19,7 @@ Page({
   onUnload() { clearInterval(this.poll); },
   async load() {
     try {
-      const { order, chats } = await api.get('/orders/' + this.data.id);
+      const { order, chats, service_qr } = await api.get('/orders/' + this.data.id);
       const me = this.data.user;
       const isFarm = me && me.role === 'farm';
       const other = isFarm ? order.buyer : order.farm;
@@ -30,8 +31,29 @@ Page({
         otherLabel: isFarm ? '采购商' : '养殖场',
         otherName: other ? other.name : '-',
         otherPhone: other ? other.phone : '-',
+        serviceQr: service_qr || { url: '', owner: '' },
       });
     } catch (e) {}
+  },
+  previewQr() {
+    const url = this.data.serviceQr.url;
+    if (url) wx.previewImage({ current: url, urls: [url] });
+  },
+  saveQr() {
+    const url = this.data.serviceQr.url;
+    if (!url) return;
+    wx.showLoading({ title: '保存中…' });
+    wx.downloadFile({
+      url,
+      success: (r) => {
+        wx.saveImageToPhotosAlbum({
+          filePath: r.tempFilePath,
+          success: () => { wx.hideLoading(); wx.showToast({ title: '已保存到相册', icon: 'success' }); },
+          fail: () => { wx.hideLoading(); wx.showToast({ title: '保存失败，请允许相册权限', icon: 'none' }); },
+        });
+      },
+      fail: () => { wx.hideLoading(); wx.showToast({ title: '下载失败', icon: 'none' }); },
+    });
   },
   async createGroup() {
     try { await api.post('/orders/' + this.data.id + '/create-group'); wx.showToast({ title: '群已创建' }); await this.load(); }

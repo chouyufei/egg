@@ -1,5 +1,25 @@
 .kv { display: flex; justify-content: space-between; padding: 12rpx 0; font-size: 28rpx; }
 
+.qr-card {
+  background: linear-gradient(135deg, #fff7e0 0%, #ffe9a8 100%);
+  border: 2rpx solid #f6b821;
+  text-align: center;
+}
+.qr-title { font-size: 32rpx; font-weight: 800; color: #1d1d1f; }
+.qr-sub { font-size: 24rpx; color: #b78300; margin-top: 6rpx; }
+.qr-img {
+  width: 420rpx; height: 420rpx;
+  margin: 24rpx auto;
+  display: block;
+  background: #fff; border-radius: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.08);
+}
+.qr-tip {
+  font-size: 24rpx; color: #5a4810; line-height: 1.6;
+  background: rgba(255,255,255,0.5); border-radius: 12rpx;
+  padding: 16rpx; margin-top: 8rpx;
+}
+
 .chat-box {
   height: 500rpx; background: #f5f6f8; border-radius: 16rpx;
   padding: 16rpx; margin-top: 16rpx;

@@ -36,6 +36,32 @@
     </div>
 
     <div class="admin-card">
+      <h3 style="margin-top: 0;">📲 客服企业微信二维码</h3>
+      <p class="muted" style="margin-top: 0; line-height: 1.7;">
+        订单生成（竞拍成交）后会自动推送给买卖双方，提示扫码加好友以便客服后续拉群对接发货。<br/>
+        二维码图片建议尺寸正方形 ≥ 400×400，清晰可扫即可。
+      </p>
+      <div class="qr-row">
+        <div class="qr-preview">
+          <img v-if="s.service_qr_url" :src="s.service_qr_url" alt="客服二维码" />
+          <div v-else class="qr-placeholder">尚未上传</div>
+        </div>
+        <div style="flex: 1;">
+          <div style="margin-bottom: 10px;">
+            <label class="muted" style="display: block; margin-bottom: 4px;">归属人 / 部门名</label>
+            <input v-model="s.service_qr_owner" placeholder="如：费晗 / 乘子农业" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label class="muted" style="display: block; margin-bottom: 4px;">二维码图片 URL</label>
+            <input v-model="s.service_qr_url" placeholder="https://example.com/qr.png" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+          </div>
+          <input type="file" accept="image/*" @change="uploadQr" style="display: block;" />
+          <p class="muted" style="margin-top: 8px; font-size: 12px;">上传后会自动填到上方 URL 框，记得点最下方"保存设置"</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
       <button class="btn-primary" @click="save" :disabled="saving">{{ saving ? '保存中…' : '💾 保存设置' }}</button>
       <span v-if="lastSavedAt" class="muted" style="margin-left: 12px;">最后保存：{{ lastSavedAt }}</span>
     </div>
@@ -54,7 +80,22 @@ const s = reactive({
   notify_platform_sms: false,
   platform_phones: [],
   wecom_webhook_url: '',
+  service_qr_url: '',
+  service_qr_owner: '',
 });
+
+async function uploadQr(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const fd = new FormData();
+  fd.append('file', f);
+  try {
+    const r = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+    s.service_qr_url = r.url;
+    showSuccessToast('已上传，记得点保存');
+  } catch (err) { showFailToast(err?.message || '上传失败'); }
+  e.target.value = '';
+}
 const saving = ref(false);
 const lastSavedAt = ref('');
 
@@ -62,6 +103,11 @@ async function load() {
   const r = await api.get('/admin/notice-settings');
   Object.assign(s, r.settings);
   if (!Array.isArray(s.platform_phones)) s.platform_phones = [];
+  try {
+    const q = await api.get('/admin/service-qr');
+    s.service_qr_url = q.service_qr_url || '';
+    s.service_qr_owner = q.service_qr_owner || '';
+  } catch (e) {}
 }
 function addPhone() { s.platform_phones.push(''); }
 function removePhone(i) { s.platform_phones.splice(i, 1); }
@@ -79,6 +125,11 @@ async function save() {
       notify_platform_sms: s.notify_platform_sms,
       platform_phones: phones,
       wecom_webhook_url: s.wecom_webhook_url,
+    });
+    // 客服二维码走单独接口
+    await api.put('/admin/service-qr', {
+      service_qr_url: s.service_qr_url,
+      service_qr_owner: s.service_qr_owner,
     });
     showSuccessToast('已保存');
     lastSavedAt.value = dayjs().format('HH:mm:ss');
@@ -109,4 +160,14 @@ onMounted(load);
   border-radius: 4px; cursor: pointer; font-size: 13px;
 }
 .btn-danger-sm { color: #ee0a24; border-color: #ee0a24; }
+
+.qr-row { display: flex; gap: 16px; align-items: flex-start; }
+.qr-preview {
+  width: 180px; height: 180px; background: #fafafa;
+  border: 2px dashed #d0d0d0; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; overflow: hidden;
+}
+.qr-preview img { width: 100%; height: 100%; object-fit: contain; }
+.qr-placeholder { color: #aaa; font-size: 13px; }
 </style>

@@ -39,6 +39,10 @@ Page({
     const url = this.data.serviceQr.url;
     if (url) wx.previewImage({ current: url, urls: [url] });
   },
+  previewChatImg(e) {
+    const url = e.currentTarget.dataset.url;
+    if (url) wx.previewImage({ current: url, urls: [url] });
+  },
   saveQr() {
     const url = this.data.serviceQr.url;
     if (!url) return;

@@ -34,6 +34,21 @@
 .chat-row.mine { text-align: right; }
 .chat-row.mine .chat-bubble { background: #f6b821; color: #fff; }
 
+/* 系统消息（居中、淡黄底） */
+.chat-sys { text-align: center; margin: 16rpx 0; }
+.chat-sys-meta { color: #b78300; font-size: 22rpx; margin-bottom: 8rpx; }
+.chat-sys-bubble {
+  display: inline-block; max-width: 86%; text-align: left;
+  background: #fff7e0; border: 2rpx solid #f6b821;
+  padding: 16rpx 20rpx; border-radius: 16rpx;
+  font-size: 26rpx; color: #1d1d1f; line-height: 1.5;
+}
+.chat-sys-img {
+  display: block; width: 360rpx; height: 360rpx;
+  margin: 12rpx auto 4rpx; background: #fff; border-radius: 12rpx;
+}
+.chat-sys-tip { font-size: 20rpx; color: #8a6b15; text-align: center; }
+
 .bid-input {
   flex: 1; background: #f5f6f8; border-radius: 999rpx;
   padding: 14rpx 24rpx; font-size: 28rpx;

@@ -39,6 +39,8 @@
   background: #fff7e0; color: #b78300;
 }
 .ec-tag-g { background: #e7f7eb; color: #06883b; }
+.ec-tag-near { background: #fff7e0; color: #b78300; font-weight: 600; }
+.ec-tag-far { background: #f0f0f0; color: #666; }
 
 .ec-foot {
   display: flex; justify-content: space-between; align-items: flex-end;

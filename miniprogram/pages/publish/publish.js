@@ -2,6 +2,7 @@ const api = require('../../utils/api');
 const { chooseAndUpload, uploadOne } = require('../../utils/upload');
 const { requestSubscribe } = require('../../utils/subscribe');
 const { ensureFarmDeposit, ensureDemandDeposit } = require('../../utils/deposit');
+const { getLocation } = require('../../utils/location');
 const app = getApp();
 
 // 从 "38-42 斤/箱" 反解出 [min, max]
@@ -205,6 +206,8 @@ Page({
       const wMin = String(f.weight_min || '').trim();
       const wMax = String(f.weight_max || '').trim();
       const weightSpec = (wMin && wMax) ? `${wMin}-${wMax} 斤/箱` : (wMin || wMax || '');
+      // 把当前定位带上，用于附近推荐（无授权时为 null，后端会回退使用 user.lat/lng）
+      const loc = await getLocation();
       const payload = {
         ...f,
         kind: this.data.isSupply ? 'supply' : 'demand',
@@ -223,6 +226,8 @@ Page({
         unit_size: f.unit_size || '车',
         intro_video: this.data.video || null,
         photos: this.data.photos,
+        lat: loc ? loc.lat : null,
+        lng: loc ? loc.lng : null,
       };
       delete payload.farm_size_wan;
       delete payload.weight_min;

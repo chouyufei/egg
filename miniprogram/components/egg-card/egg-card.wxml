@@ -12,6 +12,7 @@
     <view class="ec-tags">
       <text wx:if="{{ r.egg_color }}" class="ec-tag">{{ r.egg_color }}</text>
       <text wx:if="{{ r.region }}" class="ec-tag ec-tag-g">{{ r.region }}</text>
+      <text wx:if="{{ distText }}" class="ec-tag {{ distNear ? 'ec-tag-near' : 'ec-tag-far' }}">📍 {{ distText }}</text>
     </view>
     <view class="ec-foot">
       <view>

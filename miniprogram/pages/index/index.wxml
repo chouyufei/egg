@@ -32,6 +32,9 @@
       <text class="filter-text">{{ filterText }}</text>
       <text class="filter-arrow">▾</text>
     </view>
+
+    <view wx:if="{{ myLoc }}" class="near-hint">📍 已开启定位 · 优先显示 {{ nearRadius }}km 内的{{ activeMode === 'sell' ? '采购' : '货源' }}</view>
+    <view wx:else class="near-hint near-hint-off" bindtap="askLocation">📍 开启定位 · 优先看附近{{ activeMode === 'sell' ? '采购' : '货源' }} ›</view>
   </view>
 
   <!-- ========== 买 视角 ========== -->

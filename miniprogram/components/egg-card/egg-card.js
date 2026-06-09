@@ -1,6 +1,8 @@
+const { formatDistance } = require('../../utils/location');
+
 Component({
   properties: { r: { type: Object, value: {} } },
-  data: { cover: '', statusLabel: '', statusCls: '', kindLabel: '', kindCls: '', kindBidLabel: '出价', priceHint: '起 ¥' },
+  data: { cover: '', statusLabel: '', statusCls: '', kindLabel: '', kindCls: '', kindBidLabel: '出价', priceHint: '起 ¥', distText: '', distNear: false },
   observers: {
     r(r) {
       if (!r) return;
@@ -15,6 +17,8 @@ Component({
         kindCls: isSupply ? 'supply' : 'demand',
         kindBidLabel: isSupply ? '出价' : '报价',
         priceHint: isSupply ? '起 ¥' + r.start_price : '心理价 ¥' + r.start_price,
+        distText: r.distance_km != null ? formatDistance(r.distance_km) : '',
+        distNear: r.distance_km != null && r.distance_km <= 500,
       });
     },
   },

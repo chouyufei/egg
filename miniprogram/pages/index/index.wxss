@@ -36,6 +36,14 @@
 .filter-text { flex: 1; color: #1d1d1f; }
 .filter-arrow { color: #8a8d93; margin-left: 8rpx; }
 
+.near-hint {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.95);
+  text-align: left;
+}
+.near-hint-off { text-decoration: underline; }
+
 /* 子 Tab：可竞拍货源 / 我的采购（并排切换） */
 .sub-tabs {
   display: flex; background: #fff;

@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const { getAndReportLocation } = require('../../utils/location');
 const app = getApp();
 
 const CATEGORIES = [
@@ -60,6 +61,10 @@ Page({
     tempProvince: '',
 
     filterText: formatFilterText('', ''),
+
+    // 用户当前定位（用于按距离推荐）；获取失败时为 null
+    myLoc: null,
+    nearRadius: 500,
   },
 
   onLoad() {
@@ -84,6 +89,11 @@ Page({
       } catch (e) {}
     }
 
+    // 后台静默获取定位（首次会弹授权弹窗），用于按距离排序。失败不影响其他功能
+    getAndReportLocation().then(loc => {
+      if (loc) this.setData({ myLoc: loc });
+    });
+
     await this.refresh();
   },
 
@@ -102,11 +112,15 @@ Page({
       });
     } catch (e) {}
 
-    // 对方发布（买视角看 supply，卖视角看 demand），带筛选
+    // 对方发布（买视角看 supply，卖视角看 demand），带筛选 + 附近优先
     const browseKind = this.data.activeMode === 'sell' ? 'demand' : 'supply';
     const params = { status: 'auctioning', kind: browseKind };
     if (this.data.activeColor) params.color = this.data.activeColor;
     if (this.data.activeProvince) params.province = this.data.activeProvince;
+    if (this.data.myLoc) {
+      params.near_lat = this.data.myLoc.lat;
+      params.near_lng = this.data.myLoc.lng;
+    }
     try {
       const { resources } = await api.get('/resources', params);
       this.setData({ others: resources });
@@ -130,6 +144,17 @@ Page({
       this.setData({ activeMode: m });
     }
     await this.load();
+  },
+
+  async askLocation() {
+    const loc = await getAndReportLocation();
+    if (loc) {
+      this.setData({ myLoc: loc });
+      await this.load();
+      wx.showToast({ title: '已按距离排序', icon: 'success' });
+    } else {
+      wx.showToast({ title: '未授权定位，可在小程序设置中开启', icon: 'none', duration: 3000 });
+    }
   },
 
   setBuyerTab(e) { this.setData({ buyerTab: e.currentTarget.dataset.t }); },

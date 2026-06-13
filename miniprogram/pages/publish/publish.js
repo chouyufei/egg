@@ -12,6 +12,33 @@ function parseWeightSpec(s) {
   return m ? [m[1], m[2]] : ['', ''];
 }
 
+// 从微信地址文本中提取省 + 市
+// 例：
+//   "北京市朝阳区阜通东大街6号"   → { province: '北京', city: '北京' }
+//   "山东省青岛市市南区..."        → { province: '山东', city: '青岛' }
+//   "内蒙古自治区呼和浩特市..."    → { province: '内蒙古', city: '呼和浩特' }
+function parseAddress(addr) {
+  const s = String(addr || '');
+  if (!s) return { province: '', city: '' };
+  // 直辖市：地址通常以"X市"开头
+  for (const m of ['北京', '天津', '上海', '重庆']) {
+    if (s.indexOf(m) === 0) return { province: m, city: m };
+  }
+  // 其他省 / 自治区：从地址里挖
+  const provMatch = s.match(/^(.+?)(省|自治区)/);
+  let province = provMatch ? provMatch[1].replace(/(回族|壮族|维吾尔|藏族)$/, '') : '';
+  // 兜底：把"内蒙古"专门处理（不是以省结尾）
+  if (!province) {
+    const known = ['内蒙古', '广西', '宁夏', '新疆', '西藏'];
+    province = known.find(k => s.indexOf(k) === 0) || '';
+  }
+  // 找市
+  const rest = province ? s.substring(s.indexOf(province) + province.length) : s;
+  const cityMatch = rest.match(/([一-龥]{2,8}?)市/);
+  const city = cityMatch ? cityMatch[1] : '';
+  return { province, city };
+}
+
 const PROVINCES = ['北京', '天津', '河北', '山西', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽',
   '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州', '云南',
   '陕西', '甘肃', '青海', '宁夏', '新疆', '内蒙古', '西藏'];
@@ -59,11 +86,20 @@ Page({
       if (!auto) return wx.showToast({ title: '定位失败，请允许定位权限', icon: 'none', duration: 2500 });
       loc = { ...auto, name: '当前位置', address: `${auto.lat.toFixed(4)}, ${auto.lng.toFixed(4)}` };
     }
-    this.setData({
+
+    // 把地址解析成 省 + 市，自动写回省份下拉 + 具体地区输入框
+    const parsed = parseAddress(loc.address || loc.name || '');
+    const update = {
       pickedLoc: loc,
       locText: loc.name || '已定位',
       locSub: loc.address || '',
-    });
+    };
+    if (parsed.province) {
+      const idx = PROVINCES.findIndex(p => parsed.province.indexOf(p) >= 0 || p.indexOf(parsed.province) >= 0);
+      if (idx >= 0) update.provinceIndex = idx;
+    }
+    if (parsed.city) update['form.region'] = parsed.city;
+    this.setData(update);
   },
 
   clearLocation() {
@@ -103,10 +139,10 @@ Page({
     if (user.region) for (let i = 0; i < PROVINCES.length; i++) {
       if (user.region.indexOf(PROVINCES[i]) >= 0) { idx = i; break; }
     }
+    // 省份按 user.region 自动匹配（仅默认下拉位置），具体地区不预填，让 placeholder 提示用户
     this.setData({
       isSupply,
       provinceIndex: idx,
-      'form.region': user.region || '',
     });
     wx.setNavigationBarTitle({ title: isSupply ? '发布货源' : '发布求购' });
 

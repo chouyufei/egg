@@ -2,7 +2,7 @@ const api = require('../../utils/api');
 const { chooseAndUpload, uploadOne } = require('../../utils/upload');
 const { requestSubscribe } = require('../../utils/subscribe');
 const { ensureFarmDeposit, ensureDemandDeposit } = require('../../utils/deposit');
-const { getLocation } = require('../../utils/location');
+const { getLocation, chooseLocation } = require('../../utils/location');
 const app = getApp();
 
 // 从 "38-42 斤/箱" 反解出 [min, max]
@@ -45,6 +45,29 @@ Page({
     fromId: 0,
     depositPaid: false,
     depositAmount: 0,
+    // 用户主动定位（可选）：未选时发布时会回退到自动定位
+    pickedLoc: null,    // { lat, lng, name, address }
+    locText: '',        // 主显示
+    locSub: '',         // 副显示（详细地址）
+  },
+
+  async pickLocation() {
+    // 优先用 chooseLocation（地图选点，最直观）；不可用则回退到 getLocation（仅当前点）
+    let loc = await chooseLocation();
+    if (!loc) {
+      const auto = await getLocation({ force: true });
+      if (!auto) return wx.showToast({ title: '定位失败，请允许定位权限', icon: 'none', duration: 2500 });
+      loc = { ...auto, name: '当前位置', address: `${auto.lat.toFixed(4)}, ${auto.lng.toFixed(4)}` };
+    }
+    this.setData({
+      pickedLoc: loc,
+      locText: loc.name || '已定位',
+      locSub: loc.address || '',
+    });
+  },
+
+  clearLocation() {
+    this.setData({ pickedLoc: null, locText: '', locSub: '' });
   },
 
   async refreshDepositStatus() {
@@ -118,6 +141,13 @@ Page({
           photos: r.photos || [],
           video: r.intro_video || '',
         });
+        if (r.lat != null && r.lng != null) {
+          this.setData({
+            pickedLoc: { lat: r.lat, lng: r.lng, name: r.region || '原货源位置', address: '' },
+            locText: r.region || '原货源位置',
+            locSub: `${Number(r.lat).toFixed(4)}, ${Number(r.lng).toFixed(4)}`,
+          });
+        }
       } catch (e) {}
     }
   },
@@ -206,8 +236,9 @@ Page({
       const wMin = String(f.weight_min || '').trim();
       const wMax = String(f.weight_max || '').trim();
       const weightSpec = (wMin && wMax) ? `${wMin}-${wMax} 斤/箱` : (wMin || wMax || '');
-      // 把当前定位带上，用于附近推荐（无授权时为 null，后端会回退使用 user.lat/lng）
-      const loc = await getLocation();
+      // 把定位带上，用于附近推荐：优先用户在表单里主动选的位置，否则用当前 GPS，
+      // 都没有则为 null（后端会回退用 user.lat/lng）
+      const loc = this.data.pickedLoc || await getLocation();
       const payload = {
         ...f,
         kind: this.data.isSupply ? 'supply' : 'demand',

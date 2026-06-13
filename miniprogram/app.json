@@ -41,5 +41,5 @@
       "desc": "用于按距离推荐附近 500km 内的货源 / 采购"
     }
   },
-  "requiredPrivateInfos": ["getLocation"]
+  "requiredPrivateInfos": ["getLocation", "chooseLocation"]
 }

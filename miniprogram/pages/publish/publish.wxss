@@ -70,3 +70,15 @@
 }
 .quick-val { font-size: 28rpx; font-weight: 700; color: #b78300; }
 .quick-sub { font-size: 22rpx; color: #8a6b15; margin-top: 4rpx; }
+
+/* 定位栏 */
+.loc-row { align-items: flex-start; }
+.loc-main { font-size: 28rpx; color: #1d1d1f; }
+.loc-sub { font-size: 22rpx; margin-top: 4rpx; }
+.loc-actions { display: flex; gap: 16rpx; flex-shrink: 0; margin-left: 12rpx; }
+.loc-act {
+  font-size: 24rpx; color: #e0a40d;
+  padding: 4rpx 16rpx; border: 2rpx solid #f6b821; border-radius: 999rpx;
+  background: #fff7e0;
+}
+.loc-act-del { color: #ee0a24; border-color: #ee0a24; background: #ffeaea; }

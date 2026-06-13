@@ -32,6 +32,22 @@
     </view>
     <view class="input-row"><view class="label">具体地区</view><input value="{{ form.region }}" data-k="region" bindinput="onInput" bindblur="onInput" placeholder="如：山东青州 / 河南信阳" /></view>
 
+    <!-- 定位信息（可选） -->
+    <view class="input-row loc-row">
+      <view class="label">📍 定位</view>
+      <view class="flex-1">
+        <block wx:if="{{ locText }}">
+          <view class="loc-main">{{ locText }}</view>
+          <view wx:if="{{ locSub }}" class="loc-sub muted">{{ locSub }}</view>
+        </block>
+        <view wx:else class="loc-main muted">未定位（可选）</view>
+      </view>
+      <view class="loc-actions">
+        <text class="loc-act" bindtap="pickLocation">{{ locText ? '修改' : '定位' }}</text>
+        <text wx:if="{{ locText }}" class="loc-act loc-act-del" bindtap="clearLocation">清除</text>
+      </view>
+    </view>
+
     <!-- 先蛋色 -->
     <view class="input-row">
       <view class="label">蛋色</view>

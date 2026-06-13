@@ -2,6 +2,7 @@ const api = require('../../utils/api');
 const { formatDateTime, statusLabel } = require('../../utils/format');
 const { requestSubscribe } = require('../../utils/subscribe');
 const { ensureBuyerBidDeposit } = require('../../utils/deposit');
+const { getLocation, distanceKm, formatDistance, FAR_THRESHOLD_KM } = require('../../utils/location');
 const app = getApp();
 
 Page({
@@ -14,11 +15,14 @@ Page({
     bidPrice: '', nextLimit: 0, bidding: false, ending: false,
     showAuto: false, autoMax: '',
     statusLabel: '',
+    distText: '', distNear: false, distFar: false,
   },
   onLoad(opt) {
     this.setData({ id: Number(opt.id), user: app.globalData.user });
     this.load();
     this.poll = setInterval(() => this.load(), 5000);
+    // 静默拿一次当前定位，下次 load 时计算距离
+    getLocation().then(loc => { this._myLoc = loc; this.load(); });
   },
   onUnload() { clearInterval(this.poll); },
   async load() {
@@ -48,6 +52,19 @@ Page({
       }
 
       const bidsMapped = bids.map(b => ({ ...b, timeText: formatDateTime(b.created_at) }));
+
+      // 距离计算：用本地缓存或刚拿到的定位
+      let distText = '', distNear = false, distFar = false;
+      const my = this._myLoc;
+      if (my && resource.lat != null && resource.lng != null) {
+        const km = distanceKm(my.lat, my.lng, resource.lat, resource.lng);
+        if (km != null) {
+          distText = formatDistance(km);
+          distNear = km <= FAR_THRESHOLD_KM;
+          distFar = km > FAR_THRESHOLD_KM;
+        }
+      }
+
       const sizeNum = Number(resource.farm_size);
       const farmSizeText = sizeNum >= 10000
         ? (sizeNum / 10000).toFixed(sizeNum % 10000 === 0 ? 0 : 1) + ' 万只'
@@ -64,6 +81,7 @@ Page({
         isMine, canBid, blockReason,
         statusLabel: statusLabel(resource.status),
         farmSizeText,
+        distText, distNear, distFar,
       });
     } catch (e) {}
   },

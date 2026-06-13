@@ -99,7 +99,7 @@
       <view class="quick-tip">常用车型（点击填入）</view>
       <view class="quick-chips">
         <view class="quick-chip" wx:for="{{ truckPresets }}" wx:key="value" bindtap="pickTruck" data-v="{{ item.value }}">
-          <text class="quick-val">{{ item.value }} 车</text>
+          <text class="quick-val">{{ item.value }} m 车</text>
           <text class="quick-sub">≈ {{ item.boxes }} 箱</text>
         </view>
       </view>
@@ -110,12 +110,12 @@
     <view class="input-row">
       <view class="label">{{ isSupply ? '起拍价' : '心理价上限' }}</view>
       <input type="digit" value="{{ form.start_price }}" data-k="start_price" bindinput="onInput" bindblur="onInput" placeholder="{{ isSupply ? '如 85' : '如 95' }}" />
-      <view class="muted" style="margin-left: 8rpx;">元/{{ form.unit_size }}</view>
+      <view class="muted" style="margin-left: 8rpx;">元/箱</view>
     </view>
     <view class="input-row">
       <view class="label">{{ isSupply ? '加价幅度' : '降价幅度' }}</view>
       <input type="digit" value="{{ form.min_increment }}" data-k="min_increment" bindinput="onInput" bindblur="onInput" placeholder="≥ 2" />
-      <view class="muted" style="margin-left: 8rpx;">元/{{ form.unit_size }}</view>
+      <view class="muted" style="margin-left: 8rpx;">元/箱</view>
     </view>
     <view class="input-row">
       <view class="label">竞拍时长</view>

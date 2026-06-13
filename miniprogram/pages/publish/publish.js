@@ -301,7 +301,7 @@ Page({
         start_price: Number(f.start_price),
         min_increment: Number(f.min_increment),
         duration_hours: Number(f.duration_hours),
-        unit_label: '元/' + (f.unit_size || '车'),
+        unit_label: '元/箱',
         unit_size: f.unit_size || '车',
         intro_video: this.data.video || null,
         photos: this.data.photos,

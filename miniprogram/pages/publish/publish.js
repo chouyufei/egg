@@ -14,27 +14,39 @@ function parseWeightSpec(s) {
 
 // 从微信地址文本中提取省 + 市
 // 例：
-//   "北京市朝阳区阜通东大街6号"   → { province: '北京', city: '北京' }
-//   "山东省青岛市市南区..."        → { province: '山东', city: '青岛' }
-//   "内蒙古自治区呼和浩特市..."    → { province: '内蒙古', city: '呼和浩特' }
+//   "北京市朝阳区阜通东大街6号"      → { province: '北京', city: '北京' }
+//   "湖北省武汉市江夏区..."          → { province: '湖北', city: '武汉' }
+//   "山东省青岛市市南区..."          → { province: '山东', city: '青岛' }
+//   "内蒙古自治区呼和浩特市..."      → { province: '内蒙古', city: '呼和浩特' }
+//   "新疆维吾尔自治区乌鲁木齐市..."  → { province: '新疆', city: '乌鲁木齐' }
 function parseAddress(addr) {
   const s = String(addr || '');
   if (!s) return { province: '', city: '' };
-  // 直辖市：地址通常以"X市"开头
+  // 直辖市
   for (const m of ['北京', '天津', '上海', '重庆']) {
     if (s.indexOf(m) === 0) return { province: m, city: m };
   }
-  // 其他省 / 自治区：从地址里挖
+  let province = '';
+  let rest = s;
+  // 标准 "X省" / "X自治区"，省字 / 自治区 在地址里。用 match[0].length 跳过整段
   const provMatch = s.match(/^(.+?)(省|自治区)/);
-  let province = provMatch ? provMatch[1].replace(/(回族|壮族|维吾尔|藏族)$/, '') : '';
-  // 兜底：把"内蒙古"专门处理（不是以省结尾）
+  if (provMatch) {
+    province = provMatch[1].replace(/(回族|壮族|维吾尔|藏族)$/, '');
+    rest = s.substring(provMatch[0].length);
+  }
+  // 兜底 1：地址没"自治区"后缀（如 "宁夏银川市..."）
   if (!province) {
     const known = ['内蒙古', '广西', '宁夏', '新疆', '西藏'];
-    province = known.find(k => s.indexOf(k) === 0) || '';
+    const p = known.find(k => s.indexOf(k) === 0);
+    if (p) { province = p; rest = s.substring(p.length); }
   }
-  // 找市
-  const rest = province ? s.substring(s.indexOf(province) + province.length) : s;
-  const cityMatch = rest.match(/([一-龥]{2,8}?)市/);
+  // 兜底 2：地址没"省"字（如 "湖北武汉市..."），按已知省份名匹配前缀
+  if (!province) {
+    const p = PROVINCES.find(k => s.indexOf(k) === 0);
+    if (p) { province = p; rest = s.substring(p.length); }
+  }
+  // 找市：取剩余字符串开头的 2-8 个汉字 + "市"
+  const cityMatch = rest.match(/^([一-龥]{2,8}?)市/);
   const city = cityMatch ? cityMatch[1] : '';
   return { province, city };
 }

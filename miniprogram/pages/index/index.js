@@ -129,7 +129,6 @@ Page({
 
   async setMode(e) {
     const m = e.currentTarget.dataset.m;
-    if (m === 'other') return wx.navigateTo({ url: '/pages/select-mode/select-mode' });
     if (m === this.data.activeMode) return;
 
     // 切换 UI 模式 + 同步 DB role

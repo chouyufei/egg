@@ -19,11 +19,10 @@
       <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
     </view>
 
-    <!-- 顺序：买 / 卖 / 其他 -->
+    <!-- 顺序：买 / 卖 -->
     <view class="mode-bar">
       <view class="mode-seg {{ activeMode === 'buy' ? 'on' : '' }}" bindtap="setMode" data-m="buy">🛒 买</view>
       <view class="mode-seg {{ activeMode === 'sell' ? 'on' : '' }}" bindtap="setMode" data-m="sell">🐔 卖</view>
-      <view class="mode-seg" bindtap="setMode" data-m="other">⋯ 其他</view>
     </view>
 
     <!-- 合并的检索框：类目 + 区域 -->

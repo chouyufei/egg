@@ -10,6 +10,15 @@
       </button>
     </div>
 
+    <div class="warn-box">
+      <strong>⚠ 资金实际打款说明</strong><br/>
+      · 「直接打款」/「标记已打款」会从用户余额扣款 + 记入流水，
+        然后<strong>尝试调用微信「商家转账到零钱」API</strong> 给用户微信打钱<br/>
+      · 商家转账 API 需在微信商户后台先开通「商家转账」产品权限 + 完成 KYC，
+        否则会返回 demo 模式（仅记账，未真实转账），<strong>请在微信商户后台手工打款后</strong>
+        再点击此按钮，避免用户余额已扣但收不到钱
+    </div>
+
     <div class="admin-card">
       <table class="w-table">
         <thead>
@@ -115,11 +124,16 @@ async function approve(w) {
 }
 
 async function markPaid(w) {
-  const out_trade_no = prompt('请输入打款流水号（可选）');
-  if (out_trade_no === null) return;
+  const useAuto = confirm(
+    `准备处理 ${w.user_name} 的 ¥${w.amount} 提现到 ${w.method === 'wechat' ? '微信零钱' : '银行卡'}。\n\n` +
+    `点【确定】尝试自动转账（微信商家转账 API，需开通商家转账权限）\n` +
+    `点【取消】仅记账（请确认已在微信商户后台手工打款）`
+  );
+  const mode = useAuto ? 'auto' : 'manual';
+  const out_trade_no = prompt('请输入打款流水号（可选，留空由系统生成）') || undefined;
   try {
-    await api.post(`/admin/withdrawals/${w.id}/mark-paid`, { out_trade_no: out_trade_no || undefined });
-    showSuccessToast('已标记为已打款');
+    const r = await api.post(`/admin/withdrawals/${w.id}/mark-paid`, { out_trade_no, mode });
+    showSuccessToast(r.note || '已标记为已打款');
     await load();
   } catch (e) { showFailToast(e?.message); }
 }
@@ -168,4 +182,15 @@ onMounted(load);
 }
 .btn-green { color: #06883b; border-color: #06883b; }
 .btn-danger-sm { color: #ee0a24; border-color: #ee0a24; }
+
+.warn-box {
+  background: #fff7e0;
+  border: 1px solid #f6b821;
+  color: #8a6b15;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
 </style>

@@ -29,3 +29,12 @@
 .tx-row:last-child { border-bottom: none; }
 .tx-in  { color: #06883b; font-weight: 700; font-size: 30rpx; }
 .tx-out { color: #ee0a24; font-weight: 700; font-size: 30rpx; }
+.tx-lock   { color: #b78300; font-weight: 600; font-size: 26rpx; background: #fff7e0; padding: 6rpx 14rpx; border-radius: 12rpx; }
+.tx-unlock { color: #1c5bd8; font-weight: 600; font-size: 26rpx; background: #e6f0ff; padding: 6rpx 14rpx; border-radius: 12rpx; }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 16rpx;
+  padding: 16rpx 24rpx; background: #fff;
+  font-size: 22rpx; color: #8a8d93;
+}
+.lg-item { display: inline-flex; align-items: center; gap: 6rpx; }

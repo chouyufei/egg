@@ -31,13 +31,27 @@ Page({
     } catch (e) {}
     try {
       const { transactions } = await api.get('/wallet/transactions');
+      // 三类视觉：实际出/入账（红/绿 +- 金额）；冻结/解冻（中性灰，🔒/🔓 不带 ± 号）
+      const LOCK_TYPES = ['withdraw_lock', 'deposit_lock'];
+      const UNLOCK_TYPES = ['withdraw_refund', 'deposit_unlock'];
       this.setData({
-        transactions: transactions.map(t => ({
-          ...t,
-          amount_str: (t.amount > 0 ? '+' : '') + Number(t.amount).toFixed(2),
-          amount_cls: t.amount > 0 ? 'tx-in' : 'tx-out',
-          time_str: formatTime(t.created_at),
-        })),
+        transactions: transactions.map(t => {
+          const isLock = LOCK_TYPES.includes(t.type);
+          const isUnlock = UNLOCK_TYPES.includes(t.type);
+          const abs = Math.abs(Number(t.amount)).toFixed(2);
+          let amount_str, amount_cls;
+          if (isLock) {
+            amount_str = '🔒 ¥' + abs;
+            amount_cls = 'tx-lock';
+          } else if (isUnlock) {
+            amount_str = '🔓 ¥' + abs;
+            amount_cls = 'tx-unlock';
+          } else {
+            amount_str = (t.amount > 0 ? '+' : '') + Number(t.amount).toFixed(2);
+            amount_cls = t.amount > 0 ? 'tx-in' : 'tx-out';
+          }
+          return { ...t, amount_str, amount_cls, time_str: formatTime(t.created_at) };
+        }),
       });
     } catch (e) {}
     try {
@@ -48,8 +62,8 @@ Page({
           time_str: formatTime(w.applied_at),
           status_label: ({
             pending: '待审核',
-            approved: '已批准 · 等待打款',
-            paid: '已到账',
+            approved: '已批准 · 待打款',
+            paid: '平台已打款',
             rejected: '已拒绝',
             failed: '打款失败',
             cancelled: '已取消',

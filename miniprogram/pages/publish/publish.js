@@ -82,8 +82,9 @@ Page({
     video: '',
     loading: false,
     fromId: 0,
-    depositPaid: false,
-    depositAmount: 0,
+    depositPaid: false,    // 钱包可用余额 ≥ 保证金额度
+    depositAmount: 0,      // 需冻结金额
+    walletAvailable: 0,    // 当前可用余额
     // 用户主动定位（可选）：未选时发布时会回退到自动定位
     pickedLoc: null,    // { lat, lng, name, address }
     locText: '',        // 主显示
@@ -119,28 +120,27 @@ Page({
   },
 
   async refreshDepositStatus() {
-    const qty = Math.max(1, Number(this.data.form.quantity) || 1);
     try {
-      const ds = await api.get('/deposits/status', { qty });
-      const bucket = this.data.isSupply ? ds.supply : ds.demand;
+      const ds = await api.get('/deposits/status');
+      const required = ds.required || 0;
+      const available = (ds.balance && ds.balance.available) || 0;
       this.setData({
-        depositPaid: !!(bucket && bucket.paid),
-        depositAmount: (bucket && bucket.required) || 0,
+        depositPaid: available >= required,
+        depositAmount: required,
+        walletAvailable: Number(available).toFixed(2),
       });
     } catch (e) {}
   },
 
   async onShow() {
-    // 每次回到本页都重新查保证金状态（缴纳 / 退还后即时反映）
     await this.refreshDepositStatus();
   },
 
   async onDepositTap() {
     if (this.data.depositPaid) return;
-    const qty = Math.max(1, Number(this.data.form.quantity) || 1);
     const ok = this.data.isSupply
-      ? await ensureFarmDeposit(qty)
-      : await ensureDemandDeposit(qty);
+      ? await ensureFarmDeposit()
+      : await ensureDemandDeposit();
     if (ok) await this.refreshDepositStatus();
   },
   async onLoad(opt) {
@@ -269,11 +269,8 @@ Page({
       return wx.showToast({ title: '请填写标题/数量/起拍价', icon: 'none' });
     }
 
-    // 发布前：检查保证金（货源 → 品质保证金；求购 → 求购保证金），按数量动态计算
-    const qty = Math.max(1, Number(f.quantity) || 1);
-    const ok = this.data.isSupply
-      ? await ensureFarmDeposit(qty)
-      : await ensureDemandDeposit(qty);
+    // 发布前：确保钱包可用余额够冻结一笔保证金；不够提示去充值
+    const ok = this.data.isSupply ? await ensureFarmDeposit() : await ensureDemandDeposit();
     if (!ok) return;
     await this.refreshDepositStatus();
 

@@ -7,6 +7,8 @@ Page({
     transactions: [],
     tab: 'tx',  // tx | withdraw
     withdrawals: [],
+    depositAmount: 1000,
+    serviceFee: 50,
   },
   async onShow() {
     await this.load();
@@ -18,6 +20,13 @@ Page({
         balance: Number(b.balance || 0).toFixed(2),
         locked: Number(b.locked_balance || 0).toFixed(2),
         available: Number(b.available || 0).toFixed(2),
+      });
+    } catch (e) {}
+    try {
+      const d = await api.get('/deposits/status');
+      this.setData({
+        depositAmount: d.required,
+        serviceFee: d.service_fee,
       });
     } catch (e) {}
     try {
@@ -55,6 +64,18 @@ Page({
     } catch (e) {}
   },
   setTab(e) { this.setData({ tab: e.currentTarget.dataset.t }); },
+  goRecharge() { wx.navigateTo({ url: '/pages/recharge/recharge' }); },
+  onTxTap(e) {
+    const t = this.data.transactions[Number(e.currentTarget.dataset.i)];
+    if (!t || !t.related) return;
+    if (t.related.kind === 'order' && t.related.order_id) {
+      wx.navigateTo({ url: '/pages/order-detail/order-detail?id=' + t.related.order_id });
+    } else if ((t.related.kind === 'deposit') && t.related.order_id) {
+      wx.navigateTo({ url: '/pages/order-detail/order-detail?id=' + t.related.order_id });
+    } else if ((t.related.kind === 'deposit') && t.related.resource_id) {
+      wx.navigateTo({ url: '/pages/resource-detail/resource-detail?id=' + t.related.resource_id });
+    }
+  },
   goWithdraw() {
     if (Number(this.data.available) <= 0) {
       return wx.showToast({ title: '可用余额为 0，无法提现', icon: 'none' });

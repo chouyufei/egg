@@ -9,15 +9,15 @@
     </view>
   </view>
 
-  <!-- 保证金状态条：货源 → 品质保证金；求购 → 求购保证金。金额随数量动态变化 -->
+  <!-- 保证金状态条：发布时从钱包冻结一笔。可用余额够则金色 ✓，不够弹去充值 -->
   <view class="deposit-bar {{ depositPaid ? 'paid' : 'unpaid' }}" bindtap="onDepositTap">
     <view class="deposit-icon">{{ depositPaid ? '✓' : '⚠' }}</view>
     <view class="flex-1">
       <view class="deposit-title">
-        {{ depositPaid ? (isSupply ? '品质' : '求购') + '保证金已缴' : '本次需缴' + (isSupply ? '品质' : '求购') + '保证金' }}
+        {{ depositPaid ? '钱包余额可冻结 ' + depositAmount + ' 元保证金' : '可用余额不足 ' + depositAmount + ' 元，需充值' }}
       </view>
       <view class="deposit-sub">
-        {{ depositPaid ? '已缴金额覆盖本次数量，可直接发布' : depositAmount + ' 元（按本次车数计算，点击立即缴纳）' }}
+        当前可用 ¥{{ walletAvailable }} · 发布后将冻结，订单完成后扣服务费，余款解冻
       </view>
     </view>
     <view wx:if="{{ !depositPaid }}" class="deposit-arrow">›</view>

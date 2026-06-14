@@ -1,52 +1,43 @@
 <template>
   <div>
-    <h2 style="margin-top: 0;">💰 保证金金额规则</h2>
+    <h2 style="margin-top: 0;">💰 保证金 / 服务费规则</h2>
 
-    <div class="admin-card">
-      <h3 style="margin-top: 0;">档位说明</h3>
-      <p class="muted" style="line-height: 1.7;">
-        三类保证金都按「车数」分档收取，金额公式：<br/>
-        <code>amount = ceil(qty / 档位车数) × 每档金额</code>
-      </p>
-      <table class="example-table">
-        <thead><tr><th>本次车数</th><th>货源保证金</th><th>求购保证金</th><th>竞拍保证金</th></tr></thead>
-        <tbody>
-          <tr v-for="q in [1,2,3,4,5,6,8,10]" :key="q">
-            <td>{{ q }} 车</td>
-            <td>¥ {{ calc(q, s.deposit_supply_per_step) }}</td>
-            <td>¥ {{ calc(q, s.deposit_demand_per_step) }}</td>
-            <td>¥ {{ calc(q, s.deposit_bid_per_step) }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="admin-card explain">
+      <h3 style="margin-top: 0;">机制说明</h3>
+      <ul style="margin: 0; padding-left: 24px; line-height: 1.9;">
+        <li>用户钱包通过<strong>充值</strong>注入资金</li>
+        <li>三类操作（<strong>发布货源</strong> / <strong>发起求购</strong> / <strong>参与竞拍</strong>）
+          每次从钱包<strong>统一冻结</strong>同一笔保证金</li>
+        <li>订单完成（采购方确认收货）→ 平台从买卖双方各扣一笔<strong>服务费</strong>，
+          剩余<strong>自动解冻</strong>回可用余额</li>
+        <li>流拍 / 取消 → 全部解冻回可用</li>
+      </ul>
     </div>
 
     <div class="admin-card">
-      <h3 style="margin-top: 0;">档位车数</h3>
-      <p class="muted" style="margin-top: 0;">每多少车作为一档累加金额（修改后预览表会自动更新）</p>
+      <h3 style="margin-top: 0;">金额配置</h3>
       <div class="num-row">
-        <label>档位车数</label>
-        <input type="number" min="1" v-model.number="s.deposit_step_qty" />
-        <span class="muted">车 / 档</span>
+        <label>保证金额度</label>
+        <input type="number" min="0" step="100" v-model.number="s.deposit_amount" />
+        <span class="muted">元 / 次（发布货源 / 发起求购 / 参与竞拍 统一冻结）</span>
       </div>
-    </div>
+      <div class="num-row">
+        <label>平台服务费</label>
+        <input type="number" min="0" step="10" v-model.number="s.service_fee_amount" />
+        <span class="muted">元 / 笔（订单完成时从每方冻结里扣除）</span>
+      </div>
 
-    <div class="admin-card">
-      <h3 style="margin-top: 0;">每档金额</h3>
-      <div class="num-row">
-        <label>发布货源</label>
-        <input type="number" min="0" step="100" v-model.number="s.deposit_supply_per_step" />
-        <span class="muted">元 / 档（养殖场发布货源时缴）</span>
-      </div>
-      <div class="num-row">
-        <label>发布求购</label>
-        <input type="number" min="0" step="100" v-model.number="s.deposit_demand_per_step" />
-        <span class="muted">元 / 档（采购商发布求购时缴）</span>
-      </div>
-      <div class="num-row">
-        <label>竞拍出价</label>
-        <input type="number" min="0" step="100" v-model.number="s.deposit_bid_per_step" />
-        <span class="muted">元 / 档（参与某场竞拍 / 应标时缴）</span>
+      <div class="preview-box">
+        <div class="preview-title">📊 单笔订单资金示意（基于当前配置）</div>
+        <table class="preview-table">
+          <thead><tr><th></th><th>买方</th><th>卖方</th></tr></thead>
+          <tbody>
+            <tr><td>下单 / 发布时冻结</td><td>¥ {{ s.deposit_amount }}</td><td>¥ {{ s.deposit_amount }}</td></tr>
+            <tr><td>订单完成扣服务费</td><td>- ¥ {{ s.service_fee_amount }}</td><td>- ¥ {{ s.service_fee_amount }}</td></tr>
+            <tr class="hl"><td>解冻回可用</td><td>¥ {{ Math.max(0, s.deposit_amount - s.service_fee_amount) }}</td><td>¥ {{ Math.max(0, s.deposit_amount - s.service_fee_amount) }}</td></tr>
+            <tr class="hl-rev"><td>平台单笔收入</td><td colspan="2" style="text-align:center;">¥ {{ s.service_fee_amount * 2 }}（买卖各 {{ s.service_fee_amount }}）</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -54,7 +45,7 @@
       <button class="btn-primary" @click="save" :disabled="saving">{{ saving ? '保存中…' : '💾 保存' }}</button>
       <span v-if="lastSavedAt" class="muted" style="margin-left: 12px;">最后保存：{{ lastSavedAt }}</span>
       <p class="muted" style="margin-top: 12px; font-size: 13px;">
-        💡 修改后立即生效，作用于"修改后"的新发布 / 新出价；已生成的保证金记录不变动。
+        💡 修改后立即生效，作用于"修改后"的新发布 / 新出价；已经冻结的资金沿用原金额结算。
       </p>
     </div>
 
@@ -81,10 +72,8 @@ import api from '../../api';
 import dayjs from 'dayjs';
 
 const s = reactive({
-  deposit_step_qty: 2,
-  deposit_supply_per_step: 2000,
-  deposit_demand_per_step: 1000,
-  deposit_bid_per_step: 1000,
+  deposit_amount: 1000,
+  service_fee_amount: 50,
 });
 const saving = ref(false);
 const lastSavedAt = ref('');
@@ -100,57 +89,62 @@ async function reconcile() {
   } catch (e) { showFailToast(e?.message); } finally { reconciling.value = false; }
 }
 
-function calc(qty, perStep) {
-  const step = Math.max(1, Number(s.deposit_step_qty) || 1);
-  return Math.ceil(qty / step) * Number(perStep || 0);
-}
-
 async function load() {
   const r = await api.get('/admin/deposit-settings');
-  Object.assign(s, r);
+  s.deposit_amount = Number(r.deposit_amount) || 1000;
+  s.service_fee_amount = Number(r.service_fee_amount) || 0;
 }
 
 async function save() {
-  for (const k of ['deposit_step_qty', 'deposit_supply_per_step', 'deposit_demand_per_step', 'deposit_bid_per_step']) {
-    if (!(Number(s[k]) > 0)) return showFailToast(k + ' 必须 > 0');
+  if (!(Number(s.deposit_amount) >= 0)) return showFailToast('保证金额度需为非负数');
+  if (!(Number(s.service_fee_amount) >= 0)) return showFailToast('服务费需为非负数');
+  if (Number(s.service_fee_amount) > Number(s.deposit_amount)) {
+    return showFailToast('服务费不能大于保证金额度');
   }
   saving.value = true;
   try {
     await api.put('/admin/deposit-settings', {
-      deposit_step_qty: s.deposit_step_qty,
-      deposit_supply_per_step: s.deposit_supply_per_step,
-      deposit_demand_per_step: s.deposit_demand_per_step,
-      deposit_bid_per_step: s.deposit_bid_per_step,
+      deposit_amount: s.deposit_amount,
+      service_fee_amount: s.service_fee_amount,
     });
     showSuccessToast('已保存');
     lastSavedAt.value = dayjs().format('HH:mm:ss');
     await load();
-  } catch (e) {} finally { saving.value = false; }
+  } catch (e) { showFailToast(e?.message); } finally { saving.value = false; }
 }
 
 onMounted(load);
 </script>
 
 <style scoped>
+.explain { background: #fff7e0; border: 1px solid #f6b821; }
+.explain li { color: #5a4810; }
 .num-row {
   display: flex; align-items: center; gap: 12px;
-  padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  padding: 14px 0; border-bottom: 1px solid #f0f0f0;
 }
 .num-row:last-of-type { border-bottom: none; }
-.num-row label { min-width: 120px; font-weight: 600; }
+.num-row label { min-width: 130px; font-weight: 600; }
 .num-row input {
-  width: 140px; padding: 8px;
+  width: 160px; padding: 10px; font-size: 15px;
   border: 1px solid #d0d0d0; border-radius: 4px;
 }
-.example-table {
-  width: 100%; max-width: 560px;
-  border-collapse: collapse; margin-top: 12px;
+.preview-box {
+  background: #fafafa; border-radius: 6px;
+  padding: 14px; margin-top: 16px;
 }
-.example-table th, .example-table td {
+.preview-title { font-weight: 600; margin-bottom: 10px; color: #1d1d1f; }
+.preview-table {
+  width: 100%; max-width: 480px;
+  border-collapse: collapse;
+}
+.preview-table th, .preview-table td {
   border: 1px solid #e8e8e8; padding: 8px 12px;
   text-align: center; font-size: 13px;
 }
-.example-table th { background: #fafafa; font-weight: 600; }
+.preview-table th { background: #f0f0f0; font-weight: 600; }
+.preview-table .hl td { background: #e7f7eb; color: #06883b; font-weight: 600; }
+.preview-table .hl-rev td { background: #fff7e0; color: #b78300; font-weight: 600; }
 .btn-primary {
   background: #f6b821; color: #fff; border: none;
   padding: 10px 28px; border-radius: 6px; cursor: pointer; font-size: 14px;

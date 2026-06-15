@@ -148,6 +148,19 @@ Page({
     wx.navigateTo({ url: '/pages/seller-profile/seller-profile?id=' + this.data.r.farm.id });
   },
 
+  openRouteMap() {
+    const r = this.data.r;
+    if (!this._myLoc) return wx.showToast({ title: '需开启定位', icon: 'none' });
+    if (!r || r.lat == null || r.lng == null) {
+      return wx.showToast({ title: '该货源未登记位置', icon: 'none' });
+    }
+    const label = (r.farm && r.farm.name) || '货源地';
+    const q = `?mLat=${this._myLoc.lat}&mLng=${this._myLoc.lng}` +
+              `&dLat=${r.lat}&dLng=${r.lng}` +
+              `&dLabel=${encodeURIComponent(label)}`;
+    wx.navigateTo({ url: '/pages/route-map/route-map' + q });
+  },
+
   relist() {
     wx.navigateTo({ url: '/pages/publish/publish?from=' + this.data.id });
   },

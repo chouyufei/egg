@@ -25,7 +25,7 @@
       <text wx:if="{{ r.weight_spec }}" class="tag tag-b">{{ r.weight_spec }}</text>
       <text wx:if="{{ r.region }}" class="tag tag-g">{{ r.region }}</text>
       <text wx:if="{{ r.chicken_breed }}" class="tag tag-b">{{ r.chicken_breed }}</text>
-      <text wx:if="{{ distText }}" class="tag {{ distNear ? '' : 'tag-d' }}">📍 距您 {{ distText }}</text>
+      <text wx:if="{{ distText }}" class="tag {{ distNear ? '' : 'tag-d' }}" bindtap="openRouteMap">📍 距您 {{ distText }} ›</text>
     </view>
   </view>
 

@@ -13,8 +13,8 @@
     <view class="info-row">
       <view class="info-icon" style="background: #1c5bd8;">📍</view>
       <view class="flex-1">
-        <view class="info-title">我的位置</view>
-        <view class="info-sub muted">{{ me.lat }}, {{ me.lng }}</view>
+        <view class="info-title">{{ me.name }}</view>
+        <view wx:if="{{ me.address }}" class="info-sub muted">{{ me.address }}</view>
       </view>
     </view>
     <view class="dist-line">
@@ -28,7 +28,7 @@
       <view class="info-icon" style="background: #ee0a24;">🐔</view>
       <view class="flex-1">
         <view class="info-title">{{ dst.label }}</view>
-        <view class="info-sub muted">{{ dst.lat }}, {{ dst.lng }}</view>
+        <view wx:if="{{ dst.address }}" class="info-sub muted">{{ dst.address }}</view>
       </view>
     </view>
 

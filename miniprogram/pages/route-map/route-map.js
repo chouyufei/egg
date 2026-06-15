@@ -1,9 +1,13 @@
 const { distanceKm, formatDistance } = require('../../utils/location');
 
+function safeDecode(s) {
+  try { return decodeURIComponent(s || ''); } catch (e) { return s || ''; }
+}
+
 Page({
   data: {
-    me: null,           // { lat, lng }
-    dst: null,          // { lat, lng, label }
+    me: null,           // { lat, lng, name, address }
+    dst: null,          // { lat, lng, label, address }
     orderId: 0,
     markers: [],
     polyline: [],
@@ -17,13 +21,26 @@ Page({
     const mLng = Number(opt.mLng);
     const dLat = Number(opt.dLat);
     const dLng = Number(opt.dLng);
-    const dLabel = opt.dLabel || '对方';
+    const dLabel = safeDecode(opt.dLabel) || '货源地';
+    const dAddr  = safeDecode(opt.dAddr);
     const orderId = Number(opt.orderId) || 0;
     if (![mLat, mLng, dLat, dLng].every(Number.isFinite)) {
       return wx.showToast({ title: '参数缺失', icon: 'none' });
     }
-    const me = { lat: mLat, lng: mLng };
-    const dst = { lat: dLat, lng: dLng, label: dLabel };
+
+    // 「我的位置」尽量用自选位置 storage 里的 name/address；否则就显示「我的位置」
+    let myName = '我的位置';
+    let myAddr = '';
+    try {
+      const custom = wx.getStorageSync('customLoc');
+      if (custom && Math.abs(custom.lat - mLat) < 1e-4 && Math.abs(custom.lng - mLng) < 1e-4) {
+        myName = custom.name || myName;
+        myAddr = custom.address || '';
+      }
+    } catch (e) {}
+
+    const me = { lat: mLat, lng: mLng, name: myName, address: myAddr };
+    const dst = { lat: dLat, lng: dLng, label: dLabel, address: dAddr };
     const km = distanceKm(mLat, mLng, dLat, dLng);
 
     this.setData({

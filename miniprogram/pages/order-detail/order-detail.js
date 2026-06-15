@@ -34,12 +34,18 @@ Page({
     const isFarm = this.data.user && this.data.user.role === 'farm';
     if (isFarm) {
       const b = order.buyer;
-      return (b && b.lat != null && b.lng != null) ? { lat: b.lat, lng: b.lng, label: '采购方' } : null;
+      return (b && b.lat != null && b.lng != null)
+        ? { lat: b.lat, lng: b.lng, label: b.name || '采购方', address: b.region || '' }
+        : null;
     }
     const r = order.resource;
-    if (r && r.lat != null && r.lng != null) return { lat: r.lat, lng: r.lng, label: '货源地' };
+    if (r && r.lat != null && r.lng != null) {
+      return { lat: r.lat, lng: r.lng, label: (order.farm && order.farm.name) || r.title || '货源地', address: r.region || '' };
+    }
     const f = order.farm;
-    if (f && f.lat != null && f.lng != null) return { lat: f.lat, lng: f.lng, label: '养殖场' };
+    if (f && f.lat != null && f.lng != null) {
+      return { lat: f.lat, lng: f.lng, label: f.name || '养殖场', address: f.region || '' };
+    }
     return null;
   },
   openRouteMap() {
@@ -51,6 +57,7 @@ Page({
     const q = `?mLat=${myLat}&mLng=${myLng}` +
               `&dLat=${dst.lat}&dLng=${dst.lng}` +
               `&dLabel=${encodeURIComponent(dst.label)}` +
+              `&dAddr=${encodeURIComponent(dst.address || '')}` +
               `&orderId=${this.data.id}`;
     wx.navigateTo({
       url: '/pages/route-map/route-map' + q,

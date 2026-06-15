@@ -158,10 +158,12 @@ Page({
     // 没拿到我的位置时也允许进地图：用户在地图页可以看到货源位置 + 拉起原生导航
     const myLat = (this._myLoc && this._myLoc.lat) || r.lat;
     const myLng = (this._myLoc && this._myLoc.lng) || r.lng;
-    const label = (r.farm && r.farm.name) || '货源地';
+    const label = (r.farm && r.farm.name) || r.title || '货源地';
+    const addr = r.region || '';
     const q = `?mLat=${myLat}&mLng=${myLng}` +
               `&dLat=${r.lat}&dLng=${r.lng}` +
-              `&dLabel=${encodeURIComponent(label)}`;
+              `&dLabel=${encodeURIComponent(label)}` +
+              `&dAddr=${encodeURIComponent(addr)}`;
     wx.navigateTo({
       url: '/pages/route-map/route-map' + q,
       fail: (e) => {

@@ -16,7 +16,8 @@
     "pages/seller-profile/seller-profile",
     "pages/wallet/wallet",
     "pages/withdraw/withdraw",
-    "pages/recharge/recharge"
+    "pages/recharge/recharge",
+    "pages/route-map/route-map"
   ],
   "window": {
     "backgroundTextStyle": "light",

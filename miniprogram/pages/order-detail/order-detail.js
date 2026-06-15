@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const { formatTime, statusLabel, statusTag } = require('../../utils/format');
+const { getLocation, distanceKm, formatDistance } = require('../../utils/location');
 const app = getApp();
 
 Page({
@@ -10,13 +11,47 @@ Page({
     otherLabel: '', otherName: '', otherPhone: '',
     showDispute: false, dispute: { type: '', description: '' },
     serviceQr: { url: '', owner: '' },
+    distText: '',
   },
   onLoad(opt) {
     this.setData({ id: Number(opt.id), user: app.globalData.user });
     this.load();
     this.poll = setInterval(() => this.load(), 5000);
+    // 静默拿一次当前定位，下次 load 时计算距离
+    getLocation().then(loc => { this._myLoc = loc; this.computeDist(); });
   },
   onUnload() { clearInterval(this.poll); },
+  computeDist() {
+    if (!this._myLoc || !this.data.order) return;
+    const dst = this._otherPoint(this.data.order);
+    if (!dst) return;
+    const km = distanceKm(this._myLoc.lat, this._myLoc.lng, dst.lat, dst.lng);
+    if (km != null) this.setData({ distText: formatDistance(km) });
+  },
+  // "对方"端点：买家看货源位置；卖家看买家位置
+  _otherPoint(order) {
+    if (!order) return null;
+    const isFarm = this.data.user && this.data.user.role === 'farm';
+    if (isFarm) {
+      const b = order.buyer;
+      return (b && b.lat != null && b.lng != null) ? { lat: b.lat, lng: b.lng, label: '采购方' } : null;
+    }
+    const r = order.resource;
+    if (r && r.lat != null && r.lng != null) return { lat: r.lat, lng: r.lng, label: '货源地' };
+    const f = order.farm;
+    if (f && f.lat != null && f.lng != null) return { lat: f.lat, lng: f.lng, label: '养殖场' };
+    return null;
+  },
+  openRouteMap() {
+    const dst = this._otherPoint(this.data.order);
+    if (!dst) return wx.showToast({ title: '对方未登记位置', icon: 'none' });
+    if (!this._myLoc) return wx.showToast({ title: '需开启定位', icon: 'none' });
+    const q = `?mLat=${this._myLoc.lat}&mLng=${this._myLoc.lng}` +
+              `&dLat=${dst.lat}&dLng=${dst.lng}` +
+              `&dLabel=${encodeURIComponent(dst.label)}` +
+              `&orderId=${this.data.id}`;
+    wx.navigateTo({ url: '/pages/route-map/route-map' + q });
+  },
   async load() {
     try {
       const { order, chats, service_qr } = await api.get('/orders/' + this.data.id);
@@ -33,6 +68,7 @@ Page({
         otherPhone: other ? other.phone : '-',
         serviceQr: service_qr || { url: '', owner: '' },
       });
+      this.computeDist();
     } catch (e) {}
   },
   previewQr() {

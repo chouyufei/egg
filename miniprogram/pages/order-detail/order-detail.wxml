@@ -9,6 +9,10 @@
     <view class="kv"><text class="muted">数量</text><text>{{ order.quantity }} 枚</text></view>
     <view class="kv"><text class="muted">{{ otherLabel }}</text><text>{{ otherName }}</text></view>
     <view class="kv"><text class="muted">联系电话</text><text>{{ otherPhone }}</text></view>
+    <view wx:if="{{ distText }}" class="kv kv-link" bindtap="openRouteMap">
+      <text class="muted">📍 距离</text>
+      <text>距您 {{ distText }} <text class="muted" style="font-size: 22rpx;">查看路线 ›</text></text>
+    </view>
   </view>
 
   <!-- 客服企业微信二维码：成交后下发，买卖双方都加客服后由客服拉群 -->

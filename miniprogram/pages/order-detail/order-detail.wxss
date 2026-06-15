@@ -1,4 +1,6 @@
 .kv { display: flex; justify-content: space-between; padding: 12rpx 0; font-size: 28rpx; }
+.kv-link { color: #e0a40d; }
+.kv-link:active { opacity: 0.6; }
 
 .qr-card {
   background: linear-gradient(135deg, #fff7e0 0%, #ffe9a8 100%);

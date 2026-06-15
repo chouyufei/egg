@@ -63,11 +63,26 @@ const TRUCK_PRESETS = [
   { value: 13.5, boxes: 1250 },
 ];
 
+// 蛋色 → 常见鸡种品种映射（参考行业「鸡蛋种类」分类）
+const BREEDS_BY_COLOR = {
+  '粉壳': ['海兰系列', '罗曼系列', '粉六', '大午金风', '京柏一号', '农三', '其它'],
+  '红壳': ['海兰褐', '京红', '罗曼褐', '农大三号', '尼克红', '其它'],
+  '土鸡': ['粉八', '新阳黑', '新黛果', '白凤', '花风', '黑凤山', '本地散养', '其它'],
+  '乌鸡': ['宝凤绿', '五黑', '新阳绿', '苏禽', '苏禽二代', '达康', '神丹六号', '上海梨园', '其它'],
+  '白壳': ['京白', '海兰白', '其它'],
+};
+// 旧数据兼容
+const COLOR_ALIAS = { '杂色': '土鸡' };
+
 Page({
   data: {
     isSupply: true,
     provinces: PROVINCES, provinceIndex: 0,
     truckPresets: TRUCK_PRESETS,
+    // 当前蛋色对应的鸡种列表 + picker 索引
+    breedOptions: BREEDS_BY_COLOR['红壳'],
+    breedIndex: -1,                    // -1 表示未选；>= 0 是 picker 索引
+    breedCustom: '',                   // 选"其它"时的文本输入
     form: {
       title: '', region: '', chicken_breed: '',
       farm_size_wan: '',
@@ -168,13 +183,26 @@ Page({
         if (r.province) for (let i = 0; i < PROVINCES.length; i++) {
           if (PROVINCES[i] === r.province) { pIdx = i; break; }
         }
+        // 蛋色：旧"杂色"映射到"土鸡"；蛋色变 → 同步换鸡种 picker 列表
+        const color = COLOR_ALIAS[r.egg_color] || r.egg_color || '红壳';
+        const breedOpts = BREEDS_BY_COLOR[color] || BREEDS_BY_COLOR['红壳'];
+        let bIdx = breedOpts.indexOf(r.chicken_breed || '');
+        let bCustom = '';
+        if (bIdx < 0 && r.chicken_breed) {
+          // 旧资源里写了不在列表里的鸡种 → 算作"其它"+ 自填
+          bIdx = breedOpts.indexOf('其它');
+          bCustom = r.chicken_breed;
+        }
         this.setData({
           provinceIndex: pIdx,
+          breedOptions: breedOpts,
+          breedIndex: bIdx,
+          breedCustom: bCustom,
           'form.title': r.title || '',
           'form.region': r.region || '',
           'form.chicken_breed': r.chicken_breed || '',
           'form.farm_size_wan': r.farm_size ? +(r.farm_size / 10000).toFixed(2) : '',
-          'form.egg_color': r.egg_color || '红壳',
+          'form.egg_color': color,
           'form.weight_min': minW,
           'form.weight_max': maxW,
           'form.shell_quality': r.shell_quality || '',
@@ -199,7 +227,32 @@ Page({
       } catch (e) {}
     }
   },
-  pickColor(e) { this.setData({ 'form.egg_color': e.detail.value }); },
+  pickColor(e) {
+    const v = e.detail.value;
+    const opts = BREEDS_BY_COLOR[v] || BREEDS_BY_COLOR['红壳'];
+    this.setData({
+      'form.egg_color': v,
+      breedOptions: opts,
+      breedIndex: -1,
+      breedCustom: '',
+      'form.chicken_breed': '',
+    });
+  },
+  // 鸡种 picker change
+  pickBreed(e) {
+    const idx = Number(e.detail.value);
+    const opts = this.data.breedOptions || [];
+    const v = opts[idx] || '';
+    this.setData({
+      breedIndex: idx,
+      'form.chicken_breed': v === '其它' ? (this.data.breedCustom || '') : v,
+    });
+  },
+  // 选"其它"时的自定义文本输入
+  onBreedCustomInput(e) {
+    const v = e.detail.value || '';
+    this.setData({ breedCustom: v, 'form.chicken_breed': v });
+  },
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
 

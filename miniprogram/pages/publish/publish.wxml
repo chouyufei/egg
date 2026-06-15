@@ -60,8 +60,17 @@
       </radio-group>
     </view>
 
-    <!-- 再鸡种 -->
-    <view class="input-row"><view class="label">鸡种</view><input value="{{ form.chicken_breed }}" data-k="chicken_breed" bindinput="onInput" bindblur="onInput" placeholder="如：海兰褐 / 罗曼粉 / 笨鸡" /></view>
+    <!-- 鸡种：根据上方蛋色自动给出常见品种下拉 -->
+    <view class="input-row">
+      <view class="label">鸡种</view>
+      <picker bindchange="pickBreed" value="{{ breedIndex }}" range="{{ breedOptions }}">
+        <view class="picker-val">{{ breedIndex >= 0 ? breedOptions[breedIndex] : '请选择 ▾' }}</view>
+      </picker>
+    </view>
+    <view wx:if="{{ breedIndex >= 0 && breedOptions[breedIndex] === '其它' }}" class="input-row">
+      <view class="label">鸡种名</view>
+      <input value="{{ breedCustom }}" bindinput="onBreedCustomInput" bindblur="onBreedCustomInput" placeholder="自填鸡种名称" />
+    </view>
 
     <view wx:if="{{ isSupply }}" class="input-row">
       <view class="label">养殖规模</view>

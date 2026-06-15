@@ -84,8 +84,6 @@
       <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="如 0.5" style="width: 140rpx;" />
       <text class="muted" style="margin-left: 8rpx;">%</text>
     </view>
-    <view wx:if="{{ isSupply }}" class="input-row"><view class="label">次品包含</view><input value="{{ form.defect_note }}" data-k="defect_note" bindinput="onInput" bindblur="onInput" placeholder="如：裂纹蛋 / 沙皮蛋 / 软壳蛋" /></view>
-
     <view wx:if="{{ isSupply }}" class="input-row"><view class="label">鲜度</view><input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="x 天内" /></view>
 
     <view class="input-row">

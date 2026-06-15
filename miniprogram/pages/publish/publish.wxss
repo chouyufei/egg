@@ -2,6 +2,17 @@
   display: flex; align-items: center; gap: 20rpx;
   background: linear-gradient(135deg, #fff7e0 0%, #ffe9a8 100%);
 }
+
+/* 蛋品类目：选项较多，允许换行 */
+.egg-type-row { align-items: flex-start; }
+.egg-type-group {
+  display: flex; flex-wrap: wrap; gap: 16rpx 24rpx;
+  flex: 1;
+}
+.egg-type-opt {
+  display: inline-flex; align-items: center;
+  font-size: 26rpx;
+}
 .kind-banner.demand {
   background: linear-gradient(135deg, #e6f0ff 0%, #c5d9ff 100%);
 }

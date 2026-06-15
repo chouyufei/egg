@@ -48,13 +48,15 @@
       </view>
     </view>
 
-    <!-- 先蛋色 -->
-    <view class="input-row">
-      <view class="label">蛋色</view>
-      <radio-group bindchange="pickColor" style="display: flex; gap: 24rpx;">
-        <label><radio value="红壳" checked="{{ form.egg_color === '红壳' }}" />红壳</label>
-        <label><radio value="粉壳" checked="{{ form.egg_color === '粉壳' }}" />粉壳</label>
-        <label><radio value="杂色" checked="{{ form.egg_color === '杂色' }}" />杂色</label>
+    <!-- 蛋品类目（蛋壳颜色 + 品种） -->
+    <view class="input-row egg-type-row">
+      <view class="label">蛋品类目</view>
+      <radio-group bindchange="pickColor" class="egg-type-group">
+        <label class="egg-type-opt"><radio value="粉壳" checked="{{ form.egg_color === '粉壳' }}" />粉壳蛋</label>
+        <label class="egg-type-opt"><radio value="红壳" checked="{{ form.egg_color === '红壳' }}" />红壳蛋</label>
+        <label class="egg-type-opt"><radio value="土鸡" checked="{{ form.egg_color === '土鸡' || form.egg_color === '杂色' }}" />土鸡蛋</label>
+        <label class="egg-type-opt"><radio value="乌鸡" checked="{{ form.egg_color === '乌鸡' }}" />乌鸡蛋</label>
+        <label class="egg-type-opt"><radio value="白壳" checked="{{ form.egg_color === '白壳' }}" />白壳蛋</label>
       </radio-group>
     </view>
 

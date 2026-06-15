@@ -1,8 +1,10 @@
 const CATEGORIES = [
   { value: '',     icon: '🥚', label: '全部',   tip: '不限蛋色' },
-  { value: '红壳', icon: '🔴', label: '红壳蛋', tip: '海兰褐 / 罗曼' },
-  { value: '粉壳', icon: '🤎', label: '粉壳蛋', tip: '罗曼粉 / 海赛克斯' },
-  { value: '杂色', icon: '🟡', label: '土鸡蛋', tip: '本地笨鸡·散养' },
+  { value: '粉壳', icon: '🤎', label: '粉壳蛋', tip: '海兰系列 / 罗曼系列 / 粉六 / 大午金风' },
+  { value: '红壳', icon: '🔴', label: '红壳蛋', tip: '海兰褐 / 京红 / 农大三号' },
+  { value: '土鸡', icon: '🟡', label: '土鸡蛋', tip: '土麻 / 新阳黑 / 白凤 / 本地散养' },
+  { value: '乌鸡', icon: '⚫', label: '乌鸡蛋', tip: '五黑 / 乌鸡系列' },
+  { value: '白壳', icon: '⚪', label: '白壳蛋', tip: '京白 / 海兰白 / 神丹六号 / 上海梨园' },
 ];
 
 Page({

@@ -4,11 +4,14 @@ const app = getApp();
 
 const CUSTOM_LOC_KEY = 'customLoc';   // 持久化自选位置
 
+// 蛋品类目（按蛋壳颜色 + 品种细化，对应行业「鸡蛋种类」常见分类）
 const CATEGORIES = [
   { value: '',     icon: '🥚', label: '全部' },
-  { value: '红壳', icon: '🔴', label: '红壳' },
-  { value: '粉壳', icon: '🤎', label: '粉壳' },
-  { value: '杂色', icon: '🟡', label: '土鸡蛋' },
+  { value: '粉壳', icon: '🤎', label: '粉壳蛋' },   // 海兰系列 / 罗曼系列 / 粉六 / 大午金风 / 京柏一号 / 农三
+  { value: '红壳', icon: '🔴', label: '红壳蛋' },   // 海兰褐 / 京红 / 农大三号
+  { value: '土鸡', icon: '🟡', label: '土鸡蛋' },   // 土麻、新阳黑、新黛果、白凤、花风等本地土鸡
+  { value: '乌鸡', icon: '⚫', label: '乌鸡蛋' },   // 五黑 / 乌鸡系列
+  { value: '白壳', icon: '⚪', label: '白壳蛋' },   // 京白 / 海兰白 / 神丹六号 / 上海梨园
 ];
 
 const PROVINCES_DEFAULT = ['北京', '山东', '河南', '河北', '江苏', '上海', '广东'];

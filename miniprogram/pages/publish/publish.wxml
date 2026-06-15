@@ -114,7 +114,7 @@
     </view>
     <view class="input-row">
       <view class="label">{{ isSupply ? '加价幅度' : '降价幅度' }}</view>
-      <input type="digit" value="{{ form.min_increment }}" data-k="min_increment" bindinput="onInput" bindblur="onInput" placeholder="≥ 2" />
+      <input type="digit" value="{{ form.min_increment }}" data-k="min_increment" bindinput="onInput" bindblur="onInput" placeholder="≥ 1" />
       <view class="muted" style="margin-left: 8rpx;">元/箱</view>
     </view>
     <view class="input-row">

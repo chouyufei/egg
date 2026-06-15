@@ -1,6 +1,8 @@
 const api = require('../../utils/api');
-const { getAndReportLocation } = require('../../utils/location');
+const { getAndReportLocation, getLocation, chooseLocation } = require('../../utils/location');
 const app = getApp();
+
+const CUSTOM_LOC_KEY = 'customLoc';   // 持久化自选位置
 
 const CATEGORIES = [
   { value: '',     icon: '🥚', label: '全部' },
@@ -65,6 +67,8 @@ Page({
     // 用户当前定位（用于按距离推荐）；获取失败时为 null
     myLoc: null,
     nearRadius: 500,
+    locSource: 'gps',   // 'gps' | 'custom'
+    locName: '',        // 自选位置的显示名
   },
 
   onLoad() {
@@ -89,12 +93,49 @@ Page({
       } catch (e) {}
     }
 
-    // 后台静默获取定位（首次会弹授权弹窗），用于按距离排序。失败不影响其他功能
-    getAndReportLocation().then(loc => {
-      if (loc) this.setData({ myLoc: loc });
-    });
+    // 自选位置优先；没有再用 GPS 定位
+    const custom = wx.getStorageSync(CUSTOM_LOC_KEY);
+    if (custom && custom.lat && custom.lng) {
+      this.setData({
+        myLoc: { lat: custom.lat, lng: custom.lng },
+        locSource: 'custom',
+        locName: custom.name || '自选位置',
+      });
+    } else {
+      getAndReportLocation().then(loc => {
+        if (loc) this.setData({ myLoc: loc, locSource: 'gps', locName: '' });
+      });
+    }
 
     await this.refresh();
+  },
+
+  async pickCustomLoc() {
+    const loc = await chooseLocation();
+    if (!loc) return wx.showToast({ title: '已取消', icon: 'none' });
+    wx.setStorageSync(CUSTOM_LOC_KEY, loc);
+    // 同步到后端，让发布 / 资源详情等共用
+    try { await api.post('/auth/location', { lat: loc.lat, lng: loc.lng }); } catch (e) {}
+    this.setData({
+      myLoc: { lat: loc.lat, lng: loc.lng },
+      locSource: 'custom',
+      locName: loc.name || '自选位置',
+    });
+    await this.load();
+    wx.showToast({ title: '已切换为「' + (loc.name || '自选位置') + '」', icon: 'none', duration: 2500 });
+  },
+
+  // 长按"自选位置"清除，恢复 GPS 定位
+  async resetToGps() {
+    wx.removeStorageSync(CUSTOM_LOC_KEY);
+    const loc = await getLocation({ force: true });
+    if (loc) {
+      this.setData({ myLoc: loc, locSource: 'gps', locName: '' });
+      await this.load();
+      wx.showToast({ title: '已恢复手机定位', icon: 'success' });
+    } else {
+      this.setData({ myLoc: null, locSource: 'gps', locName: '' });
+    }
   },
 
   async refresh() {

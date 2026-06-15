@@ -32,8 +32,15 @@
       <text class="filter-arrow">▾</text>
     </view>
 
-    <view wx:if="{{ myLoc }}" class="near-hint">📍 已开启定位 · 优先显示 {{ nearRadius }}km 内的{{ activeMode === 'sell' ? '采购' : '货源' }}</view>
-    <view wx:else class="near-hint near-hint-off" bindtap="askLocation">📍 开启定位 · 优先看附近{{ activeMode === 'sell' ? '采购' : '货源' }} ›</view>
+    <view wx:if="{{ myLoc }}" class="near-hint row-between">
+      <text class="flex-1 ellipsis">📍 {{ locSource === 'custom' ? '自选：' + locName : '当前定位' }} · 优先 {{ nearRadius }}km 内</text>
+      <text class="near-edit" catchtap="pickCustomLoc">{{ locSource === 'custom' ? '更换' : '选位置' }}</text>
+      <text wx:if="{{ locSource === 'custom' }}" class="near-edit near-edit-x" catchtap="resetToGps">↻</text>
+    </view>
+    <view wx:else class="near-hint near-hint-off row-between">
+      <text bindtap="askLocation">📍 开启定位 · 优先看附近</text>
+      <text class="near-edit" catchtap="pickCustomLoc">手动选</text>
+    </view>
   </view>
 
   <!-- ========== 买 视角 ========== -->

@@ -150,15 +150,25 @@ Page({
 
   openRouteMap() {
     const r = this.data.r;
-    if (!this._myLoc) return wx.showToast({ title: '需开启定位', icon: 'none' });
-    if (!r || r.lat == null || r.lng == null) {
-      return wx.showToast({ title: '该货源未登记位置', icon: 'none' });
+    console.log('[openRouteMap] _myLoc=', this._myLoc, 'r.lat=', r && r.lat, 'r.lng=', r && r.lng);
+    if (!r) return wx.showToast({ title: '资源未加载', icon: 'none' });
+    if (r.lat == null || r.lng == null) {
+      return wx.showToast({ title: '该货源未登记位置，无法显示路线', icon: 'none', duration: 2500 });
     }
+    // 没拿到我的位置时也允许进地图：用户在地图页可以看到货源位置 + 拉起原生导航
+    const myLat = (this._myLoc && this._myLoc.lat) || r.lat;
+    const myLng = (this._myLoc && this._myLoc.lng) || r.lng;
     const label = (r.farm && r.farm.name) || '货源地';
-    const q = `?mLat=${this._myLoc.lat}&mLng=${this._myLoc.lng}` +
+    const q = `?mLat=${myLat}&mLng=${myLng}` +
               `&dLat=${r.lat}&dLng=${r.lng}` +
               `&dLabel=${encodeURIComponent(label)}`;
-    wx.navigateTo({ url: '/pages/route-map/route-map' + q });
+    wx.navigateTo({
+      url: '/pages/route-map/route-map' + q,
+      fail: (e) => {
+        console.error('[openRouteMap] navigateTo failed', e);
+        wx.showToast({ title: '跳转失败: ' + (e && e.errMsg || ''), icon: 'none', duration: 3000 });
+      },
+    });
   },
 
   relist() {

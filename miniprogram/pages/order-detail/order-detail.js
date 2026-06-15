@@ -44,13 +44,21 @@ Page({
   },
   openRouteMap() {
     const dst = this._otherPoint(this.data.order);
-    if (!dst) return wx.showToast({ title: '对方未登记位置', icon: 'none' });
-    if (!this._myLoc) return wx.showToast({ title: '需开启定位', icon: 'none' });
-    const q = `?mLat=${this._myLoc.lat}&mLng=${this._myLoc.lng}` +
+    console.log('[openRouteMap] _myLoc=', this._myLoc, 'dst=', dst);
+    if (!dst) return wx.showToast({ title: '对方未登记位置，无法显示路线', icon: 'none', duration: 2500 });
+    const myLat = (this._myLoc && this._myLoc.lat) || dst.lat;
+    const myLng = (this._myLoc && this._myLoc.lng) || dst.lng;
+    const q = `?mLat=${myLat}&mLng=${myLng}` +
               `&dLat=${dst.lat}&dLng=${dst.lng}` +
               `&dLabel=${encodeURIComponent(dst.label)}` +
               `&orderId=${this.data.id}`;
-    wx.navigateTo({ url: '/pages/route-map/route-map' + q });
+    wx.navigateTo({
+      url: '/pages/route-map/route-map' + q,
+      fail: (e) => {
+        console.error('[openRouteMap] navigateTo failed', e);
+        wx.showToast({ title: '跳转失败: ' + (e && e.errMsg || ''), icon: 'none', duration: 3000 });
+      },
+    });
   },
   async load() {
     try {

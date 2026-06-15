@@ -9,9 +9,9 @@
     <view class="kv"><text class="muted">数量</text><text>{{ order.quantity }} 枚</text></view>
     <view class="kv"><text class="muted">{{ otherLabel }}</text><text>{{ otherName }}</text></view>
     <view class="kv"><text class="muted">联系电话</text><text>{{ otherPhone }}</text></view>
-    <view wx:if="{{ distText }}" class="kv kv-link" bindtap="openRouteMap">
+    <view wx:if="{{ distText }}" class="kv kv-link" catchtap="openRouteMap">
       <text class="muted">📍 距离</text>
-      <text>距您 {{ distText }} <text class="muted" style="font-size: 22rpx;">查看路线 ›</text></text>
+      <view>距您 {{ distText }} <text class="muted" style="font-size: 22rpx;">查看路线 ›</text></view>
     </view>
   </view>
 

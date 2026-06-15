@@ -8,6 +8,14 @@
 .kv-link { color: #e0a40d; }
 .kv-link:active { opacity: 0.6; }
 
+/* 距离 chip：用 view 替代 text 让 catchtap 100% 可用，给点点击反馈 */
+.dist-tag {
+  display: inline-block;
+  cursor: pointer;
+  padding: 6rpx 16rpx;
+}
+.dist-tag:active { opacity: 0.6; }
+
 .bid-row {
   display: flex; justify-content: space-between; align-items: center;
   padding: 18rpx 0; border-bottom: 1px solid #f0f0f0;

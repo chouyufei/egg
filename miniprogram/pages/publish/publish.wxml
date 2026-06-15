@@ -102,19 +102,9 @@
 
     <view class="input-row">
       <view class="label">数量</view>
-      <input type="digit" value="{{ form.quantity }}" data-k="quantity" bindinput="onInput" bindblur="onInput" placeholder="如 1" />
-      <text class="muted" style="margin-left: 8rpx;">车</text>
-    </view>
-
-    <!-- 车型快速档 -->
-    <view class="quick-row">
-      <view class="quick-tip">常用车型（点击填入）</view>
-      <view class="quick-chips">
-        <view class="quick-chip" wx:for="{{ truckPresets }}" wx:key="value" bindtap="pickTruck" data-v="{{ item.value }}">
-          <text class="quick-val">{{ item.value }} m 车</text>
-          <text class="quick-sub">≈ {{ item.boxes }} 箱</text>
-        </view>
-      </view>
+      <picker bindchange="pickTruckPicker" value="{{ truckIndex }}" range="{{ truckRangeLabels }}">
+        <view class="picker-val">{{ truckIndex >= 0 ? truckRangeLabels[truckIndex] : '请选择车型 ▾' }}</view>
+      </picker>
     </view>
   </view>
 

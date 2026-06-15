@@ -79,6 +79,8 @@ Page({
     isSupply: true,
     provinces: PROVINCES, provinceIndex: 0,
     truckPresets: TRUCK_PRESETS,
+    truckRangeLabels: TRUCK_PRESETS.map(t => `${t.value} m 车  ≈ ${t.boxes} 箱`),
+    truckIndex: -1,
     // 当前蛋色对应的鸡种列表 + picker 索引
     breedOptions: BREEDS_BY_COLOR['红壳'],
     breedIndex: -1,                    // -1 表示未选；>= 0 是 picker 索引
@@ -210,6 +212,7 @@ Page({
           'form.defect_note': r.defect_note || '',
           'form.freshness_days': r.freshness_days || 3,
           'form.quantity': r.quantity || '',
+          truckIndex: TRUCK_PRESETS.findIndex(t => Number(t.value) === Number(r.quantity)),
           'form.unit_size': r.unit_size || '车',
           'form.start_price': r.start_price || '',
           'form.min_increment': r.min_increment || 1,
@@ -269,6 +272,17 @@ Page({
 
   pickTruck(e) {
     this.setData({ 'form.quantity': String(e.currentTarget.dataset.v) });
+    this.refreshDepositStatus();
+  },
+  // 数量 picker 选择车型 → 同步 form.quantity 为车长数字
+  pickTruckPicker(e) {
+    const idx = Number(e.detail.value);
+    const t = TRUCK_PRESETS[idx];
+    if (!t) return;
+    this.setData({
+      truckIndex: idx,
+      'form.quantity': String(t.value),
+    });
     this.refreshDepositStatus();
   },
 

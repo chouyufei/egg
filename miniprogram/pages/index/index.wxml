@@ -135,13 +135,21 @@
             class="chip {{ tempColor === item.value ? 'on' : '' }}"
             bindtap="tempPickColor" data-v="{{ item.value }}">{{ item.icon }} {{ item.label }}</view>
     </view>
-    <view class="sheet-title">区域分类</view>
+    <view class="sheet-title">区域分类 · 推荐</view>
     <view class="chip-row">
-      <view class="chip {{ tempProvince === '' ? 'on' : '' }}" bindtap="tempPickProvince" data-v="">推荐</view>
+      <view class="chip {{ tempProvince === '' ? 'on' : '' }}" bindtap="tempPickProvince" data-v="">不限</view>
       <view wx:for="{{ provinces }}" wx:key="*this"
             class="chip {{ tempProvince === item ? 'on' : '' }}"
             bindtap="tempPickProvince" data-v="{{ item }}">{{ item }}</view>
     </view>
+    <view class="sheet-title">区域分类 · 全部</view>
+    <scroll-view scroll-y class="chip-scroll">
+      <view class="chip-row">
+        <view wx:for="{{ allProvinces }}" wx:key="*this"
+              class="chip {{ tempProvince === item ? 'on' : '' }}"
+              bindtap="tempPickProvince" data-v="{{ item }}">{{ item }}</view>
+      </view>
+    </scroll-view>
     <view class="row mt-16" style="gap: 16rpx; padding: 0 24rpx;">
       <button class="btn-plain flex-1" bindtap="resetFilter">重置</button>
       <button class="btn flex-1" bindtap="applyFilter">应用</button>

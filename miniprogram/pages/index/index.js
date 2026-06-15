@@ -13,6 +13,16 @@ const CATEGORIES = [
 
 const PROVINCES_DEFAULT = ['北京', '山东', '河南', '河北', '江苏', '上海', '广东'];
 
+// 全部省份 / 直辖市 / 自治区
+const PROVINCES_ALL = [
+  '北京', '天津', '上海', '重庆',
+  '河北', '山西', '辽宁', '吉林', '黑龙江',
+  '江苏', '浙江', '安徽', '福建', '江西', '山东',
+  '河南', '湖北', '湖南', '广东', '海南',
+  '四川', '贵州', '云南', '陕西', '甘肃', '青海',
+  '广西', '内蒙古', '宁夏', '新疆', '西藏',
+];
+
 function inferNearbyProvinces(userRegion) {
   if (!userRegion) return PROVINCES_DEFAULT;
   const map = {
@@ -53,7 +63,8 @@ Page({
     mineSupplies: [],    // 我发的货源
 
     categories: CATEGORIES,
-    provinces: PROVINCES_DEFAULT,
+    provinces: PROVINCES_DEFAULT,    // 推荐（基于用户所在地推断的相邻省份）
+    allProvinces: PROVINCES_ALL,     // 全部省份 / 直辖市 / 自治区
 
     activeColor: '',
     activeProvince: '',

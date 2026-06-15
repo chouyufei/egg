@@ -118,6 +118,9 @@
   display: flex; flex-wrap: wrap;
   padding: 0 24rpx;
 }
+.chip-scroll {
+  max-height: 320rpx;
+}
 .chip {
   background: #f5f6f8; color: #1d1d1f;
   padding: 12rpx 24rpx; margin: 0 12rpx 12rpx 0;

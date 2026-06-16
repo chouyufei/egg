@@ -6,7 +6,7 @@
     </view>
     <view class="kv mt-16"><text class="muted">资源</text><text>{{ order.resource.title }}</text></view>
     <view class="kv"><text class="muted">成交价</text><text class="price">¥{{ order.final_price }}</text></view>
-    <view class="kv"><text class="muted">数量</text><text>{{ order.quantity }} 枚</text></view>
+    <view class="kv"><text class="muted">数量</text><text>{{ order.quantity }} {{ (order.resource && order.resource.unit_size) || '车' }}</text></view>
     <view class="kv"><text class="muted">{{ otherLabel }}</text><text>{{ otherName }}</text></view>
     <view class="kv"><text class="muted">联系电话</text><text>{{ otherPhone }}</text></view>
     <view wx:if="{{ distText }}" class="kv kv-link" catchtap="openRouteMap">

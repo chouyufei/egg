@@ -35,7 +35,7 @@
     <div class="card" style="margin: 0 12px 12px;">
       <div class="section-title" style="margin: 0 0 8px;">参数明细</div>
       <van-cell-group :border="false">
-        <van-cell title="数量" :value="`${resource.quantity} 枚`" />
+        <van-cell title="数量" :value="`${resource.quantity} ${resource.unit_size || '车'}`" />
         <van-cell title="蛋壳质量" :value="resource.shell_quality || '-'" />
         <van-cell title="鲜度" :value="resource.freshness_days ? `${resource.freshness_days} 天内` : '-'" />
         <van-cell title="规模" :value="resource.farm_size ? `${resource.farm_size} 只` : '-'" />

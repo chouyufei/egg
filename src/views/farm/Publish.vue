@@ -3,7 +3,7 @@
     <van-nav-bar title="发布新资源" left-arrow @click-left="$router.back()" />
 
     <div class="card" style="margin: 12px;">
-      <van-field v-model="form.title" label="标题" placeholder="如：青州散养土鸡蛋·1万枚整批" />
+      <van-field v-model="form.title" label="标题" placeholder="如：青州散养土鸡蛋·1 车整批" />
       <van-field v-model="form.region" label="地区" placeholder="如：山东青州" />
       <van-field v-model="form.chicken_breed" label="鸡种" placeholder="如：海兰褐/罗曼粉/笨鸡" />
       <van-field v-model.number="form.farm_size" type="digit" label="养殖规模" placeholder="只" />
@@ -19,7 +19,7 @@
       <van-field v-model="form.weight_spec" label="规格" placeholder="如：55-65g/枚" />
       <van-field v-model="form.shell_quality" label="蛋壳质量" placeholder="如：硬壳-无裂纹" />
       <van-field v-model.number="form.freshness_days" type="digit" label="鲜度" placeholder="x 天内" />
-      <van-field v-model.number="form.quantity" type="digit" label="数量(枚)" placeholder="如 10000" />
+      <van-field v-model.number="form.quantity" type="digit" label="数量(车)" placeholder="如 1" />
     </div>
 
     <div class="card" style="margin: 12px;">

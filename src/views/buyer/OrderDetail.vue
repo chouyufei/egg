@@ -10,7 +10,7 @@
       <van-cell-group :border="false" style="margin-top: 8px;">
         <van-cell title="资源" :value="order.resource?.title" />
         <van-cell title="成交价" :value="`¥${order.final_price}`" />
-        <van-cell title="数量" :value="`${order.quantity} 枚`" />
+        <van-cell title="数量" :value="`${order.quantity} ${order.resource?.unit_size || '车'}`" />
         <van-cell title="养殖场" :value="order.farm?.name" />
         <van-cell title="联系电话" :value="order.farm?.phone" />
       </van-cell-group>

@@ -37,7 +37,7 @@ const list = ref([]);
 const tabs = [
   { to: '/buyer', icon: 'home-o', label: '首页' },
   { to: '/buyer/search', icon: 'search', label: '搜索' },
-  { to: '/buyer/bids', icon: 'fire-o', label: '我的竞拍' },
+  { to: '/buyer/bids', icon: 'fire-o', label: '我的竞价' },
   { to: '/buyer/orders', icon: 'orders-o', label: '订单' },
   { to: '/buyer/me', icon: 'user-o', label: '我的' },
 ];

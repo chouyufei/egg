@@ -23,7 +23,7 @@
     </div>
 
     <div class="stat-grid" style="padding: 0 12px; margin-bottom: 12px;">
-      <div class="stat"><div class="v">{{ stats.active }}</div><div class="l">竞拍中</div></div>
+      <div class="stat"><div class="v">{{ stats.active }}</div><div class="l">竞价中</div></div>
       <div class="stat"><div class="v">{{ stats.sold }}</div><div class="l">已成交</div></div>
       <div class="stat"><div class="v price">¥{{ stats.gmv }}</div><div class="l">总成交额</div></div>
     </div>

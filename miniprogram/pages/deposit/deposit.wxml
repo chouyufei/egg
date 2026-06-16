@@ -1,6 +1,6 @@
 <view class="page-pad">
   <view class="card">
-    <view class="bold" style="font-size: 32rpx;">{{ isFarm ? '品质保证金' : '竞拍保证金' }}说明</view>
+    <view class="bold" style="font-size: 32rpx;">{{ isFarm ? '品质保证金' : '竞价保证金' }}说明</view>
     <view class="muted mt-8" style="line-height: 1.8;">
       <block wx:if="{{ isFarm }}">
         <view>养殖场需缴纳 <text class="bold">{{ requiredAmount }} 元</text> 品质保证金（一次性）。</view>
@@ -9,10 +9,10 @@
         <view>· 严重违规：永久没收，封禁账号</view>
       </block>
       <block wx:else>
-        <view>采购商竞拍保证金 <text class="bold">按货源单独缴纳</text>，每个 {{ requiredAmount }} 元。</view>
+        <view>采购商竞价保证金 <text class="bold">按货源单独缴纳</text>，每个 {{ requiredAmount }} 元。</view>
         <view>· 在货源详情页点出价时缴纳该场保证金</view>
-        <view>· 可同时竞拍多个货源，各自独立</view>
-        <view>· 被反超 / 未中标 / 竞拍结束自动退还</view>
+        <view>· 可同时竞价多个货源，各自独立</view>
+        <view>· 被反超 / 未中标 / 竞价结束自动退还</view>
         <view>· 中标后 7 天未拉群：扣除该场保证金</view>
       </block>
     </view>
@@ -40,7 +40,7 @@
 
   <view wx:else class="card" style="text-align: center;">
     <view style="font-size: 60rpx;">🛒</view>
-    <view class="muted mt-8" style="line-height: 1.7;">竞拍保证金在「货源详情 → 出价」时按场缴纳，无需在此预缴。</view>
+    <view class="muted mt-8" style="line-height: 1.7;">竞价保证金在「货源详情 → 出价」时按场缴纳，无需在此预缴。</view>
   </view>
 
   <view class="card">

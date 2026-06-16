@@ -70,22 +70,27 @@
 
   <view style="height: 160rpx;"></view>
 
-  <!-- 出价/报价栏：根据 kind 和 user.role 决定能否操作 -->
-  <view wx:if="{{ canBid && r.status === 'auctioning' }}" class="fixed-bottom-bar">
+  <!-- 出价/报价栏：根据 kind 和 user.role 决定能否操作。审核模式下藏起 -->
+  <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="fixed-bottom-bar">
     <button wx:if="{{ isSupply }}" class="btn-plain" style="padding: 12rpx 24rpx; flex-shrink: 0;" bindtap="openAuto">⚙ 自动</button>
     <input class="bid-input" type="digit" model:value="{{ bidPrice }}" placeholder="{{ isSupply ? '出价 ≥ ¥' + nextLimit : '报价 ≤ ¥' + nextLimit }}" />
     <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="placeBid" loading="{{ bidding }}">{{ isSupply ? '出价' : '报价' }}</button>
   </view>
 
+  <!-- 审核模式：把出价区换成"联系客服咨询" -->
+  <view wx:if="{{ reviewMode && r.status === 'auctioning' && !isMine }}" class="fixed-bottom-bar">
+    <button class="btn" style="flex: 1;" open-type="contact">📞 联系客服咨询</button>
+  </view>
+
   <!-- 发布者自己 + 无人出价时可取消 -->
   <view wx:if="{{ isMine && r.status === 'auctioning' && bids.length === 0 }}" class="fixed-bottom-bar">
-    <button class="btn btn-danger" style="flex: 1; padding: 14rpx 0;" bindtap="cancel">取消竞拍</button>
+    <button class="btn btn-danger" style="flex: 1; padding: 14rpx 0;" bindtap="cancel">取消竞价</button>
   </view>
 
   <!-- 发布者自己 + 已有出价：可手动结束按当前最高价成交 -->
   <view wx:if="{{ isMine && r.status === 'auctioning' && bids.length > 0 }}" class="fixed-bottom-bar">
     <button class="btn" style="flex: 1; padding: 14rpx 0; background: #07c160; color: #fff;" bindtap="endNow" loading="{{ ending }}">
-      ✓ 结束竞拍 · 以 ¥{{ r.current_price }} 成交
+      ✓ 结束竞价 · 以 ¥{{ r.current_price }} 成交
     </button>
   </view>
 

@@ -3,7 +3,7 @@
     浏览{{ isFarm ? '采购需求' : '货源' }}
   </view>
   <view class="tab {{ tab === 'mine' ? 'on' : '' }}" bindtap="setTab" data-t="mine">
-    我{{ isFarm ? '的应标' : '的竞拍' }}
+    我{{ isFarm ? '的应标' : '的竞价' }}
   </view>
 </view>
 

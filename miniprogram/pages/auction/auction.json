@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "竞拍",
+  "navigationBarTitleText": "竞价",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "egg-card": "/components/egg-card/egg-card",

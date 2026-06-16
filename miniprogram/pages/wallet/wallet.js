@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const { formatTime } = require('../../utils/format');
+const app = getApp();
 
 Page({
   data: {
@@ -11,6 +12,13 @@ Page({
     serviceFee: 50,
   },
   async onShow() {
+    if (app.globalData.reviewMode) {
+      wx.showModal({
+        title: '功能升级中', content: '钱包功能即将上线，敬请期待。',
+        showCancel: false, success: () => wx.switchTab({ url: '/pages/index/index' }),
+      });
+      return;
+    }
     await this.load();
   },
   async load() {

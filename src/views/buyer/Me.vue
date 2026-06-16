@@ -11,10 +11,10 @@
     </div>
 
     <van-cell-group inset style="margin: 16px 12px;">
-      <van-cell title="🛡️ 竞拍保证金" :value="depositText" is-link to="/buyer/deposit" />
+      <van-cell title="🛡️ 竞价保证金" :value="depositText" is-link to="/buyer/deposit" />
       <van-cell title="📩 消息中心" is-link to="/buyer/messages" :value="store.unreadCount ? `${store.unreadCount} 条未读` : ''" />
       <van-cell title="📦 我的订单" is-link to="/buyer/orders" />
-      <van-cell title="🔥 我的竞拍" is-link to="/buyer/bids" />
+      <van-cell title="🔥 我的竞价" is-link to="/buyer/bids" />
     </van-cell-group>
 
     <van-cell-group inset style="margin: 16px 12px;">
@@ -38,7 +38,7 @@ const depositText = computed(() => store.depositStatus?.buyer?.paid ? '已缴纳
 const tabs = [
   { to: '/buyer', icon: 'home-o', label: '首页' },
   { to: '/buyer/search', icon: 'search', label: '搜索' },
-  { to: '/buyer/bids', icon: 'fire-o', label: '我的竞拍' },
+  { to: '/buyer/bids', icon: 'fire-o', label: '我的竞价' },
   { to: '/buyer/orders', icon: 'orders-o', label: '订单' },
   { to: '/buyer/me', icon: 'user-o', label: '我的' },
 ];

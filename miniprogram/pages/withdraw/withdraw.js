@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const app = getApp();
 
 Page({
   data: {
@@ -11,6 +12,10 @@ Page({
     submitting: false,
   },
   onLoad(opt) {
+    if (app.globalData.reviewMode) {
+      wx.showModal({ title: '功能升级中', content: '提现功能即将上线。', showCancel: false, success: () => wx.navigateBack() });
+      return;
+    }
     this.setData({ available: Number(opt.available || 0) });
   },
   pickMethod(e) { this.setData({ method: e.detail.value }); },

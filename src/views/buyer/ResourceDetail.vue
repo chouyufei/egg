@@ -98,7 +98,7 @@ const minBid = computed(() => {
   if (!resource.value) return 0;
   return Number((resource.value.current_price + resource.value.min_increment).toFixed(2));
 });
-const statusLabel = computed(() => ({ auctioning: '竞拍中', sold: '已成交', failed: '已流拍', cancelled: '已取消' }[resource.value?.status]));
+const statusLabel = computed(() => ({ auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消' }[resource.value?.status]));
 
 function formatTime(t) { return dayjs(t).format('MM-DD HH:mm:ss'); }
 
@@ -113,7 +113,7 @@ async function placeBid() {
   if (!resource.value) return;
   await store.loadDepositStatus();
   if (!store.depositStatus?.buyer?.paid) {
-    try { await showConfirmDialog({ title: '需要保证金', message: '您还未缴纳 200 元竞拍保证金，是否前往缴纳？' }); }
+    try { await showConfirmDialog({ title: '需要保证金', message: '您还未缴纳 200 元竞价保证金，是否前往缴纳？' }); }
     catch (e) { return; }
     location.hash = '#/buyer/deposit';
     return;

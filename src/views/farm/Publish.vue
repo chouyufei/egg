@@ -25,7 +25,7 @@
     <div class="card" style="margin: 12px;">
       <van-field v-model.number="form.start_price" type="number" label="起拍价(¥)" placeholder="如 8500" />
       <van-field v-model.number="form.min_increment" type="number" label="加价幅度" placeholder="≥ 2" />
-      <van-field name="duration_hours" label="竞拍时长">
+      <van-field name="duration_hours" label="竞价时长">
         <template #input>
           <van-radio-group v-model="form.duration_hours" direction="horizontal">
             <van-radio :name="1">1 小时</van-radio>

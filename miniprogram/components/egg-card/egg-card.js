@@ -6,7 +6,7 @@ Component({
   observers: {
     r(r) {
       if (!r) return;
-      const labels = { auctioning: '竞拍中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' };
+      const labels = { auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' };
       const cls = { auctioning: 'tag', sold: 'tag-g', failed: 'tag-d', cancelled: 'tag-d', draft: 'tag-b' };
       const isSupply = (r.kind || 'supply') === 'supply';
       this.setData({

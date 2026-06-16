@@ -6,7 +6,7 @@
       <h3 style="margin-top: 0;">机制说明</h3>
       <ul style="margin: 0; padding-left: 24px; line-height: 1.9;">
         <li>用户钱包通过<strong>充值</strong>注入资金</li>
-        <li>三类操作（<strong>发布货源</strong> / <strong>发起求购</strong> / <strong>参与竞拍</strong>）
+        <li>三类操作（<strong>发布货源</strong> / <strong>发起求购</strong> / <strong>参与竞价</strong>）
           每次从钱包<strong>统一冻结</strong>同一笔保证金</li>
         <li>订单完成（采购方确认收货）→ 平台从买卖双方各扣一笔<strong>服务费</strong>，
           剩余<strong>自动解冻</strong>回可用余额</li>
@@ -19,7 +19,7 @@
       <div class="num-row">
         <label>保证金额度</label>
         <input type="number" min="0" step="100" v-model.number="s.deposit_amount" />
-        <span class="muted">元 / 次（发布货源 / 发起求购 / 参与竞拍 统一冻结）</span>
+        <span class="muted">元 / 次（发布货源 / 发起求购 / 参与竞价 统一冻结）</span>
       </div>
       <div class="num-row">
         <label>平台服务费</label>

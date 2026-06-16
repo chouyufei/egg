@@ -34,6 +34,6 @@ import Countdown from './Countdown.vue';
 const props = defineProps({ r: Object });
 defineEmits(['click']);
 const cover = computed(() => (props.r.photos && props.r.photos[0]) || 'https://via.placeholder.com/600x300/f6b821/ffffff?text=Egg');
-const statusLabel = computed(() => ({ auctioning: '竞拍中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[props.r.status]));
+const statusLabel = computed(() => ({ auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[props.r.status]));
 const statusPill = computed(() => ({ auctioning: 'pill-y', sold: 'pill-g', failed: 'pill-d', cancelled: 'pill-d', draft: 'pill-b' }[props.r.status]));
 </script>

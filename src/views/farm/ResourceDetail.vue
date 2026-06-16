@@ -38,7 +38,7 @@
     </div>
 
     <div v-if="resource.status === 'auctioning' && resource.bid_count === 0" style="padding: 12px;">
-      <van-button block plain type="danger" @click="cancel">取消竞拍</van-button>
+      <van-button block plain type="danger" @click="cancel">取消竞价</van-button>
       <div class="muted" style="text-align: center; margin-top: 6px;">已有出价后不可取消</div>
     </div>
   </div>
@@ -58,7 +58,7 @@ const resource = ref(null);
 const bids = ref([]);
 let poll = null;
 
-const statusLabel = computed(() => ({ auctioning: '竞拍中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[resource.value?.status]));
+const statusLabel = computed(() => ({ auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[resource.value?.status]));
 const statusType = computed(() => ({ auctioning: 'warning', sold: 'success', failed: 'default', cancelled: 'default' }[resource.value?.status] || 'default'));
 
 function format(t) { return dayjs(t).format('MM-DD HH:mm:ss'); }
@@ -70,7 +70,7 @@ async function load() {
 }
 
 async function cancel() {
-  try { await showConfirmDialog({ title: '取消竞拍', message: '确认取消该竞拍？' }); }
+  try { await showConfirmDialog({ title: '取消竞价', message: '确认取消该竞价？' }); }
   catch (e) { return; }
   await api.post(`/resources/${route.params.id}/cancel`);
   showSuccessToast('已取消');

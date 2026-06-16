@@ -8,9 +8,11 @@ Page({
     licText: '', licCls: '', depositText: '未缴纳 →',
     roleText: '',
     walletBalance: '0.00',
+    reviewMode: false,
   },
   async onShow() {
     if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
+    this.setData({ reviewMode: !!app.globalData.reviewMode });
     const user = app.globalData.user;
     if (!user) return;
     const roleMap = { farm: '养殖场', buyer: '采购商', admin: '管理员' };

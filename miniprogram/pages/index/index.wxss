@@ -57,7 +57,7 @@
   color: #ee0a24;
 }
 
-/* 子 Tab：可竞拍货源 / 我的采购（并排切换） */
+/* 子 Tab：可竞价货源 / 我的采购（并排切换） */
 .sub-tabs {
   display: flex; background: #fff;
   border-bottom: 1px solid #f0f0f0;

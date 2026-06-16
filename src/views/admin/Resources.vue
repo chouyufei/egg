@@ -30,7 +30,7 @@ import api from '../../api';
 import dayjs from 'dayjs';
 
 const list = ref([]);
-function label(s) { return ({ auctioning: '竞拍中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[s]); }
+function label(s) { return ({ auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[s]); }
 function cls(s) { return ({ auctioning: 'pill-y', sold: 'pill-g', failed: 'pill-d', cancelled: 'pill-d', draft: 'pill-b' }[s]); }
 function formatTime(t) { return dayjs(t).format('MM-DD HH:mm'); }
 function bidsOf(r) { return r.bid_count ?? '-'; }

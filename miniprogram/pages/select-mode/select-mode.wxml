@@ -18,7 +18,7 @@
     <view class="sm-icon sm-icon-buy">🛒</view>
     <view class="flex-1">
       <view class="sm-main">我要买蛋</view>
-      <view class="sm-tip">竞拍货源 / 发布求购需求</view>
+      <view class="sm-tip">竞价货源 / 发布求购需求</view>
     </view>
     <view class="sm-arrow">›</view>
   </view>

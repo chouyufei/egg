@@ -53,6 +53,7 @@ Page({
   data: {
     user: null,
     unread: 0,
+    reviewMode: false,    // 审核模式：藏起金融/复杂功能
 
     // 顶部模式：buy / sell（默认买）
     activeMode: 'buy',
@@ -96,6 +97,7 @@ Page({
 
   async onShow() {
     if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
+    this.setData({ reviewMode: !!app.globalData.reviewMode });
 
     // 同步 DB role 到当前 UI 模式，让发布 / 出价 等操作能通过权限校验
     const targetRole = this.data.activeMode === 'sell' ? 'farm' : 'buyer';

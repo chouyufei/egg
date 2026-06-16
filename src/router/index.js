@@ -38,6 +38,7 @@ const routes = [
       { path: 'notice', component: () => import('../views/admin/NoticeSettings.vue') },
       { path: 'deposit-settings', component: () => import('../views/admin/DepositSettings.vue') },
       { path: 'withdrawals', component: () => import('../views/admin/Withdrawals.vue') },
+      { path: 'review-mode', component: () => import('../views/admin/ReviewMode.vue') },
     ],
   },
 ];

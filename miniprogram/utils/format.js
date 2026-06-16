@@ -15,7 +15,7 @@ function formatDateTime(ts) {
 
 function statusLabel(s) {
   return ({
-    auctioning: '竞拍中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿',
+    auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿',
     pending_group: '待拉群', communicating: '沟通中', completed: '已完成', disputed: '纠纷中',
     available: '可用', frozen: '冻结', released: '已退还', deducted: '已扣除',
     pending: '审核中', approved: '已通过', rejected: '未通过', none: '未提交',

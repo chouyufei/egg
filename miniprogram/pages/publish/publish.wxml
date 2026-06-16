@@ -4,7 +4,7 @@
     <view>
       <view class="bold" style="font-size: 32rpx;">{{ isSupply ? '发布货源' : '发布求购需求' }}</view>
       <view class="muted mt-8" style="font-size: 24rpx;">
-        {{ isSupply ? '采购商竞价出价，价高者得' : '养殖场报价应标，价低者得（反向竞拍）' }}
+        {{ isSupply ? '采购商竞价出价，价高者得' : '养殖场报价应标，价低者得（反向竞价）' }}
       </view>
     </view>
   </view>
@@ -120,7 +120,7 @@
       <view class="muted" style="margin-left: 8rpx;">元/箱</view>
     </view>
     <view class="input-row">
-      <view class="label">竞拍时长</view>
+      <view class="label">竞价时长</view>
       <radio-group bindchange="pickDur" style="display: flex; gap: 24rpx;">
         <label><radio value="1" checked="{{ form.duration_hours == 1 }}" />1 小时</label>
         <label><radio value="2" checked="{{ form.duration_hours == 2 }}" />2 小时</label>

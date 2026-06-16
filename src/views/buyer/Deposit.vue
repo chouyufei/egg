@@ -1,10 +1,10 @@
 <template>
   <div class="page">
-    <van-nav-bar title="竞拍保证金" left-arrow @click-left="$router.back()" />
+    <van-nav-bar title="竞价保证金" left-arrow @click-left="$router.back()" />
     <div class="card" style="margin: 12px;">
       <div style="font-size: 16px; font-weight: 600;">为什么要缴纳保证金？</div>
       <div class="muted" style="margin-top: 6px; line-height: 1.7;">
-        采购商需缴纳 <b>200 元</b> 竞拍保证金。每次同时仅冻结一笔，被反超或竞拍结束即自动解冻。中标后若 7 天未拉群，将扣除保证金；恶意拉黑联系人将永久没收。
+        采购商需缴纳 <b>200 元</b> 竞价保证金。每次同时仅冻结一笔，被反超或竞价结束即自动解冻。中标后若 7 天未拉群，将扣除保证金；恶意拉黑联系人将永久没收。
       </div>
     </div>
 

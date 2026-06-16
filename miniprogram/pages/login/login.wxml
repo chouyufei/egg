@@ -33,7 +33,7 @@
     </view>
   </view>
 
-  <view class="login-foot">✓ 自主竞拍 · ✓ 双向保证金 · ✓ 7 天自动结算</view>
+  <view class="login-foot">✓ 自主竞价 · ✓ 双向保证金 · ✓ 7 天自动结算</view>
 </view>
 
 <view wx:if="{{ showBindPhone }}" class="modal-mask">

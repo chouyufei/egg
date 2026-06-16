@@ -16,8 +16,10 @@ Page({
     showAuto: false, autoMax: '',
     statusLabel: '',
     distText: '', distNear: false, distFar: false,
+    reviewMode: false,
   },
   onLoad(opt) {
+    this.setData({ reviewMode: !!app.globalData.reviewMode });
     this.setData({ id: Number(opt.id), user: app.globalData.user });
     this.load();
     this.poll = setInterval(() => this.load(), 5000);
@@ -42,7 +44,7 @@ Page({
       if (resource.status !== 'auctioning') {
         blockReason = statusLabel(resource.status);
       } else if (isMine) {
-        blockReason = '不能参与自己发布的竞拍';
+        blockReason = '不能参与自己发布的竞价';
       } else if (isSupply && me.role !== 'buyer') {
         blockReason = '货源仅限采购商出价';
       } else if (!isSupply && me.role !== 'farm') {
@@ -93,7 +95,7 @@ Page({
   async placeBid() {
     if (!this.data.canBid) return wx.showToast({ title: this.data.blockReason, icon: 'none' });
 
-    // 竞拍保证金按场缴纳：未缴则弹窗直接拉起支付，支付完留在本页继续出价
+    // 竞价保证金按场缴纳：未缴则弹窗直接拉起支付，支付完留在本页继续出价
     const depositOk = await ensureBuyerBidDeposit(this.data.id);
     if (!depositOk) return;
 
@@ -134,7 +136,7 @@ Page({
 
   cancel() {
     wx.showModal({
-      title: '取消竞拍', content: '确认取消？已有出价后无法取消',
+      title: '取消竞价', content: '确认取消？已有出价后无法取消',
       success: async (r) => {
         if (!r.confirm) return;
         try { await api.post('/resources/' + this.data.id + '/cancel'); wx.showToast({ title: '已取消' }); setTimeout(() => wx.navigateBack(), 500); }
@@ -180,7 +182,7 @@ Page({
   endNow() {
     const price = this.data.r.current_price;
     wx.showModal({
-      title: '结束竞拍并成交',
+      title: '结束竞价并成交',
       content: `确认以当前最高价 ¥${price} 成交？后续不再接受出价。`,
       confirmText: '确认成交',
       success: async (r) => {

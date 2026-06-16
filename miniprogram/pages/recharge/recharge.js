@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const { rechargeWallet } = require('../../utils/deposit');
+const app = getApp();
 
 const PRESETS = [200, 500, 1000, 2000, 5000];
 
@@ -11,6 +12,10 @@ Page({
     paying: false,
   },
   async onShow() {
+    if (app.globalData.reviewMode) {
+      wx.showModal({ title: '功能升级中', content: '充值功能即将上线。', showCancel: false, success: () => wx.navigateBack() });
+      return;
+    }
     try {
       const b = await api.get('/wallet/balance');
       this.setData({ available: Number(b.available || 0).toFixed(2) });

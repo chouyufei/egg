@@ -3,7 +3,7 @@
     <van-nav-bar title="我的资源" />
     <van-tabs v-model:active="tab">
       <van-tab name="all" title="全部" />
-      <van-tab name="auctioning" title="竞拍中" />
+      <van-tab name="auctioning" title="竞价中" />
       <van-tab name="sold" title="已成交" />
       <van-tab name="failed" title="已流拍" />
     </van-tabs>

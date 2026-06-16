@@ -19,10 +19,11 @@
       <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
     </view>
 
-    <!-- 顺序：买 / 卖 -->
+    <!-- 顺序：买 / 卖；审核模式下只显示"浏览"单段 -->
     <view class="mode-bar">
-      <view class="mode-seg {{ activeMode === 'buy' ? 'on' : '' }}" bindtap="setMode" data-m="buy">🛒 买</view>
-      <view class="mode-seg {{ activeMode === 'sell' ? 'on' : '' }}" bindtap="setMode" data-m="sell">🐔 卖</view>
+      <view wx:if="{{ !reviewMode }}" class="mode-seg {{ activeMode === 'buy' ? 'on' : '' }}" bindtap="setMode" data-m="buy">🛒 买</view>
+      <view wx:if="{{ !reviewMode }}" class="mode-seg {{ activeMode === 'sell' ? 'on' : '' }}" bindtap="setMode" data-m="sell">🐔 卖</view>
+      <view wx:if="{{ reviewMode }}" class="mode-seg on">🥚 浏览货源</view>
     </view>
 
     <!-- 合并的检索框：类目 + 区域 -->
@@ -47,7 +48,7 @@
   <block wx:if="{{ activeMode === 'buy' }}">
     <view class="sub-tabs">
       <view class="sub-tab {{ buyerTab === 'browse' ? 'on' : '' }}" bindtap="setBuyerTab" data-t="browse">
-        可竞拍货源 ({{ others.length }})
+        可竞价货源 ({{ others.length }})
       </view>
       <view class="sub-tab {{ buyerTab === 'mine' ? 'on' : '' }}" bindtap="setBuyerTab" data-t="mine">
         我的采购 ({{ mineDemands.length }})
@@ -110,7 +111,7 @@
           <view class="publish-plus">+</view>
           <view class="flex-1">
             <view class="publish-title">发布货源</view>
-            <view class="publish-sub">上架我的鸡蛋等买家竞拍</view>
+            <view class="publish-sub">上架我的鸡蛋等买家竞价</view>
           </view>
           <view class="publish-arrow">›</view>
         </view>

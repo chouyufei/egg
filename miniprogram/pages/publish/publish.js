@@ -161,6 +161,16 @@ Page({
     if (ok) await this.refreshDepositStatus();
   },
   async onLoad(opt) {
+    if (app.globalData.reviewMode) {
+      // 审核模式：禁止发布，跳回首页 + 提示用客服
+      wx.showModal({
+        title: '功能升级中',
+        content: '当前版本仅供浏览，发布相关功能即将上线，如需上架请联系客服。',
+        showCancel: false,
+        success: () => wx.switchTab({ url: '/pages/index/index' }),
+      });
+      return;
+    }
     const user = app.globalData.user;
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
     const isSupply = user.role === 'farm';

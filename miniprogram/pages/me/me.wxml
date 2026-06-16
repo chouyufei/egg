@@ -16,12 +16,12 @@
     <view wx:if="{{ user.role === 'farm' }}" class="menu-row" bindtap="goQualify">
       <text>📜 资质认证</text><text class="muted">{{ licText }} ›</text>
     </view>
-    <view class="menu-row" bindtap="goWallet">
+    <view wx:if="{{ !reviewMode }}" class="menu-row" bindtap="goWallet">
       <text>💴 我的钱包</text>
       <text class="muted">余额 ¥{{ walletBalance }} ›</text>
     </view>
-    <view class="menu-row" bindtap="goDeposit">
-      <text>{{ user.role === 'farm' ? '💰 品质保证金' : '🛡 竞拍保证金' }}</text>
+    <view wx:if="{{ !reviewMode }}" class="menu-row" bindtap="goDeposit">
+      <text>{{ user.role === 'farm' ? '💰 品质保证金' : '🛡 竞价保证金' }}</text>
       <text class="muted">{{ depositText }} ›</text>
     </view>
     <view class="menu-row" bindtap="goMessages">
@@ -31,7 +31,7 @@
       <text>📦 我的订单</text><text class="muted">›</text>
     </view>
     <view class="menu-row" bindtap="goAuction">
-      <text>{{ user.role === 'farm' ? '🛍 我的资源' : '🔥 我的竞拍' }}</text>
+      <text>{{ user.role === 'farm' ? '🛍 我的资源' : '🔥 我的竞价' }}</text>
       <text class="muted">›</text>
     </view>
   </view>

@@ -23,7 +23,7 @@
     </div>
 
     <div class="card" style="margin: 12px;">
-      <van-field v-model.number="form.start_price" type="number" label="起拍价(¥)" placeholder="如 8500" />
+      <van-field v-model.number="form.start_price" type="number" label="起报价(¥)" placeholder="如 8500" />
       <van-field v-model.number="form.min_increment" type="number" label="加价幅度" placeholder="≥ 2" />
       <van-field name="duration_hours" label="报价时长">
         <template #input>

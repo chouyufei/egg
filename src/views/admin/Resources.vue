@@ -3,7 +3,7 @@
     <h2 style="margin-top: 0;">🛒 资源监管</h2>
     <div class="admin-card">
       <table class="admin-tbl">
-        <thead><tr><th>ID</th><th>标题</th><th>养殖场</th><th>地区</th><th>起拍/当前</th><th>状态</th><th>报价数</th><th>截止</th><th>操作</th></tr></thead>
+        <thead><tr><th>ID</th><th>标题</th><th>养殖场</th><th>地区</th><th>起报/当前</th><th>状态</th><th>报价数</th><th>截止</th><th>操作</th></tr></thead>
         <tbody>
           <tr v-for="r in list" :key="r.id">
             <td>{{ r.id }}</td>

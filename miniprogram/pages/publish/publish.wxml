@@ -4,7 +4,7 @@
     <view>
       <view class="bold" style="font-size: 32rpx;">{{ isSupply ? '发布货源' : '发布求购需求' }}</view>
       <view class="muted mt-8" style="font-size: 24rpx;">
-        {{ isSupply ? '采购商报价报价，价高者优先' : '养殖场报价应标，价低者优先（反向报价）' }}
+        {{ isSupply ? '采购商在线报价，价高者优先' : '养殖场在线应标，价低者优先' }}
       </view>
     </view>
   </view>
@@ -110,7 +110,7 @@
 
   <view class="card">
     <view class="input-row">
-      <view class="label">{{ isSupply ? '起拍价' : '心理价上限' }}</view>
+      <view class="label">{{ isSupply ? '起报价' : '心理价上限' }}</view>
       <input type="digit" value="{{ form.start_price }}" data-k="start_price" bindinput="onInput" bindblur="onInput" placeholder="{{ isSupply ? '如 85' : '如 95' }}" />
       <view class="muted" style="margin-left: 8rpx;">元/箱</view>
     </view>

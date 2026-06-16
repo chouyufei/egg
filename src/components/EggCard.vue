@@ -20,7 +20,7 @@
       <div class="row-between" style="margin-top: 10px;">
         <div>
           <span class="price-large">¥{{ r.current_price }}</span>
-          <span class="muted" style="margin-left: 4px;">起拍 ¥{{ r.start_price }}</span>
+          <span class="muted" style="margin-left: 4px;">起报 ¥{{ r.start_price }}</span>
         </div>
         <div class="muted">{{ r.bid_count || 0 }} 次报价</div>
       </div>

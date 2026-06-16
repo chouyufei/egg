@@ -343,7 +343,7 @@ Page({
     const f = this.data.form;
     // 简单必填校验
     if (!f.title || !f.quantity || !f.start_price) {
-      return wx.showToast({ title: '请填写标题/数量/起拍价', icon: 'none' });
+      return wx.showToast({ title: '请填写标题/数量/起报价', icon: 'none' });
     }
 
     // 发布前：确保钱包可用余额够冻结一笔保证金；不够提示去充值

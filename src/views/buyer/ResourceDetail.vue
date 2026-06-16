@@ -15,7 +15,7 @@
         <div>
           <div class="muted">当前价</div>
           <div class="price-large">¥{{ resource.current_price }}</div>
-          <div class="muted">起拍 ¥{{ resource.start_price }} · 加价 ¥{{ resource.min_increment }}</div>
+          <div class="muted">起报 ¥{{ resource.start_price }} · 加价 ¥{{ resource.min_increment }}</div>
         </div>
         <div style="text-align: right;">
           <div class="muted">{{ resource.status === 'auctioning' ? '剩余时间' : statusLabel }}</div>

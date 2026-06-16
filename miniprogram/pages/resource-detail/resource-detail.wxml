@@ -10,7 +10,7 @@
       <view>
         <view class="muted">{{ isSupply ? '当前价' : '当前最低报价' }}</view>
         <view class="price-l">¥{{ r.current_price }} <text class="muted" style="font-size: 24rpx;">{{ r.unit_label || '元/箱' }}</text></view>
-        <view class="muted">{{ isSupply ? '起拍' : '心理价上限' }} ¥{{ r.start_price }} · {{ isSupply ? '加价' : '降价' }} ¥{{ r.min_increment }}</view>
+        <view class="muted">{{ isSupply ? '起报' : '心理价上限' }} ¥{{ r.start_price }} · {{ isSupply ? '加价' : '降价' }} ¥{{ r.min_increment }}</view>
       </view>
       <view style="text-align: right;">
         <text class="tag {{ kindCls }}" style="font-size: 24rpx;">{{ kindLabel }}</text>

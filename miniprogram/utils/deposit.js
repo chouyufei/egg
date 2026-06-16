@@ -78,6 +78,6 @@ async function ensureWalletForDeposit(actionLabel) {
 // 三个原 API 保留对外兼容名字，统一走钱包余额检查
 const ensureFarmDeposit   = () => ensureWalletForDeposit('发布货源');
 const ensureDemandDeposit = () => ensureWalletForDeposit('发布求购');
-const ensureBuyerBidDeposit = () => ensureWalletForDeposit('参与竞价');
+const ensureBuyerBidDeposit = () => ensureWalletForDeposit('参与报价');
 
 module.exports = { rechargeWallet, ensureWalletForDeposit, ensureFarmDeposit, ensureDemandDeposit, ensureBuyerBidDeposit };

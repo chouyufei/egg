@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="section-title">竞价中 · 即将结束</div>
+    <div class="section-title">报价中 · 即将结束</div>
     <div class="page-pad" v-if="endingSoon.length">
       <EggCard v-for="r in endingSoon" :key="r.id" :r="r" @click="open(r.id)" />
     </div>
@@ -51,7 +51,7 @@ const kw = ref('');
 const tabs = [
   { to: '/buyer', icon: 'home-o', label: '首页' },
   { to: '/buyer/search', icon: 'search', label: '搜索' },
-  { to: '/buyer/bids', icon: 'fire-o', label: '我的竞价' },
+  { to: '/buyer/bids', icon: 'fire-o', label: '我的报价' },
   { to: '/buyer/orders', icon: 'orders-o', label: '订单' },
   { to: '/buyer/me', icon: 'user-o', label: '我的' },
 ];

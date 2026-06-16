@@ -185,7 +185,7 @@ Page({
     });
     wx.setNavigationBarTitle({ title: isSupply ? '发布货源' : '发布求购' });
 
-    // 流拍重新上架：?from=<resource_id> → 拉旧数据预填
+    // 未成交重新上架：?from=<resource_id> → 拉旧数据预填
     if (opt && opt.from) {
       this.setData({ fromId: Number(opt.from) });
       try {

@@ -54,10 +54,10 @@
 
   <view class="card" style="margin: 0 24rpx 24rpx;">
     <view class="row-between section-title" style="margin: 0 0 16rpx;">
-      <text>{{ isSupply ? '出价记录' : '报价记录' }} ({{ bids.length }})</text>
+      <text>{{ isSupply ? '报价记录' : '报价记录' }} ({{ bids.length }})</text>
       <text class="muted">{{ r.bidder_count }} 位参与</text>
     </view>
-    <empty wx:if="{{ !bids.length }}" icon="💰" text="{{ isSupply ? '暂无出价，期待第一次出价' : '暂无报价，等待养殖场应标' }}" />
+    <empty wx:if="{{ !bids.length }}" icon="💰" text="{{ isSupply ? '暂无报价，期待第一次报价' : '暂无报价，等待养殖场应标' }}" />
     <view wx:for="{{ bids }}" wx:key="id" class="bid-row">
       <view>
         <text>{{ item.bidder_name }}</text>
@@ -70,31 +70,31 @@
 
   <view style="height: 160rpx;"></view>
 
-  <!-- 出价/报价栏：根据 kind 和 user.role 决定能否操作。审核模式下藏起 -->
+  <!-- 报价/报价栏：根据 kind 和 user.role 决定能否操作。审核模式下藏起 -->
   <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="fixed-bottom-bar">
     <button wx:if="{{ isSupply }}" class="btn-plain" style="padding: 12rpx 24rpx; flex-shrink: 0;" bindtap="openAuto">⚙ 自动</button>
-    <input class="bid-input" type="digit" model:value="{{ bidPrice }}" placeholder="{{ isSupply ? '出价 ≥ ¥' + nextLimit : '报价 ≤ ¥' + nextLimit }}" />
-    <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="placeBid" loading="{{ bidding }}">{{ isSupply ? '出价' : '报价' }}</button>
+    <input class="bid-input" type="digit" model:value="{{ bidPrice }}" placeholder="{{ isSupply ? '报价 ≥ ¥' + nextLimit : '报价 ≤ ¥' + nextLimit }}" />
+    <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="placeBid" loading="{{ bidding }}">{{ isSupply ? '报价' : '报价' }}</button>
   </view>
 
-  <!-- 审核模式：把出价区换成"联系客服咨询" -->
+  <!-- 审核模式：把报价区换成"联系客服咨询" -->
   <view wx:if="{{ reviewMode && r.status === 'auctioning' && !isMine }}" class="fixed-bottom-bar">
     <button class="btn" style="flex: 1;" open-type="contact">📞 联系客服咨询</button>
   </view>
 
-  <!-- 发布者自己 + 无人出价时可取消 -->
+  <!-- 发布者自己 + 无人报价时可取消 -->
   <view wx:if="{{ isMine && r.status === 'auctioning' && bids.length === 0 }}" class="fixed-bottom-bar">
-    <button class="btn btn-danger" style="flex: 1; padding: 14rpx 0;" bindtap="cancel">取消竞价</button>
+    <button class="btn btn-danger" style="flex: 1; padding: 14rpx 0;" bindtap="cancel">取消报价</button>
   </view>
 
-  <!-- 发布者自己 + 已有出价：可手动结束按当前最高价成交 -->
+  <!-- 发布者自己 + 已有报价：可手动结束按当前最高价成交 -->
   <view wx:if="{{ isMine && r.status === 'auctioning' && bids.length > 0 }}" class="fixed-bottom-bar">
     <button class="btn" style="flex: 1; padding: 14rpx 0; background: #07c160; color: #fff;" bindtap="endNow" loading="{{ ending }}">
-      ✓ 结束竞价 · 以 ¥{{ r.current_price }} 成交
+      ✓ 确认成交 · 以 ¥{{ r.current_price }} 成交
     </button>
   </view>
 
-  <!-- 流拍 / 已取消 + 发布者：可快速重新上架 -->
+  <!-- 未成交 / 已取消 + 发布者：可快速重新上架 -->
   <view wx:if="{{ isMine && (r.status === 'failed' || r.status === 'cancelled') }}" class="fixed-bottom-bar">
     <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="relist">↻ 重新上架</button>
   </view>
@@ -106,9 +106,9 @@
 
 <view wx:if="{{ showAuto }}" class="modal-mask" bindtap="closeAuto">
   <view class="modal" catchtap="noop">
-    <view class="bold">设置自动出价</view>
-    <view class="muted mt-8">设置最高心理价位，系统将以最低加价帮您出价，直到拍下或超出心理价。</view>
-    <view class="input-row mt-16"><view class="label">最高出价</view><input type="digit" model:value="{{ autoMax }}" placeholder="≥ {{ nextLimit }}" /></view>
+    <view class="bold">设置自动报价</view>
+    <view class="muted mt-8">设置最高心理价位，系统将以最低加价帮您报价，直到订下或超出心理价。</view>
+    <view class="input-row mt-16"><view class="label">最高报价</view><input type="digit" model:value="{{ autoMax }}" placeholder="≥ {{ nextLimit }}" /></view>
     <view class="row mt-16" style="gap: 16rpx;">
       <button class="btn-plain flex-1" bindtap="closeAuto">取消</button>
       <button class="btn flex-1" bindtap="setAuto">确认开启</button>

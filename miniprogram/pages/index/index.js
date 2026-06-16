@@ -99,7 +99,7 @@ Page({
     if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
     this.setData({ reviewMode: !!app.globalData.reviewMode });
 
-    // 同步 DB role 到当前 UI 模式，让发布 / 出价 等操作能通过权限校验
+    // 同步 DB role 到当前 UI 模式，让发布 / 报价 等操作能通过权限校验
     const targetRole = this.data.activeMode === 'sell' ? 'farm' : 'buyer';
     if (this.data.user && this.data.user.role !== 'admin' && this.data.user.role !== targetRole) {
       try {

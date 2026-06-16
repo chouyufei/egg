@@ -21,7 +21,7 @@
       <text class="muted">余额 ¥{{ walletBalance }} ›</text>
     </view>
     <view wx:if="{{ !reviewMode }}" class="menu-row" bindtap="goDeposit">
-      <text>{{ user.role === 'farm' ? '💰 品质保证金' : '🛡 竞价保证金' }}</text>
+      <text>{{ user.role === 'farm' ? '💰 品质保证金' : '🛡 履约保证金' }}</text>
       <text class="muted">{{ depositText }} ›</text>
     </view>
     <view class="menu-row" bindtap="goMessages">
@@ -31,7 +31,7 @@
       <text>📦 我的订单</text><text class="muted">›</text>
     </view>
     <view class="menu-row" bindtap="goAuction">
-      <text>{{ user.role === 'farm' ? '🛍 我的资源' : '🔥 我的竞价' }}</text>
+      <text>{{ user.role === 'farm' ? '🛍 我的资源' : '🔥 我的报价' }}</text>
       <text class="muted">›</text>
     </view>
   </view>

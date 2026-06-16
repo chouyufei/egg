@@ -48,7 +48,7 @@
   <block wx:if="{{ activeMode === 'buy' }}">
     <view class="sub-tabs">
       <view class="sub-tab {{ buyerTab === 'browse' ? 'on' : '' }}" bindtap="setBuyerTab" data-t="browse">
-        可竞价货源 ({{ others.length }})
+        在售货源 ({{ others.length }})
       </view>
       <view class="sub-tab {{ buyerTab === 'mine' ? 'on' : '' }}" bindtap="setBuyerTab" data-t="mine">
         我的采购 ({{ mineDemands.length }})
@@ -89,7 +89,7 @@
   <block wx:if="{{ activeMode === 'sell' }}">
     <view class="sub-tabs">
       <view class="sub-tab {{ sellerTab === 'browse' ? 'on' : '' }}" bindtap="setSellerTab" data-t="browse">
-        可应标求购 ({{ others.length }})
+        在征求购 ({{ others.length }})
       </view>
       <view class="sub-tab {{ sellerTab === 'mine' ? 'on' : '' }}" bindtap="setSellerTab" data-t="mine">
         我的货源 ({{ mineSupplies.length }})
@@ -111,7 +111,7 @@
           <view class="publish-plus">+</view>
           <view class="flex-1">
             <view class="publish-title">发布货源</view>
-            <view class="publish-sub">上架我的鸡蛋等买家竞价</view>
+            <view class="publish-sub">上架我的鸡蛋等买家报价</view>
           </view>
           <view class="publish-arrow">›</view>
         </view>

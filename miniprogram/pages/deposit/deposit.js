@@ -15,7 +15,7 @@ Page({
   async load() {
     try {
       const ds = await api.get('/deposits/status');
-      // 买家竞价保证金按场缴纳，此页不预缴；只用 required 展示单价
+      // 买家履约保证金按场缴纳，此页不预缴；只用 required 展示单价
       this.setData({ paid: this.data.isFarm ? ds.farm.paid : false, requiredAmount: (this.data.isFarm ? ds.farm.required : ds.buyer.required) });
     } catch (e) {}
     try {

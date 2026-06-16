@@ -22,7 +22,7 @@
           <span class="price-large">¥{{ r.current_price }}</span>
           <span class="muted" style="margin-left: 4px;">起拍 ¥{{ r.start_price }}</span>
         </div>
-        <div class="muted">{{ r.bid_count || 0 }} 次出价</div>
+        <div class="muted">{{ r.bid_count || 0 }} 次报价</div>
       </div>
     </div>
   </div>
@@ -34,6 +34,6 @@ import Countdown from './Countdown.vue';
 const props = defineProps({ r: Object });
 defineEmits(['click']);
 const cover = computed(() => (props.r.photos && props.r.photos[0]) || 'https://via.placeholder.com/600x300/f6b821/ffffff?text=Egg');
-const statusLabel = computed(() => ({ auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[props.r.status]));
+const statusLabel = computed(() => ({ auctioning: '报价中', sold: '已成交', failed: '未成交', cancelled: '已取消', draft: '草稿' }[props.r.status]));
 const statusPill = computed(() => ({ auctioning: 'pill-y', sold: 'pill-g', failed: 'pill-d', cancelled: 'pill-d', draft: 'pill-b' }[props.r.status]));
 </script>

@@ -4,10 +4,10 @@
 
     <div class="admin-card">
       <h3 style="margin-top: 0;">短信通知开关</h3>
-      <p class="muted" style="margin-top: 0;">竞价成交时是否给对应角色发送短信（不影响微信订阅消息）</p>
+      <p class="muted" style="margin-top: 0;">报价成交时是否给对应角色发送短信（不影响微信订阅消息）</p>
       <div class="toggle-row">
         <label class="switch"><input type="checkbox" v-model="s.notify_seller_sms" /><span>卖方短信通知</span></label>
-        <span class="muted">货源被拍下时通知卖方</span>
+        <span class="muted">货源已成交时通知卖方</span>
       </div>
       <div class="toggle-row">
         <label class="switch"><input type="checkbox" v-model="s.notify_buyer_sms" /><span>买方短信通知</span></label>
@@ -15,7 +15,7 @@
       </div>
       <div class="toggle-row">
         <label class="switch"><input type="checkbox" v-model="s.notify_platform_sms" /><span>平台方短信通知</span></label>
-        <span class="muted">竞价成交时通知下方配置的所有平台手机号</span>
+        <span class="muted">报价成交时通知下方配置的所有平台手机号</span>
       </div>
     </div>
 
@@ -31,14 +31,14 @@
 
     <div class="admin-card">
       <h3 style="margin-top: 0;">企业微信群机器人 webhook</h3>
-      <p class="muted" style="margin-top: 0;">竞价成交时往该机器人推送一条文本消息（含货源标题 + 买卖双方账号/手机号）。在企业微信群里添加「群机器人」→ 复制 Webhook URL 粘贴到此。留空 = 不发企业微信通知。</p>
+      <p class="muted" style="margin-top: 0;">报价成交时往该机器人推送一条文本消息（含货源标题 + 买卖双方账号/手机号）。在企业微信群里添加「群机器人」→ 复制 Webhook URL 粘贴到此。留空 = 不发企业微信通知。</p>
       <input v-model="s.wecom_webhook_url" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=..." style="width: 100%; padding: 8px; box-sizing: border-box;" />
     </div>
 
     <div class="admin-card">
       <h3 style="margin-top: 0;">📲 客服企业微信二维码</h3>
       <p class="muted" style="margin-top: 0; line-height: 1.7;">
-        订单生成（竞价成交）后会自动推送给买卖双方，提示扫码加好友以便客服后续拉群对接发货。<br/>
+        订单生成（报价成交）后会自动推送给买卖双方，提示扫码加好友以便客服后续拉群对接发货。<br/>
         二维码图片建议尺寸正方形 ≥ 400×400，清晰可扫即可。
       </p>
       <div class="qr-row">

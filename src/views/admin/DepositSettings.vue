@@ -6,11 +6,11 @@
       <h3 style="margin-top: 0;">机制说明</h3>
       <ul style="margin: 0; padding-left: 24px; line-height: 1.9;">
         <li>用户钱包通过<strong>充值</strong>注入资金</li>
-        <li>三类操作（<strong>发布货源</strong> / <strong>发起求购</strong> / <strong>参与竞价</strong>）
+        <li>三类操作（<strong>发布货源</strong> / <strong>发起求购</strong> / <strong>参与报价</strong>）
           每次从钱包<strong>统一冻结</strong>同一笔保证金</li>
         <li>订单完成（采购方确认收货）→ 平台从买卖双方各扣一笔<strong>服务费</strong>，
           剩余<strong>自动解冻</strong>回可用余额</li>
-        <li>流拍 / 取消 → 全部解冻回可用</li>
+        <li>未成交 / 取消 → 全部解冻回可用</li>
       </ul>
     </div>
 
@@ -19,7 +19,7 @@
       <div class="num-row">
         <label>保证金额度</label>
         <input type="number" min="0" step="100" v-model.number="s.deposit_amount" />
-        <span class="muted">元 / 次（发布货源 / 发起求购 / 参与竞价 统一冻结）</span>
+        <span class="muted">元 / 次（发布货源 / 发起求购 / 参与报价 统一冻结）</span>
       </div>
       <div class="num-row">
         <label>平台服务费</label>
@@ -45,7 +45,7 @@
       <button class="btn-primary" @click="save" :disabled="saving">{{ saving ? '保存中…' : '💾 保存' }}</button>
       <span v-if="lastSavedAt" class="muted" style="margin-left: 12px;">最后保存：{{ lastSavedAt }}</span>
       <p class="muted" style="margin-top: 12px; font-size: 13px;">
-        💡 修改后立即生效，作用于"修改后"的新发布 / 新出价；已经冻结的资金沿用原金额结算。
+        💡 修改后立即生效，作用于"修改后"的新发布 / 新报价；已经冻结的资金沿用原金额结算。
       </p>
     </div>
 
@@ -53,7 +53,7 @@
       <h3 style="margin-top: 0;">🔁 历史保证金对账</h3>
       <p class="muted" style="margin-top: 0; line-height: 1.7;">
         修复钱包系统上线"之前"已经释放、但未入账到用户钱包的历史保证金。
-        会扫描所有 <code>available</code> 未绑定记录 + 绑定到已结束资源（流拍/取消/成交）
+        会扫描所有 <code>available</code> 未绑定记录 + 绑定到已结束资源（未成交/取消/成交）
         但仍 <code>frozen</code> 的记录，统一补释放 + 入账户余额。<br/>
         <strong>幂等</strong>：已入账的不会重复。可在任何时候安全运行。
       </p>

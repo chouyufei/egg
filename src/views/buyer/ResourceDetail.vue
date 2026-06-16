@@ -46,10 +46,10 @@
 
     <div class="card" style="margin: 0 12px 12px;">
       <div class="row-between section-title" style="margin: 0 0 8px;">
-        <span>出价记录 ({{ bids.length }})</span>
+        <span>报价记录 ({{ bids.length }})</span>
         <span class="muted">{{ resource.bidder_count }} 位买家参与</span>
       </div>
-      <div v-if="!bids.length" class="empty" style="padding: 20px 0;">暂无出价，期待您的第一次出价</div>
+      <div v-if="!bids.length" class="empty" style="padding: 20px 0;">暂无报价，期待您的第一次报价</div>
       <van-cell v-for="b in bids.slice(0, 10)" :key="b.id" :title="`${b.bidder_name} ${b.is_auto ? '（自动）' : ''}`" :label="formatTime(b.created_at)">
         <template #value><span class="price">¥{{ b.price }}</span></template>
       </van-cell>
@@ -59,17 +59,17 @@
 
     <div class="bid-bar" v-if="resource.status === 'auctioning'">
       <van-button plain type="primary" size="small" @click="showAuto = true">⚙️ 自动</van-button>
-      <van-field v-model="bidPrice" type="number" placeholder="出价 ≥ 加价后金额" style="flex:1; background: #f5f6f8; border-radius: 20px; padding: 6px 12px;" />
-      <van-button type="primary" round @click="placeBid" :loading="bidding">出价 ¥{{ minBid }}</van-button>
+      <van-field v-model="bidPrice" type="number" placeholder="报价 ≥ 加价后金额" style="flex:1; background: #f5f6f8; border-radius: 20px; padding: 6px 12px;" />
+      <van-button type="primary" round @click="placeBid" :loading="bidding">报价 ¥{{ minBid }}</van-button>
     </div>
     <div class="bid-bar" v-else>
       <van-button block disabled>{{ statusLabel }}</van-button>
     </div>
 
-    <van-dialog v-model:show="showAuto" title="设置自动出价" show-cancel-button @confirm="setAuto">
+    <van-dialog v-model:show="showAuto" title="设置自动报价" show-cancel-button @confirm="setAuto">
       <div style="padding: 16px;">
-        <div class="muted" style="margin-bottom: 8px;">设置最高心理价位，系统将自动以最低加价帮您出价，直到您拍下或超出心理价。</div>
-        <van-field v-model="autoMax" type="number" label="最高出价" placeholder="如 9000" />
+        <div class="muted" style="margin-bottom: 8px;">设置最高心理价位，系统将自动以最低加价帮您报价，直到您订下或超出心理价。</div>
+        <van-field v-model="autoMax" type="number" label="最高报价" placeholder="如 9000" />
       </div>
     </van-dialog>
   </div>
@@ -98,7 +98,7 @@ const minBid = computed(() => {
   if (!resource.value) return 0;
   return Number((resource.value.current_price + resource.value.min_increment).toFixed(2));
 });
-const statusLabel = computed(() => ({ auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消' }[resource.value?.status]));
+const statusLabel = computed(() => ({ auctioning: '报价中', sold: '已成交', failed: '未成交', cancelled: '已取消' }[resource.value?.status]));
 
 function formatTime(t) { return dayjs(t).format('MM-DD HH:mm:ss'); }
 
@@ -113,18 +113,18 @@ async function placeBid() {
   if (!resource.value) return;
   await store.loadDepositStatus();
   if (!store.depositStatus?.buyer?.paid) {
-    try { await showConfirmDialog({ title: '需要保证金', message: '您还未缴纳 200 元竞价保证金，是否前往缴纳？' }); }
+    try { await showConfirmDialog({ title: '需要保证金', message: '您还未缴纳 200 元履约保证金，是否前往缴纳？' }); }
     catch (e) { return; }
     location.hash = '#/buyer/deposit';
     return;
   }
   const price = Number(bidPrice.value);
-  if (!price) return showFailToast('请输入出价金额');
-  if (price < minBid.value) return showFailToast(`出价至少 ¥${minBid.value}`);
+  if (!price) return showFailToast('请输入报价金额');
+  if (price < minBid.value) return showFailToast(`报价至少 ¥${minBid.value}`);
   bidding.value = true;
   try {
     await api.post('/bids', { resource_id: resource.value.id, price });
-    showSuccessToast('出价成功');
+    showSuccessToast('报价成功');
     await reload();
   } catch (e) {} finally { bidding.value = false; }
 }
@@ -134,7 +134,7 @@ async function setAuto() {
   if (!max || max < minBid.value) return showFailToast(`最高价需 ≥ ¥${minBid.value}`);
   try {
     await api.post('/bids/auto', { resource_id: resource.value.id, max_price: max });
-    showSuccessToast('自动出价已开启');
+    showSuccessToast('自动报价已开启');
     await reload();
   } catch (e) {}
 }

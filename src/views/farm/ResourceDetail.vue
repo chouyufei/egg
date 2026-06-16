@@ -25,21 +25,21 @@
       </div>
       <div style="font-weight: 600; font-size: 16px; margin-top: 12px;">{{ resource.title }}</div>
       <div class="row-between" style="margin-top: 10px;">
-        <span class="muted">{{ resource.bid_count }} 次出价 · {{ resource.bidder_count }} 位买家</span>
+        <span class="muted">{{ resource.bid_count }} 次报价 · {{ resource.bidder_count }} 位买家</span>
       </div>
     </div>
 
     <div class="card" style="margin: 0 12px 12px;">
-      <div class="section-title" style="margin: 0 0 8px;">出价记录</div>
-      <div v-if="!bids.length" class="empty" style="padding: 20px 0;">暂无出价</div>
+      <div class="section-title" style="margin: 0 0 8px;">报价记录</div>
+      <div v-if="!bids.length" class="empty" style="padding: 20px 0;">暂无报价</div>
       <van-cell v-for="b in bids" :key="b.id" :title="`${b.bidder_name} ${b.is_auto ? '（自动）' : ''}`" :label="format(b.created_at)">
         <template #value><span class="price">¥{{ b.price }}</span></template>
       </van-cell>
     </div>
 
     <div v-if="resource.status === 'auctioning' && resource.bid_count === 0" style="padding: 12px;">
-      <van-button block plain type="danger" @click="cancel">取消竞价</van-button>
-      <div class="muted" style="text-align: center; margin-top: 6px;">已有出价后不可取消</div>
+      <van-button block plain type="danger" @click="cancel">取消报价</van-button>
+      <div class="muted" style="text-align: center; margin-top: 6px;">已有报价后不可取消</div>
     </div>
   </div>
 </template>
@@ -58,7 +58,7 @@ const resource = ref(null);
 const bids = ref([]);
 let poll = null;
 
-const statusLabel = computed(() => ({ auctioning: '竞价中', sold: '已成交', failed: '已流拍', cancelled: '已取消', draft: '草稿' }[resource.value?.status]));
+const statusLabel = computed(() => ({ auctioning: '报价中', sold: '已成交', failed: '未成交', cancelled: '已取消', draft: '草稿' }[resource.value?.status]));
 const statusType = computed(() => ({ auctioning: 'warning', sold: 'success', failed: 'default', cancelled: 'default' }[resource.value?.status] || 'default'));
 
 function format(t) { return dayjs(t).format('MM-DD HH:mm:ss'); }
@@ -70,7 +70,7 @@ async function load() {
 }
 
 async function cancel() {
-  try { await showConfirmDialog({ title: '取消竞价', message: '确认取消该竞价？' }); }
+  try { await showConfirmDialog({ title: '取消报价', message: '确认取消该报价？' }); }
   catch (e) { return; }
   await api.post(`/resources/${route.params.id}/cancel`);
   showSuccessToast('已取消');

@@ -3,9 +3,9 @@
     <van-nav-bar title="我的资源" />
     <van-tabs v-model:active="tab">
       <van-tab name="all" title="全部" />
-      <van-tab name="auctioning" title="竞价中" />
+      <van-tab name="auctioning" title="报价中" />
       <van-tab name="sold" title="已成交" />
-      <van-tab name="failed" title="已流拍" />
+      <van-tab name="failed" title="未成交" />
     </van-tabs>
     <div class="page-pad">
       <div v-if="!filtered.length" class="empty">暂无资源</div>

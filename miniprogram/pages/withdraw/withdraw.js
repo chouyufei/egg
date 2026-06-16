@@ -1,6 +1,17 @@
 const api = require('../../utils/api');
 const app = getApp();
 
+const DEFAULT_RULES = {
+  min_amount: 1,
+  max_per_request: 50000,
+  max_daily_count: 3,
+  max_daily_amount: 50000,
+  processing_hours: 24,
+  arrival_hours: 72,
+  fee_pct: 0,
+  window: '工作日 09:00-18:00',
+};
+
 Page({
   data: {
     available: 0,
@@ -10,23 +21,29 @@ Page({
     account_no: '',
     bank_name: '',
     submitting: false,
+    rules: DEFAULT_RULES,
   },
-  onLoad(opt) {
-    if (app.globalData.reviewMode) {
-      wx.showModal({ title: '功能升级中', content: '提现功能即将上线。', showCancel: false, success: () => wx.navigateBack() });
-      return;
-    }
+  async onLoad(opt) {
     this.setData({ available: Number(opt.available || 0) });
+    try {
+      const rules = await api.get('/wallet/withdraw-rules');
+      this.setData({ rules: { ...DEFAULT_RULES, ...rules } });
+    } catch (e) {}
   },
   pickMethod(e) { this.setData({ method: e.detail.value }); },
-  fillAll() { this.setData({ amount: String(this.data.available) }); },
+  fillAll() {
+    const max = Math.min(this.data.available, this.data.rules.max_per_request);
+    this.setData({ amount: String(max) });
+  },
   onInput(e) {
     const key = e.currentTarget.dataset.k;
     if (key) this.setData({ [key]: e.detail.value });
   },
   async submit() {
     const amt = Number(this.data.amount);
-    if (!amt || amt <= 0) return wx.showToast({ title: '请输入提现金额', icon: 'none' });
+    const r = this.data.rules;
+    if (!amt || amt < r.min_amount) return wx.showToast({ title: `单笔提现至少 ${r.min_amount} 元`, icon: 'none' });
+    if (amt > r.max_per_request) return wx.showToast({ title: `单笔提现上限 ${r.max_per_request} 元`, icon: 'none' });
     if (amt > this.data.available) return wx.showToast({ title: '不能超过可用余额', icon: 'none' });
     if (this.data.method === 'bank') {
       if (!this.data.account_name || !this.data.account_no || !this.data.bank_name) {

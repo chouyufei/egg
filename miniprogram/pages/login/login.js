@@ -9,11 +9,43 @@ Page({
     modes: { sms: { live: false, provider: 'demo' }, wechat: { live: false } },
     showBindPhone: false,
     bindPhone: '', bindOtp: '', bindCd: 0,
+    // 审核员测试账号
+    testAccounts: [],
+    testUser: '', testPwd: '', testLoading: false,
   },
-  onLoad() { this.loadModes(); },
+  onLoad() { this.loadModes(); this.loadTestAccounts(); },
 
   async loadModes() {
     try { const m = await api.get('/auth/login-modes'); this.setData({ modes: m }); } catch (e) {}
+  },
+
+  async loadTestAccounts() {
+    try {
+      const r = await api.get('/auth/test-accounts');
+      this.setData({ testAccounts: r.accounts || [] });
+    } catch (e) {}
+  },
+
+  async testLoginQuick(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const acc = this.data.testAccounts[i];
+    if (!acc) return;
+    await this._doTestLogin(acc.username, acc.password);
+  },
+  async testLogin() {
+    const u = (this.data.testUser || '').trim();
+    const p = (this.data.testPwd || '').trim();
+    if (!u || !p) return wx.showToast({ title: '请输入账号和密码', icon: 'none' });
+    await this._doTestLogin(u, p);
+  },
+  async _doTestLogin(username, password) {
+    this.setData({ testLoading: true });
+    try {
+      const res = await api.post('/auth/test-login', { username, password });
+      app.setAuth(res.token, res.user);
+      wx.showToast({ title: '登录成功', icon: 'success' });
+      setTimeout(() => this.afterAuth(res.user), 300);
+    } catch (e) {} finally { this.setData({ testLoading: false }); }
   },
 
   async sendOtp() {

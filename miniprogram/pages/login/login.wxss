@@ -67,3 +67,44 @@
 .input-row { display: flex; align-items: center; padding: 20rpx 0; border-bottom: 1px solid #f0f0f0; }
 .input-row .label { width: 140rpx; color: #555; font-size: 26rpx; }
 .input-row input { flex: 1; }
+
+/* 审核员测试账号入口（仅供微信审核期使用，过审后整段移除） */
+.test-card {
+  margin: 48rpx 40rpx 32rpx;
+  background: linear-gradient(135deg, #fff7e0 0%, #ffe9a8 100%);
+  border: 2rpx solid #f6b821;
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx;
+}
+.test-title {
+  font-size: 30rpx; font-weight: 800;
+  color: #5a4810; margin-bottom: 8rpx;
+}
+.test-tip {
+  font-size: 22rpx; color: #8a6b15;
+  line-height: 1.6; margin-bottom: 16rpx;
+}
+.test-row {
+  display: flex; align-items: center; gap: 16rpx;
+  background: rgba(255,255,255,0.7);
+  border-radius: 14rpx;
+  padding: 16rpx;
+  margin-bottom: 12rpx;
+}
+.test-line {
+  display: flex; gap: 12rpx;
+  font-size: 24rpx; line-height: 1.7;
+}
+.test-k { color: #8a6b15; min-width: 70rpx; }
+.test-v { color: #1d1d1f; font-weight: 600; }
+.btn-test {
+  background: #f6b821; color: #fff;
+  border: none; border-radius: 999rpx;
+  font-size: 24rpx; padding: 14rpx 26rpx;
+  flex-shrink: 0;
+}
+.test-or {
+  text-align: center;
+  color: #8a6b15; font-size: 22rpx;
+  margin: 16rpx 0 8rpx;
+}

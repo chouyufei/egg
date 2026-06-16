@@ -34,6 +34,24 @@
   </view>
 
   <view class="login-foot">✓ 自主报价 · ✓ 双向保证金 · ✓ 7 天自动结算</view>
+
+  <!-- 审核员测试账号入口（提审时使用，过审后删除） -->
+  <view class="test-card">
+    <view class="test-title">🛡 审核员测试账号</view>
+    <view class="test-tip">为方便微信审核团队查看完整功能，请使用以下固定账号登录（免短信验证码）：</view>
+    <view wx:for="{{ testAccounts }}" wx:key="username" class="test-row">
+      <view class="flex-1">
+        <view class="test-line"><text class="test-k">账号</text><text class="test-v selectable" user-select="true">{{ item.username }}</text></view>
+        <view class="test-line"><text class="test-k">密码</text><text class="test-v selectable" user-select="true">{{ item.password }}</text></view>
+        <view class="test-line"><text class="test-k">角色</text><text class="test-v">{{ item.role_label }}</text></view>
+      </view>
+      <button class="btn-test" bindtap="testLoginQuick" data-i="{{ index }}">一键登录</button>
+    </view>
+    <view class="test-or">— 或手动输入登录 —</view>
+    <view class="input-row"><view class="label">测试账号</view><input model:value="{{ testUser }}" placeholder="如：审核员买家" /></view>
+    <view class="input-row"><view class="label">密码</view><input model:value="{{ testPwd }}" password placeholder="如：Test123456" /></view>
+    <button class="btn mt-8" bindtap="testLogin" loading="{{ testLoading }}">测试账号登录</button>
+  </view>
 </view>
 
 <view wx:if="{{ showBindPhone }}" class="modal-mask">

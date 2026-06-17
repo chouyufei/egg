@@ -20,6 +20,7 @@ Page({
     // 还价弹窗
     showHaggle: false, showFreight: false,
     haggleVal: 0, haggleMin: 0, haggleMax: 0, haggleReasonable: true,
+    priceUnit: '箱',
   },
   onLoad(opt) {
     this.setData({ reviewMode: !!app.globalData.reviewMode });
@@ -74,6 +75,9 @@ Page({
       const farmSizeText = sizeNum >= 10000
         ? (sizeNum / 10000).toFixed(sizeNum % 10000 === 0 ? 0 : 1) + ' 万只'
         : (sizeNum ? sizeNum + ' 只' : '');
+      // 价格单位（用于还价弹窗显示 "/箱" / "/车"）
+      const unitLabel = resource.unit_label || '元/箱';
+      const priceUnit = unitLabel.replace(/^元\//, '');
       this.setData({
         r: resource,
         bids: bidsMapped,
@@ -87,6 +91,7 @@ Page({
         statusLabel: statusLabel(resource.status),
         farmSizeText,
         distText, distNear, distFar,
+        priceUnit,
       });
     } catch (e) {}
   },

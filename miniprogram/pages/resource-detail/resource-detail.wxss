@@ -32,3 +32,107 @@
   z-index: 1000; display: flex; align-items: center; justify-content: center;
 }
 .modal { background: #fff; border-radius: 24rpx; padding: 40rpx; width: 600rpx; }
+
+/* 4 按钮底部操作栏（参考行业批发议价模式） */
+.bid-toolbar {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  display: flex; align-items: stretch;
+  padding: 12rpx 20rpx;
+  padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 16rpx rgba(0,0,0,0.06);
+  z-index: 100;
+  gap: 12rpx;
+}
+.tb-icon {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 96rpx; flex-shrink: 0;
+}
+.tb-icon-emoji { font-size: 36rpx; }
+.tb-icon-text { font-size: 20rpx; color: #5a5a5a; margin-top: 4rpx; }
+.tb-icon:active { opacity: 0.6; }
+
+.tb-action {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx; font-weight: 700;
+  padding: 18rpx 0;
+}
+.tb-action:active { opacity: 0.85; }
+.tb-action-y { background: #f6b821; color: #fff; }
+.tb-action-g { background: #07c160; color: #fff; }
+.tb-action-icon { font-size: 30rpx; }
+
+/* 我要还价弹层 */
+.haggle-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  border-top-left-radius: 28rpx;
+  border-top-right-radius: 28rpx;
+  padding: 16rpx 32rpx 36rpx;
+  padding-bottom: calc(36rpx + env(safe-area-inset-bottom));
+}
+.hg-handle {
+  width: 80rpx; height: 8rpx; background: #d0d0d0;
+  border-radius: 4rpx; margin: 0 auto 16rpx;
+}
+.hg-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 16rpx;
+}
+.hg-title { font-size: 32rpx; font-weight: 800; color: #1d1d1f; }
+.hg-close { font-size: 48rpx; color: #8a8d93; line-height: 1; padding: 0 12rpx; }
+
+.hg-label { font-size: 24rpx; color: #5a5a5a; margin: 12rpx 0 12rpx; }
+.hg-spec { display: flex; gap: 16rpx; }
+.hg-spec-card {
+  flex: 1;
+  background: #fff7e0; border: 2rpx solid #f6b821;
+  border-radius: 16rpx;
+  padding: 18rpx;
+}
+.hg-spec-card.on { background: #fff; border-color: #f6b821; }
+.hg-spec-name { font-size: 26rpx; font-weight: 700; color: #1d1d1f; }
+.hg-spec-price { color: #ee0a24; font-weight: 800; margin-top: 6rpx; }
+.hg-spec-num { font-size: 40rpx; }
+.hg-spec-unit { font-size: 22rpx; color: #8a8d93; font-weight: 400; }
+.hg-spec-stock { font-size: 22rpx; color: #8a8d93; margin-top: 4rpx; }
+
+.hg-input-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 32rpx; margin: 16rpx 0;
+}
+.hg-input-minus, .hg-input-plus {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: #f5f6f8; color: #1d1d1f;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; font-weight: 700;
+}
+.hg-input-big {
+  color: #ee0a24; font-weight: 800;
+  font-size: 32rpx;
+  min-width: 280rpx; text-align: center;
+}
+.hg-input-unit { color: #8a8d93; font-size: 22rpx; font-weight: 400; }
+
+.hg-slider {
+  display: flex; align-items: center; gap: 12rpx;
+  padding: 0 8rpx;
+}
+.hg-slider-min, .hg-slider-max {
+  font-size: 22rpx; color: #5a5a5a;
+  flex-shrink: 0;
+}
+.hg-slider-bar { flex: 1; }
+
+.hg-hint {
+  text-align: center; font-size: 24rpx;
+  padding: 16rpx 0 8rpx;
+}
+.hg-hint.on { color: #06883b; }
+.hg-hint.off { color: #ee0a24; }
+
+.hg-submit {
+  margin-top: 16rpx;
+}

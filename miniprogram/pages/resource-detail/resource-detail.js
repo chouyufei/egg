@@ -17,6 +17,9 @@ Page({
     statusLabel: '',
     distText: '', distNear: false, distFar: false,
     reviewMode: false,
+    // 还价弹窗
+    showHaggle: false, showFreight: false,
+    haggleVal: 0, haggleMin: 0, haggleMax: 0, haggleReasonable: true,
   },
   onLoad(opt) {
     this.setData({ reviewMode: !!app.globalData.reviewMode });
@@ -91,6 +94,83 @@ Page({
   openAuto() { this.setData({ showAuto: true, autoMax: String(this.data.nextLimit) }); },
   closeAuto() { this.setData({ showAuto: false }); },
   noop() {},
+
+  // 我要还价：弹窗 + 滑块（参考行业批发还价模式）
+  openHaggle() {
+    if (!this.data.canBid) return wx.showToast({ title: this.data.blockReason, icon: 'none' });
+    const r = this.data.r;
+    const inc = Number(r.min_increment) || 1;
+    const cur = Number(r.current_price);
+    let min, max, val;
+    if (this.data.isSupply) {
+      // 货源（买家还价 / 加价）：min = 当前价；max = 当前价 + 10 档加价；初始 = nextLimit
+      min = cur;
+      max = +(cur + inc * 10).toFixed(2);
+      val = this.data.nextLimit;
+    } else {
+      // 求购（卖家应标 / 降价）：min = 当前价 - 10 档；max = 当前价；初始 = nextLimit
+      min = Math.max(0, +(cur - inc * 10).toFixed(2));
+      max = cur;
+      val = this.data.nextLimit;
+    }
+    this.setData({
+      showHaggle: true,
+      haggleMin: min,
+      haggleMax: max,
+      haggleVal: val,
+      haggleReasonable: this._reasonable(val, min, max),
+    });
+  },
+  closeHaggle() { this.setData({ showHaggle: false }); },
+  _reasonable(v, min, max) {
+    // 在中段 60% 区间内视为"价格合理"
+    const span = max - min;
+    if (span <= 0) return true;
+    const lo = min + span * 0.2;
+    const hi = max - span * 0.2;
+    return v >= lo && v <= hi;
+  },
+  onHaggleSlider(e) {
+    const v = Number(e.detail.value);
+    this.setData({ haggleVal: v, haggleReasonable: this._reasonable(v, this.data.haggleMin, this.data.haggleMax) });
+  },
+  haggleMinus() {
+    const inc = Number(this.data.r.min_increment) || 1;
+    const v = Math.max(this.data.haggleMin, +(this.data.haggleVal - inc).toFixed(2));
+    this.setData({ haggleVal: v, haggleReasonable: this._reasonable(v, this.data.haggleMin, this.data.haggleMax) });
+  },
+  hagglePlus() {
+    const inc = Number(this.data.r.min_increment) || 1;
+    const v = Math.min(this.data.haggleMax, +(this.data.haggleVal + inc).toFixed(2));
+    this.setData({ haggleVal: v, haggleReasonable: this._reasonable(v, this.data.haggleMin, this.data.haggleMax) });
+  },
+  async submitHaggle() {
+    // 走原有 placeBid 逻辑，bidPrice 设为滑块当前值
+    this.setData({ bidPrice: String(this.data.haggleVal) });
+    await this.placeBid();
+    this.setData({ showHaggle: false });
+  },
+
+  // 运费说明 / 留言 / 电话
+  showFreight() { this.setData({ showFreight: true }); },
+  closeFreight() { this.setData({ showFreight: false }); },
+  callPhone() {
+    const phone = this.data.r && this.data.r.farm && this.data.r.farm.phone;
+    if (!phone || /^wx_/i.test(phone)) {
+      return wx.showToast({ title: '对方未登记电话，请用"留言"联系', icon: 'none', duration: 2500 });
+    }
+    wx.makePhoneCall({ phoneNumber: phone, fail: () => {} });
+  },
+  callOther() {
+    // 用微信客服会话作为留言入口
+    wx.showActionSheet({
+      itemList: ['📞 电话联系卖方', '📲 联系平台客服'],
+      success: (r) => {
+        if (r.tapIndex === 0) this.callPhone();
+        else wx.openCustomerServiceChat && wx.openCustomerServiceChat({ extInfo: { url: '' }, corpId: '', fail: () => wx.showToast({ title: '请在订单详情联系客服', icon: 'none' }) });
+      },
+    });
+  },
 
   async placeBid() {
     if (!this.data.canBid) return wx.showToast({ title: this.data.blockReason, icon: 'none' });

@@ -48,6 +48,15 @@ Page({
     }
     return null;
   },
+  copyOrderNo() {
+    const no = this.data.order && (this.data.order.order_no || ('#' + this.data.order.id));
+    if (!no) return;
+    wx.setClipboardData({
+      data: String(no),
+      success: () => wx.showToast({ title: '订单编号已复制', icon: 'success' }),
+    });
+  },
+
   openRouteMap() {
     const dst = this._otherPoint(this.data.order);
     console.log('[openRouteMap] _myLoc=', this._myLoc, 'dst=', dst);

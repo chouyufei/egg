@@ -1,7 +1,7 @@
 <view class="page-pad">
   <view wx:for="{{ orders }}" wx:key="id" class="card" bindtap="open" data-id="{{ item.id }}">
     <view class="row-between">
-      <text class="bold">订单 #{{ item.id }}</text>
+      <text class="bold">订单 {{ item.order_no || ('#' + item.id) }}</text>
       <text class="tag {{ item.statusCls }}">{{ item.statusText }}</text>
     </view>
     <view class="row mt-8" style="gap: 16rpx;">

@@ -1,7 +1,7 @@
 <view wx:if="{{ order }}" class="page-pad">
   <view class="card">
     <view class="row-between">
-      <text class="bold">订单 #{{ order.id }}</text>
+      <text class="bold" bindtap="copyOrderNo">订单 {{ order.order_no || ('#' + order.id) }} <text class="muted" style="font-size: 22rpx;">📋</text></text>
       <text class="tag {{ statusCls }}">{{ statusText }}</text>
     </view>
     <view class="kv mt-16"><text class="muted">资源</text><text>{{ order.resource.title }}</text></view>

@@ -15,7 +15,7 @@ function confirmModal({ title, content, confirmText = '立即缴纳', cancelText
 async function rechargeWallet(amount) {
   try {
     const res = await api.post('/pay/recharge', { amount });
-    if (res.demo) return { ok: true, msg: `已充值 ${amount} 元（演示模式）` };
+    if (res.demo) return { ok: true, msg: `已充值 ${amount} 元` };
     await new Promise((resolve, reject) => {
       wx.requestPayment({
         timeStamp: res.timeStamp,

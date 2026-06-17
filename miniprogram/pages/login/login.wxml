@@ -9,10 +9,6 @@
     <button class="btn btn-wx" bindtap="wechatLogin" loading="{{ wxLoading }}">
       <text class="wx-icon">💬</text> 微信一键登录
     </button>
-    <view wx:if="{{ !modes.wechat.live }}" class="muted text-c" style="font-size: 22rpx; margin-top: 6rpx;">
-      （演示模式：使用沙箱账号）
-    </view>
-
     <view class="divider"><text>或 手机号登录</text></view>
 
     <view class="input-row">
@@ -21,37 +17,14 @@
     </view>
     <view class="input-row">
       <view class="label">验证码</view>
-      <input model:value="{{ otp }}" type="number" maxlength="6" placeholder="{{ modes.sms.live ? '请输入收到的 6 位验证码' : '演示请输 123456' }}" />
+      <input model:value="{{ otp }}" type="number" maxlength="6" placeholder="请输入 6 位验证码" />
       <button class="otp-btn" bindtap="sendOtp" disabled="{{ cd > 0 || sendingOtp }}" size="mini" plain="true" loading="{{ sendingOtp }}">{{ cd > 0 ? (cd + 's') : '获取' }}</button>
     </view>
 
     <button class="btn mt-16" bindtap="login" loading="{{ loading }}">登录 / 注册</button>
-
-    <view class="muted text-c mt-16" style="line-height: 1.8; font-size: 22rpx;">
-      <view wx:if="{{ modes.sms.live }}">短信由 {{ modes.sms.provider }} 真实下发</view>
-      <view wx:else>演示验证码统一为 123456</view>
-    </view>
   </view>
 
   <view class="login-foot">✓ 自主报价 · ✓ 双向保证金 · ✓ 7 天自动结算</view>
-
-  <!-- 审核员测试账号入口（提审时使用，过审后删除） -->
-  <view class="test-card">
-    <view class="test-title">🛡 审核员测试账号</view>
-    <view class="test-tip">为方便微信审核团队查看完整功能，请使用以下固定账号登录（免短信验证码）：</view>
-    <view wx:for="{{ testAccounts }}" wx:key="username" class="test-row">
-      <view class="flex-1">
-        <view class="test-line"><text class="test-k">账号</text><text class="test-v selectable" user-select="true">{{ item.username }}</text></view>
-        <view class="test-line"><text class="test-k">密码</text><text class="test-v selectable" user-select="true">{{ item.password }}</text></view>
-        <view class="test-line"><text class="test-k">角色</text><text class="test-v">{{ item.role_label }}</text></view>
-      </view>
-      <button class="btn-test" bindtap="testLoginQuick" data-i="{{ index }}">一键登录</button>
-    </view>
-    <view class="test-or">— 或手动输入登录 —</view>
-    <view class="input-row"><view class="label">测试账号</view><input model:value="{{ testUser }}" placeholder="如：审核员买家" /></view>
-    <view class="input-row"><view class="label">密码</view><input model:value="{{ testPwd }}" password placeholder="如：Test123456" /></view>
-    <button class="btn mt-8" bindtap="testLogin" loading="{{ testLoading }}">测试账号登录</button>
-  </view>
 </view>
 
 <view wx:if="{{ showBindPhone }}" class="modal-mask">

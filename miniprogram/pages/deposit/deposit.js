@@ -38,7 +38,7 @@ Page({
       const res = await api.post('/pay/create-order', { type });
       if (res.paid) { wx.showToast({ title: '已缴纳' }); return await this.load(); }
       if (res.demo) {
-        wx.showToast({ title: '已缴纳保证金（演示模式）', icon: 'success' });
+        wx.showToast({ title: '保证金已缴纳', icon: 'success' });
         return await this.load();
       }
       await new Promise((resolve, reject) => {
@@ -75,7 +75,7 @@ Page({
     const confirmed = await new Promise(resolve => {
       wx.showModal({
         title: '退还品质保证金',
-        content: '退还后再次发布货源将需要重新缴纳。仅演示模式下可用。',
+        content: '退还后再次发布货源将需要重新缴纳。',
         confirmText: '确认退还',
         success: r => resolve(!!r.confirm),
         fail: () => resolve(false),

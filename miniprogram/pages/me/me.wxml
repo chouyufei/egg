@@ -20,10 +20,6 @@
       <text>💴 我的钱包</text>
       <text class="muted">余额 ¥{{ walletBalance }} ›</text>
     </view>
-    <view wx:if="{{ !reviewMode }}" class="menu-row" bindtap="goDeposit">
-      <text>🛡 服务保障金</text>
-      <text class="muted">{{ depositText }} ›</text>
-    </view>
     <view class="menu-row" bindtap="goMessages">
       <text>📩 消息中心</text><text class="muted">{{ unread ? unread + ' 条未读 ›' : '›' }}</text>
     </view>

@@ -37,7 +37,7 @@ Page({
   goDeposit() { wx.navigateTo({ url: '/pages/deposit/deposit' }); },
   goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
   goOrders() { wx.switchTab({ url: '/pages/orders/orders' }); },
-  goAuction() { wx.navigateTo({ url: '/pages/auction/auction?tab=mine' }); },
+  goAuction() { wx.navigateTo({ url: '/pages/auction/auction' }); },
   goWallet() { wx.navigateTo({ url: '/pages/wallet/wallet' }); },
   goAgreement() { wx.navigateTo({ url: '/pages/agreement/agreement' }); },
   goPrivacy()   { wx.navigateTo({ url: '/pages/privacy/privacy' }); },

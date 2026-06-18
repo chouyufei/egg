@@ -35,7 +35,7 @@
   <view class="card">
     <view class="section-title" style="margin: 0 0 16rpx;">沟通群</view>
     <view wx:if="{{ !order.group_id }}" class="text-c" style="padding: 20rpx 0;">
-      <view class="muted mt-8">{{ user.role === 'buyer' ? '中标后请尽快建群联系养殖场' : '等待采购商建群，或可主动建群' }}</view>
+      <view class="muted mt-8">{{ user.role === 'buyer' ? '成交后请尽快建群联系养殖场' : '等待采购商建群，或可主动建群' }}</view>
       <button class="btn mt-16" bindtap="createGroup">建立沟通群</button>
     </view>
     <view wx:else>

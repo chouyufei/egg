@@ -12,8 +12,8 @@
         <view>采购商服务保障金 <text class="bold">按货源单独缴纳</text>，每个 {{ requiredAmount }} 元。</view>
         <view>· 在货源详情页点报价时缴纳该场保证金</view>
         <view>· 可同时报价多个货源，各自独立</view>
-        <view>· 被反超 / 未中标 / 报价结束自动退还</view>
-        <view>· 中标后 7 天未拉群：扣除该场保证金</view>
+        <view>· 被反超 / 未成交 / 报价结束自动退还</view>
+        <view>· 成交后 7 天未拉群：扣除该场保障金</view>
       </block>
     </view>
   </view>

@@ -1,56 +1,22 @@
-<view class="tabs">
-  <view class="tab {{ tab === 'browse' ? 'on' : '' }}" bindtap="setTab" data-t="browse">
-    浏览{{ isFarm ? '采购需求' : '货源' }}
-  </view>
-  <view class="tab {{ tab === 'mine' ? 'on' : '' }}" bindtap="setTab" data-t="mine">
-    我{{ isFarm ? '的应标' : '的报价' }}
-  </view>
+<view class="tabs sub-tabs">
+  <view class="tab {{ sub === 'active' ? 'on' : '' }}" bindtap="setSub" data-s="active">进行中</view>
+  <view class="tab {{ sub === 'won' ? 'on' : '' }}" bindtap="setSub" data-s="won">已中</view>
+  <view class="tab {{ sub === 'lost' ? 'on' : '' }}" bindtap="setSub" data-s="lost">未中</view>
 </view>
-
-<block wx:if="{{ tab === 'browse' }}">
-  <view class="page-pad">
-    <view class="search-row">
-      <input class="search-input" model:value="{{ filters.keyword }}" placeholder="搜索标题或描述" bindconfirm="reload" />
-      <view class="btn-plain" style="padding: 6rpx 28rpx;" bindtap="reload">筛选</view>
-    </view>
-    <view class="filter-row">
-      <picker bindchange="pickSort" value="{{ sortIndex }}" range="{{ sortOptions }}" range-key="label">
-        <view class="filter-chip">排序：{{ sortOptions[sortIndex].label }} ▾</view>
-      </picker>
-      <picker bindchange="pickColor" value="{{ colorIndex }}" range="{{ colorOptions }}">
-        <view class="filter-chip">蛋色：{{ colorOptions[colorIndex] }} ▾</view>
-      </picker>
-    </view>
-    <view class="grid">
-      <view class="grid-cell" wx:for="{{ all }}" wx:key="id">
-        <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+<view class="page-pad">
+  <view wx:for="{{ filteredMine }}" wx:key="id" class="card row" bindtap="openRes" data-id="{{ item.id }}">
+    <image class="thumb" src="{{ item.photos[0] || 'https://placehold.co/100x100/f6b821/fff?text=Egg' }}" mode="aspectFill" />
+    <view class="flex-1" style="margin-left: 20rpx;">
+      <view class="bold ellipsis">{{ item.title }}</view>
+      <view class="mt-8">
+        <text class="tag {{ item.leading ? 'tag-g' : 'tag-r' }}">{{ item.statusText }}</text>
+        <text wx:if="{{ item.region }}" class="tag tag-b">{{ item.region }}</text>
+      </view>
+      <view class="row-between mt-8">
+        <text class="price">¥{{ item.current_price }} {{ item.unit_label || '元/箱' }}</text>
+        <text class="muted">{{ item.timeText }}</text>
       </view>
     </view>
-    <empty wx:if="{{ !all.length }}" icon="🔍" text="{{ isFarm ? '当前没有采购需求' : '当前没有货源' }}" />
   </view>
-</block>
-
-<block wx:else>
-  <view class="tabs sub-tabs">
-    <view class="tab {{ sub === 'active' ? 'on' : '' }}" bindtap="setSub" data-s="active">进行中</view>
-    <view class="tab {{ sub === 'won' ? 'on' : '' }}" bindtap="setSub" data-s="won">已成交</view>
-    <view class="tab {{ sub === 'lost' ? 'on' : '' }}" bindtap="setSub" data-s="lost">未中</view>
-  </view>
-  <view class="page-pad">
-    <view wx:for="{{ filteredMine }}" wx:key="id" class="card row" bindtap="openRes" data-id="{{ item.id }}">
-      <image class="thumb" src="{{ item.photos[0] || 'https://placehold.co/100x100/f6b821/fff?text=Egg' }}" mode="aspectFill" />
-      <view class="flex-1" style="margin-left: 20rpx;">
-        <view class="bold ellipsis">{{ item.title }}</view>
-        <view class="mt-8">
-          <text class="tag {{ item.leading ? 'tag-g' : 'tag-r' }}">{{ item.statusText }}</text>
-          <text wx:if="{{ item.region }}" class="tag tag-b">{{ item.region }}</text>
-        </view>
-        <view class="row-between mt-8">
-          <text class="price">¥{{ item.current_price }} {{ item.unit_label || '元/箱' }}</text>
-          <text class="muted">{{ item.timeText }}</text>
-        </view>
-      </view>
-    </view>
-    <empty wx:if="{{ !filteredMine.length }}" icon="🔥" text="暂无记录" />
-  </view>
-</block>
+  <empty wx:if="{{ !filteredMine.length }}" icon="🔥" text="暂无记录" />
+</view>

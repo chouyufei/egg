@@ -47,7 +47,7 @@
     <view wx:if="{{ r.farm_size }}" class="kv"><text class="muted">规模</text><text>{{ farmSizeText }}</text></view>
     <view wx:if="{{ isSupply }}" class="kv kv-link" bindtap="openSeller">
       <text class="muted">养殖场</text>
-      <text>{{ r.farm.name }} <text class="muted" style="font-size: 22rpx;">查看信用 / 在拍 ›</text></text>
+      <text>{{ r.farm.name }} <text class="muted" style="font-size: 22rpx;">查看信用 / 在售 ›</text></text>
     </view>
     <view wx:else class="kv"><text class="muted">采购方</text><text>{{ r.farm.name }}</text></view>
     <view wx:if="{{ r.description }}" class="mt-16" style="line-height: 1.7;">{{ r.description }}</view>

@@ -62,7 +62,7 @@
             <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
           </view>
         </view>
-        <empty wx:if="{{ !others.length }}" icon="🛒" text="暂无在拍货源" />
+        <empty wx:if="{{ !others.length }}" icon="🛒" text="暂无在售货源" />
       </block>
 
       <block wx:else>

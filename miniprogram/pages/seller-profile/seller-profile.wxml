@@ -20,7 +20,7 @@
     <view class="stat-sep"></view>
     <view class="stat">
       <view class="stat-num">{{ stats.active_cnt }}</view>
-      <view class="stat-lbl">在拍</view>
+      <view class="stat-lbl">在售</view>
     </view>
     <view class="stat-sep"></view>
     <view class="stat">
@@ -44,7 +44,7 @@
 
   <view class="sub-tabs">
     <view class="sub-tab {{ tab === 'active' ? 'on' : '' }}" bindtap="setTab" data-t="active">
-      在拍货源 ({{ active.length }})
+      在售货源 ({{ active.length }})
     </view>
     <view class="sub-tab {{ tab === 'sold' ? 'on' : '' }}" bindtap="setTab" data-t="sold">
       历史成交 ({{ sold.length }})
@@ -58,7 +58,7 @@
           <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
         </view>
       </view>
-      <empty wx:if="{{ !active.length }}" icon="🛒" text="暂无在拍货源" />
+      <empty wx:if="{{ !active.length }}" icon="🛒" text="暂无在售货源" />
     </block>
     <block wx:else>
       <view class="grid">

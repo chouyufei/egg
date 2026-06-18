@@ -56,7 +56,7 @@ Page({
       const mineRaw = resources.map(r => ({
         ...r,
         statusText: r.status === 'auctioning' ? (r.leading ? '领先中' : (this.data.isFarm ? '已被压价' : '已被反超')) :
-          (r.status === 'sold' ? (r.leading ? (this.data.isFarm ? '已中标' : '已中拍') : '未中') :
+          (r.status === 'sold' ? (r.leading ? '已成交' : '未中') :
            (r.status === 'failed' ? '未成交' : '已取消')),
         timeText: r.status === 'auctioning' ? this.fmtCountdown(r.end_at) : '已结束',
       }));

@@ -33,7 +33,7 @@
 <block wx:else>
   <view class="tabs sub-tabs">
     <view class="tab {{ sub === 'active' ? 'on' : '' }}" bindtap="setSub" data-s="active">进行中</view>
-    <view class="tab {{ sub === 'won' ? 'on' : '' }}" bindtap="setSub" data-s="won">已{{ isFarm ? '中标' : '中拍' }}</view>
+    <view class="tab {{ sub === 'won' ? 'on' : '' }}" bindtap="setSub" data-s="won">已成交</view>
     <view class="tab {{ sub === 'lost' ? 'on' : '' }}" bindtap="setSub" data-s="lost">未中</view>
   </view>
   <view class="page-pad">

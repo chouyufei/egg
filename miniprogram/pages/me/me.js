@@ -41,7 +41,7 @@ Page({
   goAgreement() { wx.navigateTo({ url: '/pages/agreement/agreement' }); },
   goPrivacy()   { wx.navigateTo({ url: '/pages/privacy/privacy' }); },
   goAbout()     { wx.navigateTo({ url: '/pages/about/about' }); },
-  callCs()      { wx.makePhoneCall({ phoneNumber: '4008888888', fail: () => {} }); },
+  callCs()      { wx.makePhoneCall({ phoneNumber: '18675545968', fail: () => {} }); },
   logout() {
     wx.showModal({ title: '退出登录', content: '确认退出？', success: r => { if (r.confirm) app.logout(); } });
   },

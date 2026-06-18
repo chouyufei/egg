@@ -34,7 +34,7 @@
       <text>💬 联系客服</text><text class="muted">在线咨询 ›</text>
     </button>
     <view class="menu-row" bindtap="callCs">
-      <text>📞 客服电话</text><text class="muted">400-888-8888 ›</text>
+      <text>📞 客服电话</text><text class="muted">186-7554-5968 ›</text>
     </view>
     <view class="menu-row" bindtap="goAgreement">
       <text>📜 用户协议</text><text class="muted">›</text>

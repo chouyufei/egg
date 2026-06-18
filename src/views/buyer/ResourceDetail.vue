@@ -113,7 +113,7 @@ async function placeBid() {
   if (!resource.value) return;
   await store.loadDepositStatus();
   if (!store.depositStatus?.buyer?.paid) {
-    try { await showConfirmDialog({ title: '需要保证金', message: '您还未缴纳 200 元履约保证金，是否前往缴纳？' }); }
+    try { await showConfirmDialog({ title: '需要保证金', message: '您还未缴纳 200 元服务保障金，是否前往缴纳？' }); }
     catch (e) { return; }
     location.hash = '#/buyer/deposit';
     return;

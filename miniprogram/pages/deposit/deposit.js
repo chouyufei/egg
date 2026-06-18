@@ -15,7 +15,7 @@ Page({
   async load() {
     try {
       const ds = await api.get('/deposits/status');
-      // 买家履约保证金按场缴纳，此页不预缴；只用 required 展示单价
+      // 买家服务保障金按场缴纳，此页不预缴；只用 required 展示单价
       this.setData({ paid: this.data.isFarm ? ds.farm.paid : false, requiredAmount: (this.data.isFarm ? ds.farm.required : ds.buyer.required) });
     } catch (e) {}
     try {
@@ -74,7 +74,7 @@ Page({
     if (!dep) return wx.showToast({ title: '没有可退还的保证金', icon: 'none' });
     const confirmed = await new Promise(resolve => {
       wx.showModal({
-        title: '退还品质保证金',
+        title: '退还服务保障金',
         content: '退还后再次发布货源将需要重新缴纳。',
         confirmText: '确认退还',
         success: r => resolve(!!r.confirm),

@@ -1,15 +1,15 @@
 <view class="page-pad">
   <view class="card">
-    <view class="bold" style="font-size: 32rpx;">{{ isFarm ? '品质保证金' : '履约保证金' }}说明</view>
+    <view class="bold" style="font-size: 32rpx;">{{ isFarm ? '服务保障金' : '服务保障金' }}说明</view>
     <view class="muted mt-8" style="line-height: 1.8;">
       <block wx:if="{{ isFarm }}">
-        <view>养殖场需缴纳 <text class="bold">{{ requiredAmount }} 元</text> 品质保证金（一次性）。</view>
+        <view>养殖场需缴纳 <text class="bold">{{ requiredAmount }} 元</text> 服务保障金（一次性）。</view>
         <view>· 货不对板：按比例扣除 + 退还差价</view>
         <view>· 长期不发货：扣除保证金 + 退款</view>
         <view>· 严重违规：永久没收，封禁账号</view>
       </block>
       <block wx:else>
-        <view>采购商履约保证金 <text class="bold">按货源单独缴纳</text>，每个 {{ requiredAmount }} 元。</view>
+        <view>采购商服务保障金 <text class="bold">按货源单独缴纳</text>，每个 {{ requiredAmount }} 元。</view>
         <view>· 在货源详情页点报价时缴纳该场保证金</view>
         <view>· 可同时报价多个货源，各自独立</view>
         <view>· 被反超 / 未中标 / 报价结束自动退还</view>
@@ -34,7 +34,7 @@
 
   <view wx:else class="card" style="text-align: center;">
     <view style="font-size: 60rpx;">🛒</view>
-    <view class="muted mt-8" style="line-height: 1.7;">履约保证金在「货源详情 → 报价」时按场缴纳，无需在此预缴。</view>
+    <view class="muted mt-8" style="line-height: 1.7;">服务保障金在「货源详情 → 报价」时按场缴纳，无需在此预缴。</view>
   </view>
 
   <view class="card">

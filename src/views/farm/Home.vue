@@ -17,7 +17,7 @@
     </div>
 
     <div v-else-if="!depositPaid" class="card" style="margin: 16px 12px; border-left: 3px solid #f6b821;">
-      <div style="font-weight: 600;">💰 缴纳品质保证金</div>
+      <div style="font-weight: 600;">💰 缴纳服务保障金</div>
       <div class="muted" style="margin-top: 4px;">需缴纳 1000 元方可发布资源</div>
       <van-button type="primary" size="small" round style="margin-top: 10px;" @click="$router.push('/farm/deposit')">前往缴纳</van-button>
     </div>

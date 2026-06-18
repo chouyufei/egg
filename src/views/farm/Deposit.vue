@@ -1,11 +1,11 @@
 <template>
   <div class="page">
-    <van-nav-bar title="品质保证金" left-arrow @click-left="$router.back()" />
+    <van-nav-bar title="服务保障金" left-arrow @click-left="$router.back()" />
 
     <div class="card" style="margin: 12px;">
-      <div style="font-size: 16px; font-weight: 600;">品质保证金说明</div>
+      <div style="font-size: 16px; font-weight: 600;">服务保障金说明</div>
       <div class="muted" style="margin-top: 6px; line-height: 1.7;">
-        养殖场需缴纳 <b>1000 元</b> 品质保证金。<br/>
+        养殖场需缴纳 <b>1000 元</b> 服务保障金。<br/>
         - 货不对板：扣除 200 元 + 退还差价<br/>
         - 长期不发货：扣除 1000 元 + 200 元 + 退款<br/>
         - 严重违规：永久没收，封禁账号

@@ -9,7 +9,7 @@
             <td>{{ d.id }}</td>
             <td>{{ d.user_name }}</td>
             <td>{{ roleLabel(d.user_role) }}</td>
-            <td>{{ d.type === 'farm_quality' ? '品质保证金' : '履约保证金' }}</td>
+            <td>{{ d.type === 'farm_quality' ? '服务保障金' : '服务保障金' }}</td>
             <td>¥{{ d.amount }}</td>
             <td><span class="pill" :class="cls(d.status)">{{ label(d.status) }}</span></td>
             <td>{{ formatTime(d.paid_at) }}</td>

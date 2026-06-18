@@ -13,7 +13,7 @@
 
     <van-cell-group inset style="margin: 16px 12px;">
       <van-cell title="📜 资质认证" :value="licLabel" is-link to="/farm/qualify" />
-      <van-cell title="💰 品质保证金" :value="depositText" is-link to="/farm/deposit" />
+      <van-cell title="💰 服务保障金" :value="depositText" is-link to="/farm/deposit" />
       <van-cell title="📩 消息中心" is-link to="/farm/messages" :value="store.unreadCount ? `${store.unreadCount} 条未读` : ''" />
       <van-cell title="📦 我的订单" is-link to="/farm/orders" />
       <van-cell title="🛍️ 我的资源" is-link to="/farm/resources" />

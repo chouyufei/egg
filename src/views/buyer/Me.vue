@@ -11,7 +11,7 @@
     </div>
 
     <van-cell-group inset style="margin: 16px 12px;">
-      <van-cell title="🛡️ 履约保证金" :value="depositText" is-link to="/buyer/deposit" />
+      <van-cell title="🛡️ 服务保障金" :value="depositText" is-link to="/buyer/deposit" />
       <van-cell title="📩 消息中心" is-link to="/buyer/messages" :value="store.unreadCount ? `${store.unreadCount} 条未读` : ''" />
       <van-cell title="📦 我的订单" is-link to="/buyer/orders" />
       <van-cell title="🔥 我的报价" is-link to="/buyer/bids" />

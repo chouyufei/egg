@@ -180,7 +180,7 @@ Page({
   async placeBid() {
     if (!this.data.canBid) return wx.showToast({ title: this.data.blockReason, icon: 'none' });
 
-    // 履约保证金按场缴纳：未缴则弹窗直接拉起支付，支付完留在本页继续报价
+    // 服务保障金按场缴纳：未缴则弹窗直接拉起支付，支付完留在本页继续报价
     const depositOk = await ensureBuyerBidDeposit(this.data.id);
     if (!depositOk) return;
 

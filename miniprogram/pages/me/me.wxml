@@ -27,6 +27,10 @@
     <view class="menu-row" bindtap="goMessages">
       <text>📩 消息中心</text><text class="muted">{{ unread ? unread + ' 条未读 ›' : '›' }}</text>
     </view>
+    <view class="menu-row" bindtap="goAuction">
+      <text>{{ user.role === 'farm' ? '🛍 我的资源' : '🔥 我的报价' }}</text>
+      <text class="muted">›</text>
+    </view>
   </view>
 
   <view class="card menu-card" style="margin: 24rpx 24rpx;">

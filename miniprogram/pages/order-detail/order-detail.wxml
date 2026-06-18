@@ -2,7 +2,10 @@
   <view class="card">
     <view class="row-between">
       <text class="bold" bindtap="copyOrderNo">订单 {{ order.order_no || ('#' + order.id) }} <text class="muted" style="font-size: 22rpx;">📋</text></text>
-      <text class="tag {{ statusCls }}">{{ statusText }}</text>
+      <view class="row" style="gap: 12rpx;">
+        <text class="tag {{ statusCls }}">{{ statusText }}</text>
+        <text class="report-tag" catchtap="report">⚐ 举报</text>
+      </view>
     </view>
     <view class="kv mt-16"><text class="muted">资源</text><text>{{ order.resource.title }}</text></view>
     <view class="kv"><text class="muted">成交价</text><text class="price">¥{{ order.final_price }}</text></view>

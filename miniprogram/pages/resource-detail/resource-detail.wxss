@@ -136,3 +136,14 @@
 .hg-submit {
   margin-top: 16rpx;
 }
+
+.report-tag {
+  display: inline-block;
+  margin-left: 12rpx;
+  font-size: 20rpx;
+  color: #8a8d93;
+  padding: 4rpx 12rpx;
+  border: 2rpx solid #d0d0d0;
+  border-radius: 999rpx;
+}
+.report-tag:active { opacity: 0.6; }

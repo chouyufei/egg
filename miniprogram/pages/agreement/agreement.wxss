@@ -1,0 +1,21 @@
+.doc {
+  padding: 32rpx 32rpx 64rpx;
+  font-size: 26rpx; line-height: 1.8;
+  color: #1d1d1f;
+  background: #fff;
+}
+.doc-title {
+  font-size: 36rpx; font-weight: 800;
+  text-align: center; margin-bottom: 12rpx;
+}
+.doc-date {
+  text-align: center; color: #8a8d93;
+  font-size: 22rpx; margin-bottom: 32rpx;
+}
+.h2 {
+  font-weight: 700; font-size: 28rpx;
+  margin: 24rpx 0 12rpx;
+  color: #e0a40d;
+}
+.p { margin-bottom: 12rpx; text-indent: 2em; }
+.li { padding-left: 1em; color: #5a5a5a; }

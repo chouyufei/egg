@@ -153,7 +153,12 @@
     </view>
   </view>
 
-  <button class="btn mt-16" bindtap="submit" loading="{{ loading }}">
+  <view class="agree-row" bindtap="toggleAgree">
+    <text class="agree-box {{ agreed ? 'on' : '' }}">{{ agreed ? '✓' : '' }}</text>
+    <text class="agree-text">我已阅读并同意 <text class="link" catchtap="openAgreement">《用户服务协议》</text> 和 <text class="link" catchtap="openPrivacy">《隐私政策》</text>，承诺所发布信息真实有效</text>
+  </view>
+
+  <button class="btn mt-16" bindtap="submit" loading="{{ loading }}" disabled="{{ !agreed }}">
     立即发布{{ isSupply ? '货源' : '求购' }}
   </button>
 </view>

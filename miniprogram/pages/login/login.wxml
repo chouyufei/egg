@@ -24,6 +24,11 @@
     <button class="btn mt-16" bindtap="login" loading="{{ loading }}">登录 / 注册</button>
   </view>
 
+  <view class="agree-foot" bindtap="toggleAgree">
+    <text class="agree-box {{ agreed ? 'on' : '' }}">{{ agreed ? '✓' : '' }}</text>
+    <text class="agree-text">登录即表示同意 <text class="link" catchtap="openAgreement">《用户协议》</text> 和 <text class="link" catchtap="openPrivacy">《隐私政策》</text></text>
+  </view>
+
   <view class="login-foot">✓ 自主报价 · ✓ 双向保证金 · ✓ 7 天自动结算</view>
 </view>
 

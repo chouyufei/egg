@@ -48,6 +48,10 @@ Page({
     }
     return null;
   },
+  report() {
+    wx.navigateTo({ url: '/pages/report/report?t=order&id=' + this.data.id });
+  },
+
   copyOrderNo() {
     const no = this.data.order && (this.data.order.order_no || ('#' + this.data.order.id));
     if (!no) return;

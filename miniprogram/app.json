@@ -17,7 +17,11 @@
     "pages/wallet/wallet",
     "pages/withdraw/withdraw",
     "pages/recharge/recharge",
-    "pages/route-map/route-map"
+    "pages/route-map/route-map",
+    "pages/about/about",
+    "pages/agreement/agreement",
+    "pages/privacy/privacy",
+    "pages/report/report"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,0 +1,34 @@
+.chip-row { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.chip {
+  background: #f5f6f8; color: #1d1d1f;
+  padding: 12rpx 28rpx; border-radius: 999rpx;
+  font-size: 26rpx; border: 2rpx solid transparent;
+}
+.chip.on {
+  background: #fff7e0; color: #b78300;
+  border-color: #f6b821; font-weight: 600;
+}
+.ta {
+  width: 100%; min-height: 200rpx;
+  background: #f5f6f8; border-radius: 12rpx;
+  padding: 20rpx; font-size: 26rpx;
+  box-sizing: border-box;
+}
+.upload-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.upload-thumb, .upload-add {
+  width: 160rpx; height: 160rpx; border-radius: 12rpx;
+  position: relative;
+}
+.upload-thumb image { width: 100%; height: 100%; border-radius: 12rpx; }
+.upload-del {
+  position: absolute; top: -10rpx; right: -10rpx;
+  width: 40rpx; height: 40rpx; line-height: 36rpx;
+  border-radius: 50%; background: #ee0a24; color: #fff;
+  text-align: center; font-size: 28rpx; font-weight: 700;
+}
+.upload-add {
+  background: #f5f6f8; border: 2rpx dashed #d0d0d0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64rpx; color: #b0b0b0;
+}
+.text-r { text-align: right; }

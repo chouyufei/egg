@@ -9,7 +9,11 @@ Page({
     modes: { sms: { live: false, provider: 'demo' }, wechat: { live: false } },
     showBindPhone: false,
     bindPhone: '', bindOtp: '', bindCd: 0,
+    agreed: false,
   },
+  toggleAgree() { this.setData({ agreed: !this.data.agreed }); },
+  openAgreement() { wx.navigateTo({ url: '/pages/agreement/agreement' }); },
+  openPrivacy()   { wx.navigateTo({ url: '/pages/privacy/privacy' }); },
   onLoad() { this.loadModes(); },
 
   async loadModes() {
@@ -42,6 +46,9 @@ Page({
     if (!this.data.phone || !this.data.otp) {
       return wx.showToast({ title: '请填写手机号和验证码', icon: 'none' });
     }
+    if (!this.data.agreed) {
+      return wx.showToast({ title: '请先勾选同意《用户协议》', icon: 'none', duration: 2500 });
+    }
     this.setData({ loading: true });
     try {
       const res = await api.post('/auth/login', {
@@ -55,6 +62,9 @@ Page({
   },
 
   async wechatLogin() {
+    if (!this.data.agreed) {
+      return wx.showToast({ title: '请先勾选同意《用户协议》', icon: 'none', duration: 2500 });
+    }
     this.setData({ wxLoading: true });
     try {
       const code = await new Promise((resolve, reject) => {

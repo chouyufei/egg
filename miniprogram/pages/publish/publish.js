@@ -99,6 +99,7 @@ Page({
     video: '',
     loading: false,
     fromId: 0,
+    agreed: false,
     depositPaid: false,    // 钱包可用余额 ≥ 保证金额度
     depositAmount: 0,      // 需冻结金额
     walletAvailable: 0,    // 当前可用余额
@@ -240,6 +241,10 @@ Page({
       } catch (e) {}
     }
   },
+  toggleAgree() { this.setData({ agreed: !this.data.agreed }); },
+  openAgreement() { wx.navigateTo({ url: '/pages/agreement/agreement' }); },
+  openPrivacy()   { wx.navigateTo({ url: '/pages/privacy/privacy' }); },
+
   pickColor(e) {
     const v = e.detail.value;
     const opts = BREEDS_BY_COLOR[v] || BREEDS_BY_COLOR['红壳'];

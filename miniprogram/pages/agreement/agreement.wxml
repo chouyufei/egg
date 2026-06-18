@@ -1,0 +1,80 @@
+<view class="doc">
+  <view class="doc-title">{{ tab === 'fund' ? '资金管理说明' : '凤伯乐用户服务协议' }}</view>
+  <view class="doc-date">最近更新：2026 年 6 月</view>
+
+  <block wx:if="{{ tab !== 'fund' }}">
+    <view class="h2">一、协议确认</view>
+    <view class="p">本协议是您（以下简称"用户"）与武汉乘子农业科技有限公司（以下简称"凤伯乐"）就使用本平台所订立的协议。注册、登录或使用本平台即视为您已充分阅读并同意本协议全部条款。</view>
+
+    <view class="h2">二、服务内容</view>
+    <view class="p">凤伯乐为养殖场（卖方）与采购商（买方）提供蛋品供需信息撮合、报价对接、订单管理、客服协助等服务。平台不直接参与买卖交易本身，仅作为中立的信息撮合与服务提供方。</view>
+
+    <view class="h2">三、注册与账号</view>
+    <view class="p">3.1 用户须使用真实手机号注册，并保证所提供信息真实、准确、完整。</view>
+    <view class="p">3.2 用户应妥善保管账号及验证码，因账号外泄造成的损失由用户自行承担。</view>
+    <view class="p">3.3 养殖场注册需提交营业执照、食品流通许可证等资质材料，由平台审核通过后方可发布货源。</view>
+
+    <view class="h2">四、用户行为规范</view>
+    <view class="p">用户承诺不发布以下内容：</view>
+    <view class="li">· 虚假货源 / 求购信息</view>
+    <view class="li">· 法律禁止流通的物品</view>
+    <view class="li">· 涉嫌欺诈、虚假宣传的内容</view>
+    <view class="li">· 不当言论、人身攻击、骚扰他人</view>
+    <view class="li">· 冒充他人身份或机构</view>
+    <view class="p">违反上述规范的内容将被平台删除，严重者将冻结账号并追究法律责任。</view>
+
+    <view class="h2">五、保证金与服务费</view>
+    <view class="p">5.1 发布货源 / 求购 / 参与报价均需冻结一笔履约保证金，从用户钱包余额扣划。</view>
+    <view class="p">5.2 订单成功完成（采购方确认收货）后，平台按规则扣取服务费，余款解冻回钱包。</view>
+    <view class="p">5.3 因用户违约（如不发货、货不对板）扣除的保证金，归平台所有用于补偿相关方损失。</view>
+
+    <view class="h2">六、违约与争议处理</view>
+    <view class="p">6.1 交易双方应诚实守信履行约定。如发生争议，应优先协商解决；协商不成的，可向平台客服申请仲裁，平台将根据双方提供的证据公平裁决。</view>
+    <view class="p">6.2 用户对裁决结果不服的，可向公司所在地有管辖权的人民法院提起诉讼。</view>
+
+    <view class="h2">七、知识产权</view>
+    <view class="p">凤伯乐平台的全部代码、设计、商标归武汉乘子农业科技有限公司所有。未经授权不得复制、传播或用于商业用途。</view>
+
+    <view class="h2">八、免责声明</view>
+    <view class="p">8.1 因不可抗力（如系统故障、网络中断、自然灾害等）导致的服务中断，平台不承担责任。</view>
+    <view class="p">8.2 用户因自身违规、误操作或第三方原因造成的损失，平台不承担责任。</view>
+
+    <view class="h2">九、协议修改</view>
+    <view class="p">平台有权根据法律法规和业务发展调整本协议。修改后将在小程序公告，继续使用即视为同意修改后的条款。</view>
+
+    <view class="h2">十、联系我们</view>
+    <view class="p">客服电话：400-888-8888</view>
+    <view class="p">客服邮箱：support@fengbole.com</view>
+    <view class="p">公司地址：湖北省武汉市江夏区</view>
+  </block>
+
+  <block wx:else>
+    <view class="h2">一、资金来源</view>
+    <view class="p">用户钱包余额来源于：① 微信支付充值；② 履约保证金到期解冻；③ 平台奖励或退款。</view>
+
+    <view class="h2">二、保证金机制</view>
+    <view class="p">2.1 每次发布货源、发起求购、参与报价时，系统自动从钱包"可用余额"冻结固定额度（默认 1000 元，金额以发布时显示为准）。</view>
+    <view class="p">2.2 冻结金额不可提现，但用户仍可正常浏览、咨询、查看订单。</view>
+
+    <view class="h2">三、服务费扣除</view>
+    <view class="p">3.1 订单成功完成（采购方确认收货）后，平台按规则从买卖双方各扣一笔服务费（默认 50 元 / 笔）。</view>
+    <view class="p">3.2 余款（保证金 - 服务费）自动解冻回钱包"可用余额"，即可申请提现。</view>
+
+    <view class="h2">四、未成交 / 取消</view>
+    <view class="p">订单未成交或被取消的，所冻结的保证金全额解冻回可用余额，不收取任何费用。</view>
+
+    <view class="h2">五、提现规则</view>
+    <view class="p">5.1 提现至微信零钱或银行卡。</view>
+    <view class="p">5.2 单笔最低 1 元、最高 50000 元；每日最多 3 次、累计 50000 元。</view>
+    <view class="p">5.3 提交后 24 小时内审核，审核通过后 1-3 个工作日到账。</view>
+    <view class="p">5.4 不收取提现手续费。</view>
+
+    <view class="h2">六、违规扣款</view>
+    <view class="p">如用户因违约（不发货、货不对板、虚假信息等）被平台核实扣款的，扣款金额归平台用于补偿相关方损失，并通过站内消息明示原因。</view>
+
+    <view class="h2">七、资金安全</view>
+    <view class="p">所有资金流转通过微信支付完成，全程加密、可追溯。平台不会保留用户的微信密码或银行卡密码，任何索要密码的行为均为诈骗，请立即报警。</view>
+  </block>
+
+  <view style="height: 80rpx;"></view>
+</view>

@@ -230,6 +230,10 @@ Page({
     });
   },
 
+  report() {
+    wx.navigateTo({ url: '/pages/report/report?t=resource&id=' + this.data.id });
+  },
+
   openSeller() {
     if (!this.data.r || !this.data.r.farm) return;
     wx.navigateTo({ url: '/pages/seller-profile/seller-profile?id=' + this.data.r.farm.id });

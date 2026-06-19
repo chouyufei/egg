@@ -11,18 +11,16 @@
 }
 .menu-row:last-child { border-bottom: none; }
 
-/* open-type="contact" button must stay a <button>, but strip its default
-   chrome so the row visually aligns with sibling .menu-row views. */
-.menu-btn {
-  width: 100%;
-  margin: 0;
-  padding: 28rpx 32rpx;
-  line-height: 1.4;
-  font-size: 30rpx;
-  font-weight: normal;
-  text-align: left;
+/* "在线客服" 行用普通 view 渲染保证对齐，
+   再叠一个隐形 <button open-type="contact"> 接收点击 → 微信原生客服会话 */
+.menu-row-rel { position: relative; }
+.menu-row-overlay {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  margin: 0; padding: 0;
   background: transparent;
-  color: inherit;
-  border-radius: 0;
+  border: none;
+  line-height: 1;
+  opacity: 0;
 }
-.menu-btn::after { border: none; }
+.menu-row-overlay::after { border: none; }

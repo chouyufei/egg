@@ -30,9 +30,8 @@
         <view class="picker-val">{{ provinces[provinceIndex] }} ▾</view>
       </picker>
     </view>
-    <view class="input-row"><view class="label">具体地区</view><input value="{{ form.region }}" data-k="region" bindinput="onInput" bindblur="onInput" placeholder="如：山东青州 / 河南信阳" /></view>
 
-    <!-- 定位信息（可选） -->
+    <!-- 定位：选定后自动填省/市/地址，作为具体地区 -->
     <view class="input-row loc-row">
       <view class="label">📍 定位</view>
       <view class="flex-1">

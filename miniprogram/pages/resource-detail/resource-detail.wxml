@@ -74,6 +74,18 @@
     </view>
   </view>
 
+  <!-- 分享：邀请好友围观，越多关注成交越快 -->
+  <view wx:if="{{ r.status === 'auctioning' }}" class="card share-card" style="margin: 0 24rpx 24rpx;">
+    <view class="share-row">
+      <view class="share-icon">📣</view>
+      <view class="flex-1">
+        <view class="bold">邀请好友围观</view>
+        <view class="muted mt-8" style="font-size: 24rpx;">关注的人越多，价格冲刺越快，越早锁货</view>
+      </view>
+      <button class="btn share-btn" open-type="share">分享</button>
+    </view>
+  </view>
+
   <view style="height: 160rpx;"></view>
 
   <!-- 底部 4 按钮操作栏（参考行业批发还价模式：运费 / 留言 / 我要还价 / 电话联系） -->

@@ -31,6 +31,44 @@ Page({
     getLocation().then(loc => { this._myLoc = loc; this.load(); });
   },
   onUnload() { clearInterval(this.poll); },
+
+  // 转发到微信好友 / 群（裂变分享）
+  onShareAppMessage() {
+    const r = this.data.r;
+    const id = this.data.id;
+    const path = '/pages/resource-detail/resource-detail?id=' + id;
+    if (!r) return { title: '凤伯乐 · 鸡蛋询价撮合', path };
+    const isSupply = (r.kind || 'supply') === 'supply';
+    const watchers = r.bidder_count || r.view_count || 0;
+    const region = r.region || '';
+    const tag = r.egg_color || '';
+    const title = isSupply
+      ? `🔥 一车${region}${tag}鸡蛋已 ${watchers} 人围观，现价 ¥${r.current_price}/${r.unit_size || '箱'}，赶紧抢锁！`
+      : `🛒 ${region}求购${tag}鸡蛋 ${r.quantity} ${r.unit_size || '车'}，有货速来抢报，价高者优先！`;
+    return {
+      title,
+      path,
+      imageUrl: (r.photos && r.photos[0]) || '',
+    };
+  },
+
+  // 转发到朋友圈
+  onShareTimeline() {
+    const r = this.data.r;
+    const id = this.data.id;
+    if (!r) return { title: '凤伯乐 · 鸡蛋询价撮合', query: 'id=' + id };
+    const isSupply = (r.kind || 'supply') === 'supply';
+    const region = r.region || '';
+    const tag = r.egg_color || '';
+    const title = isSupply
+      ? `🔥 ${region}${tag}鸡蛋 现价 ¥${r.current_price}/${r.unit_size || '箱'}，多人围观中`
+      : `🛒 ${region}求购${tag}鸡蛋 ${r.quantity} ${r.unit_size || '车'}，有货请进`;
+    return {
+      title,
+      query: 'id=' + id,
+      imageUrl: (r.photos && r.photos[0]) || '',
+    };
+  },
   async load() {
     try {
       const { resource, bids } = await api.get('/resources/' + this.data.id);

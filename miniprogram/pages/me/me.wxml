@@ -30,7 +30,7 @@
   </view>
 
   <view class="card menu-card" style="margin: 24rpx 24rpx;">
-    <button class="menu-row menu-btn" open-type="contact" plain="true" style="border: none; background: transparent;">
+    <button class="menu-row menu-btn" open-type="contact" plain="true" hover-class="none">
       <text>💬 联系客服</text><text class="muted">在线咨询 ›</text>
     </button>
     <view class="menu-row" bindtap="callCs">

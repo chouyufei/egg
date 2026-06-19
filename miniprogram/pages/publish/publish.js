@@ -85,12 +85,19 @@ Page({
     breedOptions: BREEDS_BY_COLOR['红壳'],
     breedIndex: -1,                    // -1 表示未选；>= 0 是 picker 索引
     breedCustom: '',                   // 选"其它"时的文本输入
+    // 单箱枚数预设：'360' / '480' / 'other'；'other' 时显示自填输入框
+    packSizePreset: '',
+    // 蛋黄颜色 picker
+    yolkColorOptions: ['红心', '黄心', '双色'],
+    yolkColorIndex: -1,
     form: {
       title: '', region: '', chicken_breed: '',
       farm_size_wan: '',
       egg_color: '红壳',
       weight_min: '', weight_max: '',
+      pack_size: '',
       shell_quality: '',
+      yolk_color: '', yolk_shade: '',
       defect_rate: '', defect_note: '',
       freshness_days: 3, quantity: '', unit_size: '车', start_price: '',
       min_increment: 1, duration_hours: 2, description: '',
@@ -206,11 +213,18 @@ Page({
           bIdx = breedOpts.indexOf('其它');
           bCustom = r.chicken_breed;
         }
+        // 还原单箱枚数预设（命中 360 / 480 → 对应单选；否则归类为 自填）
+        const ps = r.pack_size != null && r.pack_size !== '' ? String(r.pack_size) : '';
+        const psPreset = ps === '360' || ps === '480' ? ps : (ps ? 'other' : '');
+        // 还原蛋黄颜色 picker
+        const yIdx = ['红心', '黄心', '双色'].indexOf(r.yolk_color || '');
         this.setData({
           provinceIndex: pIdx,
           breedOptions: breedOpts,
           breedIndex: bIdx,
           breedCustom: bCustom,
+          packSizePreset: psPreset,
+          yolkColorIndex: yIdx,
           'form.title': r.title || '',
           'form.region': r.region || '',
           'form.chicken_breed': r.chicken_breed || '',
@@ -218,7 +232,10 @@ Page({
           'form.egg_color': color,
           'form.weight_min': minW,
           'form.weight_max': maxW,
+          'form.pack_size': ps,
           'form.shell_quality': r.shell_quality || '',
+          'form.yolk_color': r.yolk_color || '',
+          'form.yolk_shade': r.yolk_shade || '',
           'form.defect_rate': r.defect_rate != null ? String(r.defect_rate) : '',
           'form.defect_note': r.defect_note || '',
           'form.freshness_days': r.freshness_days || 3,
@@ -270,6 +287,19 @@ Page({
   onBreedCustomInput(e) {
     const v = e.detail.value || '';
     this.setData({ breedCustom: v, 'form.chicken_breed': v });
+  },
+  pickPackSize(e) {
+    const v = e.detail.value;
+    if (v === 'other') {
+      this.setData({ packSizePreset: 'other', 'form.pack_size': '' });
+    } else {
+      this.setData({ packSizePreset: v, 'form.pack_size': v });
+    }
+  },
+  pickYolkColor(e) {
+    const i = Number(e.detail.value);
+    const v = this.data.yolkColorOptions[i] || '';
+    this.setData({ yolkColorIndex: i, 'form.yolk_color': v });
   },
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
@@ -373,6 +403,9 @@ Page({
         // 养殖规模：用户填 1.5 (万只) → 存 15000 (只)
         farm_size: farmSizeWan ? Math.round(farmSizeWan * 10000) : null,
         weight_spec: weightSpec,
+        pack_size: f.pack_size !== '' ? Number(f.pack_size) : null,
+        yolk_color: f.yolk_color || null,
+        yolk_shade: f.yolk_shade || null,
         defect_rate: f.defect_rate !== '' ? Number(f.defect_rate) : null,
         defect_note: f.defect_note || null,
         freshness_days: Number(f.freshness_days) || null,

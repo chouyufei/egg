@@ -38,7 +38,12 @@
     <view class="section-title" style="margin: 0 0 16rpx;">参数明细</view>
     <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} {{ r.unit_size || '车' }}</text></view>
     <view wx:if="{{ r.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ r.weight_spec }}</text></view>
+    <view wx:if="{{ r.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ r.pack_size }} 枚/箱</text></view>
     <view wx:if="{{ r.shell_quality }}" class="kv"><text class="muted">蛋壳质量</text><text>{{ r.shell_quality }}</text></view>
+    <view wx:if="{{ r.yolk_color }}" class="kv">
+      <text class="muted">蛋黄颜色</text>
+      <text>{{ r.yolk_color }}<text wx:if="{{ r.yolk_shade }}" class="muted" style="font-size: 22rpx;"> · {{ r.yolk_shade }}</text></text>
+    </view>
     <view wx:if="{{ r.defect_rate != null }}" class="kv">
       <text class="muted">次品率</text>
       <text>{{ r.defect_rate }}%<text wx:if="{{ r.defect_note }}" class="muted" style="font-size: 22rpx;"> · {{ r.defect_note }}</text></text>

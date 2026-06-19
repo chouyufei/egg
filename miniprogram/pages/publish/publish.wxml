@@ -87,7 +87,34 @@
       <text class="muted" style="margin-left: 8rpx;">斤/箱</text>
     </view>
 
+    <!-- 规格：单箱枚数 -->
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">规格</view>
+      <radio-group bindchange="pickPackSize" style="display: flex; gap: 24rpx; flex-wrap: wrap;">
+        <label><radio value="360" checked="{{ packSizePreset === '360' }}" />360 枚/箱</label>
+        <label><radio value="480" checked="{{ packSizePreset === '480' }}" />480 枚/箱</label>
+        <label><radio value="other" checked="{{ packSizePreset === 'other' }}" />其它</label>
+      </radio-group>
+    </view>
+    <view wx:if="{{ isSupply && packSizePreset === 'other' }}" class="input-row">
+      <view class="label">单箱枚数</view>
+      <input type="number" value="{{ form.pack_size }}" data-k="pack_size" bindinput="onInput" bindblur="onInput" placeholder="如 300" style="width: 160rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">枚/箱</text>
+    </view>
+
     <view wx:if="{{ isSupply }}" class="input-row"><view class="label">蛋壳质量</view><input value="{{ form.shell_quality }}" data-k="shell_quality" bindinput="onInput" bindblur="onInput" placeholder="如：硬壳-无裂纹" /></view>
+
+    <!-- 蛋黄颜色：红心 / 黄心 / 双色 + 罗氏色号 -->
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">蛋黄颜色</view>
+      <picker bindchange="pickYolkColor" value="{{ yolkColorIndex }}" range="{{ yolkColorOptions }}">
+        <view class="picker-val">{{ yolkColorIndex >= 0 ? yolkColorOptions[yolkColorIndex] : '请选择 ▾' }}</view>
+      </picker>
+    </view>
+    <view wx:if="{{ isSupply && yolkColorIndex >= 0 }}" class="input-row">
+      <view class="label">蛋黄色号</view>
+      <input value="{{ form.yolk_shade }}" data-k="yolk_shade" bindinput="onInput" bindblur="onInput" placeholder="如 12-13 度 (罗氏比色卡)" />
+    </view>
 
     <!-- 次品率 -->
     <view wx:if="{{ isSupply }}" class="input-row">
@@ -98,7 +125,11 @@
     <view wx:if="{{ isSupply }}" class="hint-row">
       💡 次品率 = 裂纹蛋 + 脏蛋 + 破蛋 占总量的百分比，承诺该比例不超过填写值
     </view>
-    <view wx:if="{{ isSupply }}" class="input-row"><view class="label">鲜度</view><input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="x 天内" /></view>
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">鲜度</view>
+      <input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="如 3" style="width: 160rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">天内</text>
+    </view>
 
     <view class="input-row">
       <view class="label">数量</view>

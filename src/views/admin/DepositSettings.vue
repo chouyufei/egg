@@ -8,8 +8,8 @@
         <li>用户钱包通过<strong>充值</strong>注入资金</li>
         <li>三类操作（<strong>发布货源</strong> / <strong>发起求购</strong> / <strong>参与报价</strong>）
           每次从钱包<strong>统一冻结</strong>同一笔保证金</li>
-        <li>订单完成（采购方确认收货）→ 平台从买卖双方各扣一笔<strong>服务费</strong>，
-          剩余<strong>自动解冻</strong>回可用余额</li>
+        <li>订单完成（采购方确认收货）→ 平台<strong>仅从卖方（养殖场）</strong>的保障金中扣一笔<strong>服务费</strong>，
+          买方冻结的保障金<strong>全额解冻</strong>回可用余额</li>
         <li>未成交 / 取消 → 全部解冻回可用</li>
       </ul>
     </div>
@@ -23,8 +23,8 @@
       </div>
       <div class="num-row">
         <label>平台服务费</label>
-        <input type="number" min="0" step="10" v-model.number="s.service_fee_amount" />
-        <span class="muted">元 / 笔（订单完成时从每方冻结里扣除）</span>
+        <input type="number" min="0" step="50" v-model.number="s.service_fee_amount" />
+        <span class="muted">元 / 笔（订单完成时仅从卖方保障金中扣除，买方不扣）</span>
       </div>
 
       <div class="preview-box">
@@ -33,9 +33,9 @@
           <thead><tr><th></th><th>买方</th><th>卖方</th></tr></thead>
           <tbody>
             <tr><td>下单 / 发布时冻结</td><td>¥ {{ s.deposit_amount }}</td><td>¥ {{ s.deposit_amount }}</td></tr>
-            <tr><td>订单完成扣服务费</td><td>- ¥ {{ s.service_fee_amount }}</td><td>- ¥ {{ s.service_fee_amount }}</td></tr>
-            <tr class="hl"><td>解冻回可用</td><td>¥ {{ Math.max(0, s.deposit_amount - s.service_fee_amount) }}</td><td>¥ {{ Math.max(0, s.deposit_amount - s.service_fee_amount) }}</td></tr>
-            <tr class="hl-rev"><td>平台单笔收入</td><td colspan="2" style="text-align:center;">¥ {{ s.service_fee_amount * 2 }}（买卖各 {{ s.service_fee_amount }}）</td></tr>
+            <tr><td>订单完成扣服务费</td><td>- ¥ 0</td><td>- ¥ {{ s.service_fee_amount }}</td></tr>
+            <tr class="hl"><td>解冻回可用</td><td>¥ {{ s.deposit_amount }}</td><td>¥ {{ Math.max(0, s.deposit_amount - s.service_fee_amount) }}</td></tr>
+            <tr class="hl-rev"><td>平台单笔收入</td><td colspan="2" style="text-align:center;">¥ {{ s.service_fee_amount }}（仅向卖方收取）</td></tr>
           </tbody>
         </table>
       </div>

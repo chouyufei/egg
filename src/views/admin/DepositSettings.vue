@@ -72,8 +72,8 @@ import api from '../../api';
 import dayjs from 'dayjs';
 
 const s = reactive({
-  deposit_amount: 1000,
-  service_fee_amount: 50,
+  deposit_amount: 500,
+  service_fee_amount: 500,
 });
 const saving = ref(false);
 const lastSavedAt = ref('');
@@ -91,8 +91,8 @@ async function reconcile() {
 
 async function load() {
   const r = await api.get('/admin/deposit-settings');
-  s.deposit_amount = Number(r.deposit_amount) || 1000;
-  s.service_fee_amount = Number(r.service_fee_amount) || 0;
+  s.deposit_amount = Number(r.deposit_amount) || 500;
+  s.service_fee_amount = Number(r.service_fee_amount) || 500;
 }
 
 async function save() {

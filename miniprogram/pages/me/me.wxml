@@ -46,7 +46,7 @@
       <text>🛡 隐私政策</text><text class="muted">›</text>
     </view>
     <view class="menu-row" bindtap="goAbout">
-      <text>ℹ 关于凤伯乐</text><text class="muted">v1.0.0 ›</text>
+      <text>ℹ️ 关于凤伯乐</text><text class="muted">v1.0.0 ›</text>
     </view>
   </view>
 

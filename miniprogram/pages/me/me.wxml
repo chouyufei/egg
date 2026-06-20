@@ -32,10 +32,12 @@
   </view>
 
   <view class="card menu-card" style="margin: 24rpx 24rpx;">
-    <view class="menu-row menu-row-rel">
-      <text>💬 在线客服</text><text class="muted">在线咨询 ›</text>
-      <button class="menu-row-overlay" open-type="contact" plain="true" hover-class="none"></button>
-    </view>
+    <button class="menu-row-btn" open-type="contact" plain="true" hover-class="menu-row-btn-hover">
+      <view class="menu-row" style="border-bottom: none;">
+        <text>💬 在线客服</text><text class="muted">在线咨询 ›</text>
+      </view>
+    </button>
+    <view class="menu-row-divider"></view>
     <view class="menu-row" bindtap="callCs">
       <text>📞 客服电话</text><text class="muted">186-7554-5968 ›</text>
     </view>

@@ -18,16 +18,22 @@
 }
 .menu-row:last-child { border-bottom: none; }
 
-/* "在线客服" 行用普通 view 渲染保证对齐，
-   再叠一个隐形 <button open-type="contact"> 接收点击 → 微信原生客服会话 */
-.menu-row-rel { position: relative; }
-.menu-row-overlay {
-  position: absolute;
-  left: 0; right: 0; top: 0; bottom: 0;
-  margin: 0; padding: 0;
+/* "在线客服" 行用 <button open-type="contact"> 包住一个标准 .menu-row，
+   按钮自己只做点击触发，没有任何视觉影响；inner view 维持与其它行
+   一致的 flex 布局 + 字号 + 内边距。 */
+.menu-row-btn {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   background: transparent;
   border: none;
+  border-radius: 0;
   line-height: 1;
-  opacity: 0;
+  font-size: inherit;
+  color: inherit;
+  text-align: left;
 }
-.menu-row-overlay::after { border: none; }
+.menu-row-btn::after { border: none; }
+.menu-row-btn-hover { background: #f5f6f8; }
+.menu-row-divider { height: 1rpx; background: #f0f0f0; margin: 0 32rpx; }

@@ -3,7 +3,9 @@
     <view class="row" style="gap: 24rpx;">
       <view class="avatar">{{ user.role === 'farm' ? '🐔' : '🛒' }}</view>
       <view class="flex-1">
-        <view class="hero-title">{{ user.name }}</view>
+        <view class="hero-title" bindtap="editName">
+          {{ user.name }} <text class="hero-edit">✎</text>
+        </view>
         <view class="hero-sub">{{ roleText }} · {{ user.phone }}</view>
         <view wx:if="{{ user.role === 'farm' }}" class="mt-8">
           <text class="tag {{ licCls }}">{{ licText }}</text>

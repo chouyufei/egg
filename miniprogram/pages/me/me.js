@@ -43,6 +43,32 @@ Page({
   goPrivacy()   { wx.navigateTo({ url: '/pages/privacy/privacy' }); },
   goAbout()     { wx.navigateTo({ url: '/pages/about/about' }); },
   callCs()      { wx.makePhoneCall({ phoneNumber: '18675545968', fail: () => {} }); },
+  editName() {
+    const current = (this.data.user && this.data.user.name) || '';
+    wx.showModal({
+      title: '修改昵称',
+      placeholderText: '请输入新昵称（2-20 字）',
+      content: current,
+      editable: true,
+      confirmText: '保存',
+      success: async (r) => {
+        if (!r.confirm) return;
+        const v = String(r.content || '').trim();
+        if (!v) return wx.showToast({ title: '昵称不能为空', icon: 'none' });
+        if (v.length < 2 || v.length > 20) return wx.showToast({ title: '昵称限 2-20 字', icon: 'none' });
+        if (v === current) return;
+        try {
+          const { user } = await api.patch('/auth/me', { name: v });
+          app.globalData.user = user;
+          wx.setStorageSync('user', user);
+          this.setData({ user });
+          wx.showToast({ title: '已保存' });
+        } catch (e) {
+          wx.showToast({ title: e.message || '保存失败', icon: 'none' });
+        }
+      },
+    });
+  },
   logout() {
     wx.showModal({ title: '退出登录', content: '确认退出？', success: r => { if (r.confirm) app.logout(); } });
   },

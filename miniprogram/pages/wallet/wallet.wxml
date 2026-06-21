@@ -71,6 +71,9 @@
         </view>
         <view style="text-align: right;">
           <text class="tag {{ item.status_cls }}">{{ item.status_label }}</text>
+          <view wx:if="{{ item.can_confirm }}" class="mt-8">
+            <text class="link" style="font-size: 22rpx;" bindtap="confirmReceive" data-id="{{ item.id }}">去微信确认收款 ›</text>
+          </view>
           <view wx:if="{{ item.status === 'pending' }}" class="mt-8">
             <text class="muted" style="font-size: 22rpx; color: #ee0a24;" bindtap="cancelWithdraw" data-id="{{ item.id }}">取消</text>
           </view>

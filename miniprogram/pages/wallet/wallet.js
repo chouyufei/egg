@@ -71,16 +71,18 @@ Page({
           status_label: ({
             pending: '待审核',
             approved: '已批准 · 待打款',
+            transferring: '待您在微信确认收款',
             paid: '平台已打款',
             rejected: '已拒绝',
             failed: '打款失败',
             cancelled: '已取消',
           })[w.status] || w.status,
           status_cls: ({
-            pending: 'tag', approved: 'tag-b',
+            pending: 'tag', approved: 'tag-b', transferring: 'tag-y',
             paid: 'tag-g', rejected: 'tag-r', failed: 'tag-r',
             cancelled: 'tag-d',
           })[w.status] || 'tag',
+          can_confirm: w.status === 'transferring' && !!w.package_info,
         })),
       });
     } catch (e) {}
@@ -103,6 +105,40 @@ Page({
       return wx.showToast({ title: '可用余额为 0，无法提现', icon: 'none' });
     }
     wx.navigateTo({ url: '/pages/withdraw/withdraw?available=' + this.data.available });
+  },
+  // 在小程序里拉起微信"商家转账"确认收款 UI，到账后通知后端结算
+  async confirmReceive(e) {
+    const w = this.data.withdrawals.find(x => x.id === Number(e.currentTarget.dataset.id));
+    if (!w || !w.package_info) return wx.showToast({ title: '缺少转账信息', icon: 'none' });
+    let cfg;
+    try { cfg = await api.get('/wallet/wechat-pay-config'); } catch (err) {}
+    if (!cfg || !cfg.mch_id || !cfg.appid) {
+      return wx.showToast({ title: '商户配置缺失，请联系客服', icon: 'none' });
+    }
+    if (!wx.requestMerchantTransfer) {
+      return wx.showModal({
+        title: '微信版本过低',
+        content: '请升级微信到最新版本后再点【确认收款】',
+        showCancel: false,
+      });
+    }
+    wx.requestMerchantTransfer({
+      mchId: cfg.mch_id,
+      appId: cfg.appid,
+      package: w.package_info,
+      success: async () => {
+        try {
+          await api.post('/wallet/withdrawals/' + w.id + '/confirm-received');
+          wx.showToast({ title: '已到账', icon: 'success' });
+          await this.load();
+        } catch (err) {
+          wx.showToast({ title: err.message || '回执失败', icon: 'none' });
+        }
+      },
+      fail: (err) => {
+        wx.showToast({ title: '取消或失败：' + (err && err.errMsg || ''), icon: 'none', duration: 2500 });
+      },
+    });
   },
   cancelWithdraw(e) {
     const id = e.currentTarget.dataset.id;

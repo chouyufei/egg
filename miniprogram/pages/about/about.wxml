@@ -24,7 +24,7 @@
   <view class="card">
     <view class="section-title" style="margin: 0 0 16rpx;">联系我们</view>
     <view class="kv"><text class="muted">客服电话</text><text bindtap="callCs" class="link">186-7554-5968</text></view>
-    <view class="kv"><text class="muted">客服邮箱</text><text class="small">support@fengbole.com</text></view>
+    <view class="kv"><text class="muted">客服邮箱</text><text class="small">18675545968@163.com</text></view>
     <view class="kv"><text class="muted">工作时间</text><text>工作日 9:00-18:00</text></view>
     <button class="btn mt-16" open-type="contact">📲 联系在线客服</button>
   </view>

@@ -32,15 +32,6 @@
   </view>
 
   <view class="card menu-card" style="margin: 24rpx 24rpx;">
-    <button class="menu-row-btn" open-type="contact" plain="true" hover-class="menu-row-btn-hover">
-      <view class="menu-row" style="border-bottom: none;">
-        <text>💬 在线客服</text><text class="muted">在线咨询 ›</text>
-      </view>
-    </button>
-    <view class="menu-row-divider"></view>
-    <view class="menu-row" bindtap="callCs">
-      <text>📞 客服电话</text><text class="muted">186-7554-5968 ›</text>
-    </view>
     <view class="menu-row" bindtap="goAgreement">
       <text>📜 用户协议</text><text class="muted">›</text>
     </view>
@@ -48,7 +39,7 @@
       <text>🛡 隐私政策</text><text class="muted">›</text>
     </view>
     <view class="menu-row" bindtap="goAbout">
-      <text>ℹ️ 关于凤伯乐</text><text class="muted">v1.0.0 ›</text>
+      <text>ℹ️ 关于我们</text><text class="muted">v1.0.0 ›</text>
     </view>
   </view>
 

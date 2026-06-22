@@ -101,8 +101,6 @@
       <text class="muted" style="margin-left: 8rpx;">枚/箱</text>
     </view>
 
-    <view wx:if="{{ isSupply }}" class="input-row"><view class="label">蛋壳质量</view><input value="{{ form.shell_quality }}" data-k="shell_quality" bindinput="onInput" bindblur="onInput" placeholder="如：硬壳-无裂纹" /></view>
-
     <!-- 蛋黄颜色：红心 / 黄心 / 双色 + 罗氏色号 -->
     <view wx:if="{{ isSupply }}" class="input-row">
       <view class="label">蛋黄颜色</view>
@@ -118,7 +116,7 @@
     <!-- 次品率 -->
     <view wx:if="{{ isSupply }}" class="input-row">
       <view class="label">次品率</view>
-      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="如 0.5" style="width: 140rpx;" />
+      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="默认 0.2" style="width: 140rpx;" />
       <text class="muted" style="margin-left: 8rpx;">%</text>
     </view>
     <view wx:if="{{ isSupply }}" class="hint-row">
@@ -131,10 +129,15 @@
     </view>
 
     <view class="input-row">
-      <view class="label">数量</view>
+      <view class="label">车型</view>
       <picker bindchange="pickTruckPicker" value="{{ truckIndex }}" range="{{ truckRangeLabels }}">
         <view class="picker-val">{{ truckIndex >= 0 ? truckRangeLabels[truckIndex] : '请选择车型 ▾' }}</view>
       </picker>
+    </view>
+    <view wx:if="{{ truckIndex >= 0 }}" class="input-row">
+      <view class="label">数量</view>
+      <input type="number" value="{{ form.truck_count }}" data-k="truck_count" bindinput="onInput" bindblur="onInput" placeholder="如 1" style="width: 160rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">车</text>
     </view>
   </view>
 

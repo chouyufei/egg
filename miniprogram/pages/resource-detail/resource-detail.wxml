@@ -36,7 +36,7 @@
 
   <view class="card" style="margin: 0 24rpx 24rpx;">
     <view class="section-title" style="margin: 0 0 16rpx;">参数明细</view>
-    <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} {{ r.unit_size || '车' }}</text></view>
+    <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} {{ r.unit_size || '车' }}<text wx:if="{{ r.truck_type }}" class="muted" style="font-size: 22rpx;"> · {{ r.truck_type }} 米车</text></text></view>
     <view wx:if="{{ r.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ r.weight_spec }}</text></view>
     <view wx:if="{{ r.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ r.pack_size }} 枚/箱</text></view>
     <view wx:if="{{ r.shell_quality }}" class="kv"><text class="muted">蛋壳质量</text><text>{{ r.shell_quality }}</text></view>

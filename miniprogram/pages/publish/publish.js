@@ -96,10 +96,9 @@ Page({
       egg_color: '红壳',
       weight_min: '', weight_max: '',
       pack_size: '',
-      shell_quality: '',
       yolk_color: '', yolk_shade: '',
-      defect_rate: '', defect_note: '',
-      freshness_days: 3, quantity: '', unit_size: '车', start_price: '',
+      defect_rate: '0.2', defect_note: '',
+      freshness_days: 3, truck_count: 1, truck_type: '', quantity: '', unit_size: '车', start_price: '',
       min_increment: 1, duration_hours: 1, description: '',
     },
     photos: [],
@@ -233,14 +232,15 @@ Page({
           'form.weight_min': minW,
           'form.weight_max': maxW,
           'form.pack_size': ps,
-          'form.shell_quality': r.shell_quality || '',
           'form.yolk_color': r.yolk_color || '',
           'form.yolk_shade': r.yolk_shade || '',
-          'form.defect_rate': r.defect_rate != null ? String(r.defect_rate) : '',
+          'form.defect_rate': r.defect_rate != null ? String(r.defect_rate) : '0.2',
           'form.defect_note': r.defect_note || '',
           'form.freshness_days': r.freshness_days || 3,
-          'form.quantity': r.quantity || '',
-          truckIndex: TRUCK_PRESETS.findIndex(t => Number(t.value) === Number(r.quantity)),
+          'form.quantity': r.quantity || '1',
+          'form.truck_count': Number(r.quantity) || 1,
+          'form.truck_type': r.truck_type || '',
+          truckIndex: r.truck_type ? TRUCK_PRESETS.findIndex(t => Number(t.value) === Number(r.truck_type)) : -1,
           'form.unit_size': r.unit_size || '车',
           'form.start_price': r.start_price || '',
           'form.min_increment': r.min_increment || 1,
@@ -308,25 +308,27 @@ Page({
     const key = e.currentTarget.dataset.k;
     if (!key) return;
     this.setData({ ['form.' + key]: e.detail.value });
-    // 数量变化 → 保证金金额随之变化
-    if (key === 'quantity') {
+    if (key === 'truck_count') {
+      // 多少车变 → 同步 quantity (整数车数) → 保证金金额随之变化
+      const n = Math.max(1, parseInt(e.detail.value, 10) || 0);
+      this.setData({ 'form.quantity': String(n) });
       clearTimeout(this._qtyTimer);
       this._qtyTimer = setTimeout(() => this.refreshDepositStatus(), 300);
     }
   },
 
-  pickTruck(e) {
-    this.setData({ 'form.quantity': String(e.currentTarget.dataset.v) });
-    this.refreshDepositStatus();
-  },
-  // 数量 picker 选择车型 → 同步 form.quantity 为车长数字
+  // 车型 picker 选择 → 同步 form.truck_type 为车长（米数）
   pickTruckPicker(e) {
     const idx = Number(e.detail.value);
     const t = TRUCK_PRESETS[idx];
     if (!t) return;
+    // 选车型时若没填多少车，默认 1
+    const count = this.data.form.truck_count || 1;
     this.setData({
       truckIndex: idx,
-      'form.quantity': String(t.value),
+      'form.truck_type': String(t.value),
+      'form.truck_count': count,
+      'form.quantity': String(count),
     });
     this.refreshDepositStatus();
   },
@@ -409,7 +411,8 @@ Page({
         defect_rate: f.defect_rate !== '' ? Number(f.defect_rate) : null,
         defect_note: f.defect_note || null,
         freshness_days: Number(f.freshness_days) || null,
-        quantity: Number(f.quantity),
+        quantity: Math.max(1, parseInt(f.truck_count, 10) || Number(f.quantity) || 1),
+        truck_type: f.truck_type || null,
         start_price: Number(f.start_price),
         min_increment: Number(f.min_increment),
         duration_hours: Number(f.duration_hours),
@@ -423,6 +426,8 @@ Page({
       delete payload.farm_size_wan;
       delete payload.weight_min;
       delete payload.weight_max;
+      delete payload.truck_count;
+      delete payload.shell_quality;
       await api.post('/resources', payload);
       wx.showToast({ title: '发布成功' });
       setTimeout(() => wx.navigateBack(), 500);

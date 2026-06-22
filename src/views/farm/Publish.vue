@@ -29,8 +29,8 @@
         <template #input>
           <van-radio-group v-model="form.duration_hours" direction="horizontal">
             <van-radio :name="0.5">30 分钟</van-radio>
-            <van-radio :name="1">1 小时</van-radio>
-            <van-radio :name="1.5">1 小时半</van-radio>
+            <van-radio :name="1">60 分钟</van-radio>
+            <van-radio :name="1.5">90 分钟</van-radio>
           </van-radio-group>
         </template>
       </van-field>

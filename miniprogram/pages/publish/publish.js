@@ -100,7 +100,7 @@ Page({
       yolk_color: '', yolk_shade: '',
       defect_rate: '', defect_note: '',
       freshness_days: 3, quantity: '', unit_size: '车', start_price: '',
-      min_increment: 1, duration_hours: 2, description: '',
+      min_increment: 1, duration_hours: 1, description: '',
     },
     photos: [],
     video: '',

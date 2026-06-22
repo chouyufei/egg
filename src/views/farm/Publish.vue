@@ -25,12 +25,12 @@
     <div class="card" style="margin: 12px;">
       <van-field v-model.number="form.start_price" type="number" label="起报价(¥)" placeholder="如 8500" />
       <van-field v-model.number="form.min_increment" type="number" label="加价幅度" placeholder="≥ 2" />
-      <van-field name="duration_hours" label="报价时长">
+      <van-field name="duration_hours" label="订单有效期">
         <template #input>
           <van-radio-group v-model="form.duration_hours" direction="horizontal">
+            <van-radio :name="0.5">30 分钟</van-radio>
             <van-radio :name="1">1 小时</van-radio>
-            <van-radio :name="2">2 小时</van-radio>
-            <van-radio :name="3">3 小时</van-radio>
+            <van-radio :name="1.5">1 小时半</van-radio>
           </van-radio-group>
         </template>
       </van-field>
@@ -61,7 +61,7 @@ const photosText = ref('https://images.unsplash.com/photo-1582722872445-44dc5f7e
 const form = reactive({
   title: '', region: '', chicken_breed: '', farm_size: null, egg_color: '红壳',
   weight_spec: '', shell_quality: '', freshness_days: 3, quantity: null,
-  start_price: null, min_increment: 2, duration_hours: 2, description: '',
+  start_price: null, min_increment: 2, duration_hours: 1, description: '',
 });
 
 async function submit() {

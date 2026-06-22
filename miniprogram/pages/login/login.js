@@ -14,7 +14,14 @@ Page({
   toggleAgree() { this.setData({ agreed: !this.data.agreed }); },
   openAgreement() { wx.navigateTo({ url: '/pages/agreement/agreement' }); },
   openPrivacy()   { wx.navigateTo({ url: '/pages/privacy/privacy' }); },
-  onLoad() { this.loadModes(); },
+  onLoad() {
+    // 已登录的用户直接进首页，不要每次启动都看到登录页 + 再勾一遍协议
+    if (app.globalData.token || wx.getStorageSync('token')) {
+      wx.reLaunch({ url: '/pages/index/index' });
+      return;
+    }
+    this.loadModes();
+  },
 
   async loadModes() {
     try { const m = await api.get('/auth/login-modes'); this.setData({ modes: m }); } catch (e) {}

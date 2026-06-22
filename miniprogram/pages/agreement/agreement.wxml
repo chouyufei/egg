@@ -45,7 +45,7 @@
     <view class="h2">十、联系我们</view>
     <view class="p">客服电话：186-7554-5968</view>
     <view class="p">客服邮箱：18675545968@163.com</view>
-    <view class="p">公司地址：湖北省武汉市江夏区</view>
+    <view class="p">公司地址：湖北省武汉市江夏区藏龙岛联享企业中心 G 栋 408</view>
   </block>
 
   <block wx:else>

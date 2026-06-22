@@ -9,7 +9,7 @@
   <view class="card">
     <view class="section-title" style="margin: 0 0 16rpx;">运营主体</view>
     <view class="kv"><text class="muted">公司名称</text><text>湖北省乘子农业科技有限公司</text></view>
-    <view class="kv"><text class="muted">统一社会信用代码</text><text class="small">9142010xxxxxxxxxxx</text></view>
+    <view class="kv"><text class="muted">统一社会信用代码</text><text class="small">91420115MACU7XUEX0</text></view>
     <view class="kv"><text class="muted">经营范围</text><text class="small">食用农产品销售 / 食品销售 / 平台技术服务</text></view>
     <view class="kv"><text class="muted">ICP 备案</text><text>鄂 ICP 备 2026027874 号-2X</text></view>
   </view>

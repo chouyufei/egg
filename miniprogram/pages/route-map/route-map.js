@@ -1,4 +1,4 @@
-const { distanceKm, formatDistance } = require('../../utils/location');
+const { distanceKm, formatDistance, chooseLocation } = require('../../utils/location');
 
 function safeDecode(s) {
   try { return decodeURIComponent(s || ''); } catch (e) { return s || ''; }
@@ -93,6 +93,47 @@ Page({
       longitude: this.data.me.lng,
       name: '我的位置',
       scale: 14,
+    });
+  },
+  // 用户在路线页直接换"我的位置"，重新计算距离 / 路径
+  async pickMyLoc() {
+    const loc = await chooseLocation();
+    if (!loc) return;
+    const dst = this.data.dst;
+    if (!dst) return;
+    const me = { lat: loc.lat, lng: loc.lng, name: loc.name || '我的位置', address: loc.address || '' };
+    const km = distanceKm(me.lat, me.lng, dst.lat, dst.lng);
+    this.setData({
+      me,
+      distText: formatDistance(km),
+      centerLat: (me.lat + dst.lat) / 2,
+      centerLng: (me.lng + dst.lng) / 2,
+      includePoints: [
+        { latitude: me.lat, longitude: me.lng },
+        { latitude: dst.lat, longitude: dst.lng },
+      ],
+      markers: [
+        {
+          id: 1, latitude: me.lat, longitude: me.lng,
+          iconPath: '', width: 40, height: 40,
+          callout: { content: me.name, display: 'ALWAYS', color: '#fff', bgColor: '#1c5bd8', padding: 6, borderRadius: 8, fontSize: 12, textAlign: 'center' },
+        },
+        {
+          id: 2, latitude: dst.lat, longitude: dst.lng,
+          iconPath: '', width: 40, height: 40,
+          callout: { content: dst.label, display: 'ALWAYS', color: '#fff', bgColor: '#ee0a24', padding: 6, borderRadius: 8, fontSize: 12, textAlign: 'center' },
+        },
+      ],
+      polyline: [{
+        points: [
+          { latitude: me.lat, longitude: me.lng },
+          { latitude: dst.lat, longitude: dst.lng },
+        ],
+        color: '#f6b821',
+        width: 6,
+        dottedLine: true,
+        arrowLine: true,
+      }],
     });
   },
   backToOrder() {

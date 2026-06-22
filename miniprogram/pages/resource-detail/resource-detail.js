@@ -18,7 +18,7 @@ Page({
     distText: '', distNear: false, distFar: false,
     reviewMode: false,
     // 还价弹窗
-    showHaggle: false, showFreight: false,
+    showHaggle: false,
     haggleVal: 0, haggleMin: 0, haggleMax: 0, haggleReasonable: true,
     priceUnit: '箱',
   },
@@ -194,9 +194,7 @@ Page({
     this.setData({ showHaggle: false });
   },
 
-  // 运费说明 / 留言 / 电话
-  showFreight() { this.setData({ showFreight: true }); },
-  closeFreight() { this.setData({ showFreight: false }); },
+  // 留言 / 电话
   callPhone() {
     const phone = this.data.r && this.data.r.farm && this.data.r.farm.phone;
     if (!phone || /^wx_/i.test(phone)) {
@@ -279,14 +277,20 @@ Page({
 
   openRouteMap() {
     const r = this.data.r;
-    console.log('[openRouteMap] _myLoc=', this._myLoc, 'r.lat=', r && r.lat, 'r.lng=', r && r.lng);
     if (!r) return wx.showToast({ title: '资源未加载', icon: 'none' });
     if (r.lat == null || r.lng == null) {
       return wx.showToast({ title: '该货源未登记位置，无法显示路线', icon: 'none', duration: 2500 });
     }
-    // 没拿到我的位置时也允许进地图：用户在地图页可以看到货源位置 + 拉起原生导航
-    const myLat = (this._myLoc && this._myLoc.lat) || r.lat;
-    const myLng = (this._myLoc && this._myLoc.lng) || r.lng;
+    // 「我的位置」优先级：首页自选地址 > 当前 GPS > 货源点兜底
+    const custom = wx.getStorageSync('customLoc');
+    let myLat, myLng;
+    if (custom && Number.isFinite(custom.lat) && Number.isFinite(custom.lng)) {
+      myLat = custom.lat; myLng = custom.lng;
+    } else if (this._myLoc) {
+      myLat = this._myLoc.lat; myLng = this._myLoc.lng;
+    } else {
+      myLat = r.lat; myLng = r.lng;
+    }
     const label = (r.farm && r.farm.name) || r.title || '货源地';
     const addr = r.region || '';
     const q = `?mLat=${myLat}&mLng=${myLng}` +

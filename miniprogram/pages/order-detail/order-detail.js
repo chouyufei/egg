@@ -63,10 +63,17 @@ Page({
 
   openRouteMap() {
     const dst = this._otherPoint(this.data.order);
-    console.log('[openRouteMap] _myLoc=', this._myLoc, 'dst=', dst);
     if (!dst) return wx.showToast({ title: '对方未登记位置，无法显示路线', icon: 'none', duration: 2500 });
-    const myLat = (this._myLoc && this._myLoc.lat) || dst.lat;
-    const myLng = (this._myLoc && this._myLoc.lng) || dst.lng;
+    // 「我的位置」优先级：首页自选地址 > 当前 GPS > 对方点兜底
+    const custom = wx.getStorageSync('customLoc');
+    let myLat, myLng;
+    if (custom && Number.isFinite(custom.lat) && Number.isFinite(custom.lng)) {
+      myLat = custom.lat; myLng = custom.lng;
+    } else if (this._myLoc) {
+      myLat = this._myLoc.lat; myLng = this._myLoc.lng;
+    } else {
+      myLat = dst.lat; myLng = dst.lng;
+    }
     const q = `?mLat=${myLat}&mLng=${myLng}` +
               `&dLat=${dst.lat}&dLng=${dst.lng}` +
               `&dLabel=${encodeURIComponent(dst.label)}` +

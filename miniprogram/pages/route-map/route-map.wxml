@@ -16,6 +16,7 @@
         <view class="info-title">{{ me.name }}</view>
         <view wx:if="{{ me.address }}" class="info-sub muted">{{ me.address }}</view>
       </view>
+      <text class="link" style="font-size: 22rpx;" bindtap="pickMyLoc">更换 ›</text>
     </view>
     <view class="dist-line">
       <view class="dist-dot"></view>

@@ -3,8 +3,8 @@ const app = getApp();
 
 const DEFAULT_RULES = {
   min_amount: 1,
-  processing_hours: 24,
-  arrival_hours: 72,
+  processing_hours: 1,
+  arrival_hours: 2,
   fee_pct: 0,
   window: '工作日 09:00-18:00',
   methods: {

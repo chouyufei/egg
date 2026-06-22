@@ -14,9 +14,6 @@ const CATEGORIES = [
   { value: '白壳', icon: '⚪', label: '白壳蛋' },   // 京白 / 海兰白 / 神丹六号 / 上海梨园
 ];
 
-const PROVINCES_DEFAULT = ['北京', '山东', '河南', '河北', '江苏', '上海', '广东'];
-
-// 全部省份 / 直辖市 / 自治区
 const PROVINCES_ALL = [
   '北京', '天津', '上海', '重庆',
   '河北', '山西', '辽宁', '吉林', '黑龙江',
@@ -25,23 +22,6 @@ const PROVINCES_ALL = [
   '四川', '贵州', '云南', '陕西', '甘肃', '青海',
   '广西', '内蒙古', '宁夏', '新疆', '西藏',
 ];
-
-function inferNearbyProvinces(userRegion) {
-  if (!userRegion) return PROVINCES_DEFAULT;
-  const map = {
-    '山东': ['山东', '河北', '河南', '江苏', '北京', '天津'],
-    '北京': ['北京', '天津', '河北', '山东', '河南'],
-    '河南': ['河南', '湖北', '山东', '河北', '安徽'],
-    '河北': ['河北', '北京', '山东', '天津', '山西'],
-    '上海': ['上海', '江苏', '浙江', '安徽'],
-    '广东': ['广东', '广西', '湖南', '江西', '福建'],
-    '湖北': ['湖北', '河南', '湖南', '安徽', '江西'],
-  };
-  for (const k of Object.keys(map)) {
-    if (userRegion.indexOf(k) >= 0) return map[k];
-  }
-  return PROVINCES_DEFAULT;
-}
 
 function formatFilterText(color, province) {
   const c = color || '全部类目';
@@ -67,7 +47,6 @@ Page({
     mineSupplies: [],    // 我发的货源
 
     categories: CATEGORIES,
-    provinces: PROVINCES_DEFAULT,    // 推荐（基于用户所在地推断的相邻省份）
     allProvinces: PROVINCES_ALL,     // 全部省份 / 直辖市 / 自治区
 
     activeColor: '',
@@ -89,10 +68,7 @@ Page({
   onLoad() {
     const user = app.globalData.user || wx.getStorageSync('user');
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
-    this.setData({
-      user,
-      provinces: inferNearbyProvinces(user.region),
-    });
+    this.setData({ user });
   },
 
   async onShow() {

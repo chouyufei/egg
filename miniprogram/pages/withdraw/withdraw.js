@@ -6,7 +6,7 @@ const DEFAULT_RULES = {
   processing_hours: 1,
   arrival_hours: 2,
   fee_pct: 0,
-  window: '工作日 09:00-18:00',
+  window: '7×24 小时',
   methods: {
     wechat: { max_per_request: 200, max_daily_count: 10, max_daily_amount: 2000 },
     bank: { max_per_request: 5000, max_daily_count: 3, max_daily_amount: 5000 },
@@ -61,14 +61,45 @@ Page({
     }
     this.setData({ submitting: true });
     try {
-      await api.post('/wallet/withdrawals', {
+      const res = await api.post('/wallet/withdrawals', {
         amount: amt,
         method: this.data.method,
         account_name: this.data.account_name,
         account_no: this.data.account_no,
         bank_name: this.data.bank_name,
       });
-      wx.showToast({ title: '已提交，等待审核', icon: 'success' });
+      const w = res.withdrawal || {};
+      // 微信零钱 + 拿到 package_info → 直接拉起微信"商家转账到零钱"确认收款窗口
+      if (this.data.method === 'wechat' && w.package_info && wx.requestMerchantTransfer) {
+        let cfg;
+        try { cfg = await api.get('/wallet/wechat-pay-config'); } catch (err) {}
+        if (cfg && cfg.appid && cfg.mch_id) {
+          wx.requestMerchantTransfer({
+            mchId: cfg.mch_id,
+            appId: cfg.appid,
+            package: w.package_info,
+            success: async () => {
+              try {
+                await api.post('/wallet/withdrawals/' + w.id + '/confirm-received');
+                wx.showToast({ title: '已到账', icon: 'success' });
+                setTimeout(() => wx.navigateBack(), 800);
+              } catch (err) {
+                wx.showToast({ title: err.message || '回执失败', icon: 'none' });
+              }
+            },
+            fail: () => {
+              wx.showToast({ title: '可在「提现记录」点【确认收款】完成到账', icon: 'none', duration: 3000 });
+              setTimeout(() => wx.navigateBack(), 1500);
+            },
+          });
+          return;
+        }
+      }
+      // 微信零钱已直接 paid / 银行卡需人工 / demo：提示并返回
+      const msg = w.status === 'paid' ? '已到账'
+        : this.data.method === 'bank' ? '已提交，2 小时内到账'
+        : '已提交';
+      wx.showToast({ title: msg, icon: 'success' });
       setTimeout(() => wx.navigateBack(), 800);
     } catch (e) {} finally { this.setData({ submitting: false }); }
   },

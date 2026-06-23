@@ -242,6 +242,10 @@ Page({
           'form.truck_count': Number(r.quantity) || 1,
           'form.truck_type': r.truck_type || '',
           truckIndex: r.truck_type ? TRUCK_PRESETS.findIndex(t => Number(t.value) === Number(r.truck_type)) : -1,
+          totalBoxes: (function () {
+            const i = r.truck_type ? TRUCK_PRESETS.findIndex(t => Number(t.value) === Number(r.truck_type)) : -1;
+            return i >= 0 ? TRUCK_PRESETS[i].boxes * (Number(r.quantity) || 1) : 0;
+          })(),
           'form.unit_size': r.unit_size || '车',
           'form.start_price': r.start_price || '',
           'form.min_increment': r.min_increment || 1,

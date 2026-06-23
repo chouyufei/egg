@@ -300,6 +300,24 @@ Page({
     wx.navigateTo({ url: '/pages/publish/publish?from=' + this.data.id });
   },
 
+  // 删除（仅未成交 / 已取消的资源由发布方主动移除）
+  deleteRes() {
+    wx.showModal({
+      title: '删除货源',
+      content: '删除后将无法恢复，且在"我的参与/我的发布"列表中不再出现。确认删除？',
+      confirmText: '确认删除',
+      confirmColor: '#ee0a24',
+      success: async (r) => {
+        if (!r.confirm) return;
+        try {
+          await api.post('/resources/' + this.data.id + '/delete');
+          wx.showToast({ title: '已删除', icon: 'success' });
+          setTimeout(() => wx.navigateBack(), 600);
+        } catch (e) {}
+      },
+    });
+  },
+
   endNow() {
     const price = this.data.r.current_price;
     wx.showModal({

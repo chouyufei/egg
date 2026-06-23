@@ -70,40 +70,47 @@
   </view>
 
   <!-- 已通过 / 审核中：只读详情 -->
-  <view wx:if="{{ !canEdit && showDetail }}" class="card">
-    <view class="kv"><text class="muted">鸡场名称</text><text>{{ form.name || '—' }}</text></view>
-    <view class="kv"><text class="muted">联系人</text><text>{{ form.contact_name || '—' }}</text></view>
-    <view class="kv"><text class="muted">联系电话</text><text>{{ form.contact_phone || '—' }}</text></view>
-    <view class="kv"><text class="muted">所在省份</text><text>{{ provinces[provinceIndex] || '—' }}</text></view>
-    <view class="kv"><text class="muted">详细地址</text><text>{{ form.address || '—' }}</text></view>
-    <view class="kv"><text class="muted">养殖规模</text><text>{{ form.farm_size_int ? form.farm_size_int + ' 只' : '—' }}</text></view>
-    <view wx:if="{{ form.daily_output }}" class="kv"><text class="muted">日产量</text><text>{{ form.daily_output }} 箱/天</text></view>
-    <view class="kv"><text class="muted">主营蛋品</text><text>{{ form.main_products || '—' }}</text></view>
-    <view class="kv"><text class="muted">营业执照号</text><text>{{ form.business_license || '—' }}</text></view>
+  <view wx:if="{{ !canEdit && showDetail }}" class="card qf-detail-card">
+    <view class="qf-section-title">📋 基础信息</view>
+    <view class="qf-kv"><text class="qf-k">鸡场名称</text><text class="qf-v">{{ form.name || '—' }}</text></view>
+    <view class="qf-kv"><text class="qf-k">联系人</text><text class="qf-v">{{ form.contact_name || '—' }}</text></view>
+    <view class="qf-kv"><text class="qf-k">联系电话</text><text class="qf-v">{{ form.contact_phone || '—' }}</text></view>
+    <view class="qf-kv"><text class="qf-k">所在省份</text><text class="qf-v">{{ provinces[provinceIndex] || '—' }}</text></view>
+    <view class="qf-kv"><text class="qf-k">详细地址</text><text class="qf-v">{{ form.address || '—' }}</text></view>
 
-    <view wx:if="{{ form.license_photos.length }}" class="upload-block">
-      <view class="upload-title">营业执照照片</view>
+    <view class="qf-section-title mt-16">🐔 养殖信息</view>
+    <view class="qf-kv"><text class="qf-k">养殖规模</text><text class="qf-v">{{ form.farm_size_int ? form.farm_size_int + ' 只' : '—' }}</text></view>
+    <view wx:if="{{ form.daily_output }}" class="qf-kv"><text class="qf-k">日产量</text><text class="qf-v">{{ form.daily_output }} 箱/天</text></view>
+    <view class="qf-kv"><text class="qf-k">主营蛋品</text><text class="qf-v">{{ form.main_products || '—' }}</text></view>
+    <view class="qf-kv"><text class="qf-k">营业执照号</text><text class="qf-v">{{ form.business_license || '—' }}</text></view>
+
+    <view class="qf-section-title mt-16">📸 资质照片</view>
+    <view wx:if="{{ form.license_photos.length }}" class="qf-photos-block">
+      <view class="qf-photos-title">· 营业执照</view>
       <view class="upload-grid">
-        <view wx:for="{{ form.license_photos }}" wx:key="*this" class="upload-thumb">
+        <view wx:for="{{ form.license_photos }}" wx:key="*this" class="upload-thumb qf-thumb">
           <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.license_photos }}" data-url="{{ item }}" />
         </view>
       </view>
     </view>
-    <view wx:if="{{ form.farm_photos.length }}" class="upload-block">
-      <view class="upload-title">鸡场实景照</view>
+    <view wx:if="{{ form.farm_photos.length }}" class="qf-photos-block">
+      <view class="qf-photos-title">· 鸡场实景</view>
       <view class="upload-grid">
-        <view wx:for="{{ form.farm_photos }}" wx:key="*this" class="upload-thumb">
+        <view wx:for="{{ form.farm_photos }}" wx:key="*this" class="upload-thumb qf-thumb">
           <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.farm_photos }}" data-url="{{ item }}" />
         </view>
       </view>
     </view>
-    <view wx:if="{{ form.quarantine_photos.length }}" class="upload-block">
-      <view class="upload-title">检疫合格证 / 其他资质</view>
+    <view wx:if="{{ form.quarantine_photos.length }}" class="qf-photos-block">
+      <view class="qf-photos-title">· 检疫合格证 / 其他资质</view>
       <view class="upload-grid">
-        <view wx:for="{{ form.quarantine_photos }}" wx:key="*this" class="upload-thumb">
+        <view wx:for="{{ form.quarantine_photos }}" wx:key="*this" class="upload-thumb qf-thumb">
           <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.quarantine_photos }}" data-url="{{ item }}" />
         </view>
       </view>
+    </view>
+    <view wx:if="{{ !form.license_photos.length && !form.farm_photos.length && !form.quarantine_photos.length }}" class="muted text-c" style="padding: 32rpx 0; font-size: 24rpx;">
+      无已上传图片
     </view>
   </view>
 

@@ -21,7 +21,15 @@ Page({
     showDetail: false,     // 已通过 / 审核中时，是否展开已提交资料的只读视图
     loading: false,
   },
-  onLoad() {
+  async onLoad() {
+    // 拉一次最新 user，避免 license_photos 等字段在登录响应里缺失
+    try {
+      const me = await api.get('/auth/me');
+      if (me && me.user) {
+        app.globalData.user = me.user;
+        wx.setStorageSync('user', me.user);
+      }
+    } catch (e) {}
     const u = app.globalData.user;
     if (!u) return;
     let idx = 0;

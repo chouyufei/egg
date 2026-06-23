@@ -117,8 +117,9 @@
     </button>
   </view>
 
-  <!-- 未成交 / 已取消 + 发布者：可快速重新上架 -->
-  <view wx:if="{{ isMine && (r.status === 'failed' || r.status === 'cancelled') }}" class="fixed-bottom-bar">
+  <!-- 未成交 / 已取消 + 发布者：可快速重新上架 / 删除 -->
+  <view wx:if="{{ isMine && (r.status === 'failed' || r.status === 'cancelled') }}" class="fixed-bottom-bar" style="gap: 16rpx;">
+    <button class="btn-plain" style="flex: 1; padding: 14rpx 0; color: #ee0a24; border-color: #ee0a24;" bindtap="deleteRes">🗑 删除</button>
     <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="relist">↻ 重新上架</button>
   </view>
 

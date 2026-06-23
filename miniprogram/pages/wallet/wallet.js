@@ -1,8 +1,11 @@
+const { defaultShare } = require('../../utils/share');
 const api = require('../../utils/api');
 const { formatTime } = require('../../utils/format');
 const app = getApp();
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: {
     balance: 0, locked: 0, available: 0,
     transactions: [],

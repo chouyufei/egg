@@ -1,9 +1,12 @@
+const { defaultShare } = require('../../utils/share');
 const api = require('../../utils/api');
 const { formatTime, statusLabel, statusTag } = require('../../utils/format');
 const { getLocation, distanceKm, formatDistance } = require('../../utils/location');
 const app = getApp();
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: {
     id: 0, order: null, chats: [], msg: '',
     user: null,

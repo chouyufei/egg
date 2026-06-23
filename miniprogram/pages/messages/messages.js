@@ -1,3 +1,4 @@
+const { defaultShare } = require('../../utils/share');
 const api = require('../../utils/api');
 const { formatTime } = require('../../utils/format');
 
@@ -11,6 +12,8 @@ const ICONS = {
 };
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: { list: [] },
   async onShow() {
     try {

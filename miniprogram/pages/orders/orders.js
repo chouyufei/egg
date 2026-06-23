@@ -1,8 +1,11 @@
 const api = require('../../utils/api');
 const { formatTime, statusLabel, statusTag } = require('../../utils/format');
+const { defaultShare } = require('../../utils/share');
 const app = getApp();
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: { orders: [], otherLabel: '' },
   onShow() { this.load(); },
   async onPullDownRefresh() { await this.load(); wx.stopPullDownRefresh(); },

@@ -1,8 +1,11 @@
 const api = require('../../utils/api');
 const { statusLabel, statusTag } = require('../../utils/format');
+const { defaultShare } = require('../../utils/share');
 const app = getApp();
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: {
     user: null, unread: 0,
     licText: '', licCls: '', depositText: '未缴纳 →',

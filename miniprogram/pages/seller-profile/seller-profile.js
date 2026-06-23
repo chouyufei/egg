@@ -1,3 +1,4 @@
+const { defaultShare } = require('../../utils/share');
 const api = require('../../utils/api');
 
 const LIC_TEXT = {
@@ -8,6 +9,8 @@ const LIC_TEXT = {
 };
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: {
     id: 0,
     seller: null,

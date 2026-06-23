@@ -1,3 +1,4 @@
+const { defaultShare } = require('../../utils/share');
 const CATEGORIES = [
   { value: '',     icon: '🥚', label: '全部',   tip: '不限蛋色' },
   { value: '粉壳', icon: '🤎', label: '粉壳蛋', tip: '海兰系列 / 罗曼系列 / 粉六 / 大午金风' },
@@ -8,6 +9,8 @@ const CATEGORIES = [
 ];
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: { categories: CATEGORIES, activeColor: '' },
   onLoad(opts) {
     this.setData({ activeColor: opts.current || '' });

@@ -1,7 +1,10 @@
+const { defaultShare } = require('../../utils/share');
 const api = require('../../utils/api');
 const app = getApp();
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: {
     user: null, isFarm: false,
     sub: 'active',

@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const { getAndReportLocation, getLocation, chooseLocation } = require('../../utils/location');
+const { defaultShare } = require('../../utils/share');
 const app = getApp();
 
 const CUSTOM_LOC_KEY = 'customLoc';   // 持久化自选位置
@@ -30,6 +31,8 @@ function formatFilterText(color, province) {
 }
 
 Page({
+  onShareAppMessage() { return defaultShare(); },
+  onShareTimeline()   { return defaultShare(); },
   data: {
     user: null,
     unread: 0,

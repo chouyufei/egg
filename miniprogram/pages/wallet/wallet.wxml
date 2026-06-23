@@ -67,7 +67,7 @@
           <view class="muted" style="font-size: 22rpx;">申请于 {{ item.time_str }}</view>
           <view wx:if="{{ item.out_trade_no }}" class="muted" style="font-size: 22rpx;">打款流水：{{ item.out_trade_no }}</view>
           <view wx:if="{{ item.status === 'paid' }}" class="muted" style="font-size: 22rpx; color: #06883b;">💡 微信零钱实时到账；银行卡通常 2 小时内到账</view>
-          <view wx:if="{{ item.failure_reason }}" class="muted" style="font-size: 22rpx; color: #ee0a24;">{{ item.failure_reason }}</view>
+          <view wx:if="{{ item.failure_reason && item.status !== 'paid' }}" class="muted" style="font-size: 22rpx; color: #ee0a24;">{{ item.failure_reason }}</view>
         </view>
         <view style="text-align: right;">
           <text class="tag {{ item.status_cls }}">{{ item.status_label }}</text>

@@ -95,10 +95,9 @@ Page({
           return;
         }
       }
-      // 微信零钱已直接 paid / 银行卡需人工 / demo：提示并返回
-      const msg = w.status === 'paid' ? '已到账'
-        : this.data.method === 'bank' ? '已提交，2 小时内到账'
-        : '已提交';
+      // 微信零钱（无 package_info）→ 一律视为已到账；银行卡 → 2 小时内到账
+      const msg = this.data.method === 'wechat' ? '已到账'
+        : '已提交，2 小时内到账';
       wx.showToast({ title: msg, icon: 'success' });
       setTimeout(() => wx.navigateBack(), 800);
     } catch (e) {} finally { this.setData({ submitting: false }); }

@@ -88,11 +88,11 @@
 
   <view style="height: 160rpx;"></view>
 
-  <!-- 底部操作栏：我要还价 / 电话联系 -->
+  <!-- 底部操作栏：我要出价 / 电话联系 -->
   <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="bid-toolbar">
     <view class="tb-action tb-action-y" bindtap="openHaggle">
       <view class="tb-action-icon">💰</view>
-      <view class="tb-action-text">我要{{ isSupply ? '还价' : '应标' }}</view>
+      <view class="tb-action-text">我要出价</view>
     </view>
     <view class="tb-action tb-action-g" bindtap="callPhone">
       <view class="tb-action-icon">📞</view>
@@ -127,12 +127,12 @@
   </view>
 </view>
 
-<!-- 我要还价弹窗 -->
+<!-- 我要出价弹窗 -->
 <view wx:if="{{ showHaggle }}" class="modal-mask" bindtap="closeHaggle">
   <view class="haggle-sheet" catchtap="noop">
     <view class="hg-handle"></view>
     <view class="hg-head">
-      <text class="hg-title">我要{{ isSupply ? '还价' : '应标' }}</text>
+      <text class="hg-title">我要出价</text>
       <text class="hg-close" bindtap="closeHaggle">×</text>
     </view>
 

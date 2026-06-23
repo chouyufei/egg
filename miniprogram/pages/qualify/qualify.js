@@ -18,6 +18,7 @@ Page({
     statusText: '未提交', statusCls: 'tag-d',
     licenseStatus: '',     // approved / pending / rejected / none
     canEdit: true,         // 仅 rejected / none / 未提交 时可填表 + 提交
+    showDetail: false,     // 已通过 / 审核中时，是否展开已提交资料的只读视图
     loading: false,
   },
   onLoad() {
@@ -144,6 +145,7 @@ Page({
       });
     } catch (e) {} finally { this.setData({ loading: false }); }
   },
+  toggleDetail() { this.setData({ showDetail: !this.data.showDetail }); },
 });
 
 function safeParse(s) {

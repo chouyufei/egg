@@ -16,6 +16,8 @@ Page({
     },
     provinces: PROVINCES, provinceIndex: 0,
     statusText: '未提交', statusCls: 'tag-d',
+    licenseStatus: '',     // approved / pending / rejected / none
+    canEdit: true,         // 仅 rejected / none / 未提交 时可填表 + 提交
     loading: false,
   },
   onLoad() {
@@ -40,6 +42,8 @@ Page({
       'form.quarantine_photos': safeParse(u.quarantine_photos),
       statusText: statusLabel(u.license_status),
       statusCls: statusTag(u.license_status),
+      licenseStatus: u.license_status || '',
+      canEdit: !['approved', 'pending'].includes(u.license_status),
     });
   },
   onShow() {
@@ -48,6 +52,8 @@ Page({
     this.setData({
       statusText: statusLabel(u.license_status),
       statusCls: statusTag(u.license_status),
+      licenseStatus: u.license_status || '',
+      canEdit: !['approved', 'pending'].includes(u.license_status),
     });
   },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
@@ -133,6 +139,8 @@ Page({
       this.setData({
         statusText: statusLabel(me.user.license_status),
         statusCls: statusTag(me.user.license_status),
+        licenseStatus: me.user.license_status || '',
+        canEdit: !['approved', 'pending'].includes(me.user.license_status),
       });
     } catch (e) {} finally { this.setData({ loading: false }); }
   },

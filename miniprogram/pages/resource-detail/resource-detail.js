@@ -198,19 +198,9 @@ Page({
   callPhone() {
     const phone = this.data.r && this.data.r.farm && this.data.r.farm.phone;
     if (!phone || /^wx_/i.test(phone)) {
-      return wx.showToast({ title: '对方未登记电话，请用"留言"联系', icon: 'none', duration: 2500 });
+      return wx.showToast({ title: '对方未登记电话，请联系平台客服', icon: 'none', duration: 2500 });
     }
     wx.makePhoneCall({ phoneNumber: phone, fail: () => {} });
-  },
-  callOther() {
-    // 用微信客服会话作为留言入口
-    wx.showActionSheet({
-      itemList: ['📞 电话联系卖方', '📲 联系平台客服'],
-      success: (r) => {
-        if (r.tapIndex === 0) this.callPhone();
-        else wx.openCustomerServiceChat && wx.openCustomerServiceChat({ extInfo: { url: '' }, corpId: '', fail: () => wx.showToast({ title: '请在订单详情联系客服', icon: 'none' }) });
-      },
-    });
   },
 
   async placeBid() {

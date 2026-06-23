@@ -139,6 +139,9 @@
       <input type="number" value="{{ form.truck_count }}" data-k="truck_count" bindinput="onInput" bindblur="onInput" placeholder="如 1" style="width: 160rpx;" />
       <text class="muted" style="margin-left: 8rpx;">车</text>
     </view>
+    <view wx:if="{{ truckIndex >= 0 && totalBoxes }}" class="hint-row">
+      💡 约 {{ totalBoxes }} 箱（{{ truckRangeLabels[truckIndex] }} × {{ form.truck_count }} 车）
+    </view>
   </view>
 
   <view class="card">

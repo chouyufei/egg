@@ -88,12 +88,8 @@
 
   <view style="height: 160rpx;"></view>
 
-  <!-- 底部操作栏：留言 / 我要还价 / 电话联系 -->
+  <!-- 底部操作栏：我要还价 / 电话联系 -->
   <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="bid-toolbar">
-    <view class="tb-icon" bindtap="callOther">
-      <view class="tb-icon-emoji">💬</view>
-      <view class="tb-icon-text">留言</view>
-    </view>
     <view class="tb-action tb-action-y" bindtap="openHaggle">
       <view class="tb-action-icon">💰</view>
       <view class="tb-action-text">我要{{ isSupply ? '还价' : '应标' }}</view>

@@ -81,6 +81,7 @@ Page({
     truckPresets: TRUCK_PRESETS,
     truckRangeLabels: TRUCK_PRESETS.map(t => `${t.value} m 车  ≈ ${t.boxes} 箱`),
     truckIndex: -1,
+    totalBoxes: 0,            // 车型 × 多少车 = 估算总箱数
     // 当前蛋色对应的鸡种列表 + picker 索引
     breedOptions: BREEDS_BY_COLOR['红壳'],
     breedIndex: -1,                    // -1 表示未选；>= 0 是 picker 索引
@@ -309,9 +310,10 @@ Page({
     if (!key) return;
     this.setData({ ['form.' + key]: e.detail.value });
     if (key === 'truck_count') {
-      // 多少车变 → 同步 quantity (整数车数) → 保证金金额随之变化
+      // 多少车变 → 同步 quantity (整数车数) → 保证金金额随之变化 + 重算箱数
       const n = Math.max(1, parseInt(e.detail.value, 10) || 0);
       this.setData({ 'form.quantity': String(n) });
+      this._recomputeBoxes(e.detail.value);
       clearTimeout(this._qtyTimer);
       this._qtyTimer = setTimeout(() => this.refreshDepositStatus(), 300);
     }
@@ -329,8 +331,16 @@ Page({
       'form.truck_type': String(t.value),
       'form.truck_count': count,
       'form.quantity': String(count),
+      totalBoxes: t.boxes * count,
     });
     this.refreshDepositStatus();
+  },
+  // 车长 × 车数 → 估算箱数（用 TRUCK_PRESETS.boxes 作为每车装箱数）
+  _recomputeBoxes(count) {
+    const t = TRUCK_PRESETS[this.data.truckIndex];
+    if (!t) return;
+    const n = Math.max(1, parseInt(count, 10) || 0);
+    this.setData({ totalBoxes: t.boxes * n });
   },
 
   async addPhoto() {

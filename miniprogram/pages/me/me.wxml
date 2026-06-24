@@ -1,21 +1,21 @@
 <view wx:if="{{ user }}">
   <view class="hero">
     <view class="row" style="gap: 24rpx;">
-      <view class="avatar">{{ user.role === 'farm' ? '🐔' : '🛒' }}</view>
+      <view class="avatar">🥚</view>
       <view class="flex-1">
         <view class="hero-title" bindtap="editName">
           {{ user.name }} <text class="hero-edit">✎</text>
         </view>
-        <view class="hero-sub">{{ roleText }} · {{ user.phone }}</view>
-        <view wx:if="{{ user.role === 'farm' }}" class="mt-8">
-          <text class="tag {{ licCls }}">{{ licText }}</text>
+        <view class="hero-sub">{{ user.phone }}</view>
+        <view class="mt-8">
+          <text class="tag {{ licCls }}">资质 {{ licText }}</text>
         </view>
       </view>
     </view>
   </view>
 
   <view class="card menu-card" style="margin: 32rpx 24rpx;">
-    <view wx:if="{{ user.role === 'farm' }}" class="menu-row" bindtap="goQualify">
+    <view class="menu-row" bindtap="goQualify">
       <text>📜 资质认证</text><text class="muted">{{ licText }} ›</text>
     </view>
     <view wx:if="{{ !reviewMode }}" class="menu-row" bindtap="goWallet">

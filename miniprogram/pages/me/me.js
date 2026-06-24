@@ -20,9 +20,9 @@ Page({
     if (!user) return;
     const roleMap = { farm: '养殖场', buyer: '采购商', admin: '管理员' };
     this.setData({
-      user, roleText: roleMap[user.role],
-      licText: statusLabel(user.license_status),
-      licCls: statusTag(user.license_status),
+      user,
+      licText: statusLabel(user.license_status || 'none'),
+      licCls: statusTag(user.license_status || 'none'),
     });
     try { const m = await api.get('/messages/unread-count'); this.setData({ unread: m.count || 0 }); } catch (e) {}
     try { const b = await api.get('/wallet/balance'); this.setData({ walletBalance: Number(b.balance || 0).toFixed(2) }); } catch (e) {}

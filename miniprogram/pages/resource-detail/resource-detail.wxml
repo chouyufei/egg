@@ -88,15 +88,11 @@
 
   <view style="height: 160rpx;"></view>
 
-  <!-- 底部操作栏：我要出价 / 电话联系 -->
+  <!-- 底部操作栏：我要出价 -->
   <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="bid-toolbar">
-    <view class="tb-action tb-action-y" bindtap="openHaggle">
+    <view class="tb-action tb-action-y" style="flex: 1;" bindtap="openHaggle">
       <view class="tb-action-icon">💰</view>
       <view class="tb-action-text">我要出价</view>
-    </view>
-    <view class="tb-action tb-action-g" bindtap="callPhone">
-      <view class="tb-action-icon">📞</view>
-      <view class="tb-action-text">电话联系</view>
     </view>
   </view>
 

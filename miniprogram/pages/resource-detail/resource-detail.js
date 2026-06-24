@@ -198,14 +198,6 @@ Page({
     this.setData({ showHaggle: false });
   },
 
-  // 留言 / 电话
-  callPhone() {
-    const phone = this.data.r && this.data.r.farm && this.data.r.farm.phone;
-    if (!phone || /^wx_/i.test(phone)) {
-      return wx.showToast({ title: '对方未登记电话，请联系平台客服', icon: 'none', duration: 2500 });
-    }
-    wx.makePhoneCall({ phoneNumber: phone, fail: () => {} });
-  },
 
   async placeBid() {
     if (!this.data.canBid) return wx.showToast({ title: this.data.blockReason, icon: 'none' });

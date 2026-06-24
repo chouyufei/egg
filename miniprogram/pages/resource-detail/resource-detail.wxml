@@ -137,7 +137,7 @@
       <text class="hg-close" bindtap="closeHaggle">×</text>
     </view>
 
-    <view class="hg-label">选择当前要还价的规格</view>
+    <view class="hg-label">选择当前要出价的规格</view>
     <view class="hg-spec">
       <view class="hg-spec-card on">
         <view class="hg-spec-name">{{ r.weight_spec || '默认规格' }}</view>

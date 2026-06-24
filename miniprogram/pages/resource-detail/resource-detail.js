@@ -8,7 +8,7 @@ const app = getApp();
 Page({
   data: {
     id: 0, r: null, bids: [], photos: [],
-    user: null, isMine: false,
+    user: null, isMine: false, needLogin: false,
     isSupply: true,
     kindLabel: '货源', kindCls: 'tag',
     canBid: false, blockReason: '',
@@ -82,8 +82,12 @@ Page({
         ? Number((resource.current_price + resource.min_increment).toFixed(2))
         : Number((resource.current_price - resource.min_increment).toFixed(2));
 
+      // 未登录访客（通过分享链接进入）：允许浏览，不允许出价；提示登录
+      const needLogin = !me;
       let canBid = false, blockReason = '';
-      if (resource.status !== 'auctioning') {
+      if (needLogin) {
+        blockReason = '登录后可参与报价 / 联系卖方';
+      } else if (resource.status !== 'auctioning') {
         blockReason = statusLabel(resource.status);
       } else if (isMine) {
         blockReason = '不能参与自己发布的报价';
@@ -125,7 +129,7 @@ Page({
         kindCls: isSupply ? 'tag' : 'tag-b',
         nextLimit,
         bidPrice: this.data.bidPrice || String(nextLimit),
-        isMine, canBid, blockReason,
+        isMine, canBid, blockReason, needLogin,
         statusLabel: statusLabel(resource.status),
         farmSizeText,
         distText, distNear, distFar,
@@ -298,6 +302,11 @@ Page({
 
   relist() {
     wx.navigateTo({ url: '/pages/publish/publish?from=' + this.data.id });
+  },
+
+  // 未登录访客点登录：去登录页，登录成功后返回首页（用户可重走分享路径）
+  goLogin() {
+    wx.redirectTo({ url: '/pages/login/login' });
   },
 
   // 删除（仅未成交 / 已取消的资源由发布方主动移除）

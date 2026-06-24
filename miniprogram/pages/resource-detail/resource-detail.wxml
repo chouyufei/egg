@@ -123,7 +123,12 @@
     <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="relist">↻ 重新上架</button>
   </view>
 
-  <view wx:if="{{ !canBid && !isMine }}" class="fixed-bottom-bar">
+  <!-- 未登录访客（分享进来）：信息可看，底部固定一条登录 CTA -->
+  <view wx:if="{{ needLogin }}" class="fixed-bottom-bar">
+    <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="goLogin">🔑 登录后参与报价 / 联系卖方</button>
+  </view>
+
+  <view wx:elif="{{ !canBid && !isMine }}" class="fixed-bottom-bar">
     <button class="btn-plain" style="flex: 1;" disabled>{{ blockReason }}</button>
   </view>
 </view>

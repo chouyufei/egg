@@ -122,7 +122,7 @@
     <view wx:if="{{ isSupply }}" class="hint-row">
       💡 次品率 = 裂纹蛋 + 脏蛋 + 破蛋 占总量的百分比，承诺该比例不超过填写值
     </view>
-    <view wx:if="{{ isSupply }}" class="input-row">
+    <view class="input-row">
       <view class="label">鲜度</view>
       <input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="如 3" style="width: 160rpx;" />
       <text class="muted" style="margin-left: 8rpx;">天内</text>

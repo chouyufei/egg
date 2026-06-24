@@ -1,10 +1,9 @@
 <view class="page-pad">
-  <view wx:for="{{ orders }}" wx:key="id" class="card" bindtap="open" data-id="{{ item.id }}">
-    <view class="row-between">
-      <view>
-        <text class="tag {{ item.sideCls }}" style="margin-right: 8rpx;">{{ item.sideLabel }}</text>
-        <text class="bold">订单 {{ item.order_no || ('#' + item.id) }}</text>
-      </view>
+  <view wx:for="{{ orders }}" wx:key="id" class="card order-card" bindtap="open" data-id="{{ item.id }}">
+    <!-- 顶部一行大色块标识：买 / 卖，整张卡左侧也描一条色边强化 -->
+    <view class="{{ item.sideCls }}">{{ item.sideLabel }}</view>
+    <view class="row-between mt-8">
+      <text class="bold">订单 {{ item.order_no || ('#' + item.id) }}</text>
       <text class="tag {{ item.statusCls }}">{{ item.statusText }}</text>
     </view>
     <view class="row mt-8" style="gap: 16rpx;">

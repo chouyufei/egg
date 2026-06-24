@@ -24,8 +24,9 @@ Page({
           statusText: statusLabel(o.status),
           statusCls: statusTag(o.status),
           timeText: formatTime(o.created_at),
-          sideLabel: isFarmSide ? '卖' : '买',
-          sideCls:   isFarmSide ? 'tag-g' : 'tag-b',
+          sideLabel:  isFarmSide ? '卖单 · 我的货源被采购' : '买单 · 我参与的采购',
+          sideShort:  isFarmSide ? '卖' : '买',
+          sideCls:    isFarmSide ? 'side-pill side-pill-sell' : 'side-pill side-pill-buy',
           otherLabel: isFarmSide ? '采购商' : '养殖场',
           otherName:  isFarmSide ? (o.buyer && o.buyer.name) : (o.farm && o.farm.name),
         };

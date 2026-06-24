@@ -56,9 +56,12 @@ async function ensureWalletForDeposit(actionLabel) {
     available = ds.balance && ds.balance.available || 0;
   } catch (e) { return false; }
 
-  if (available >= required) return true;
+  // 用分（整数）比较，避免浮点误差导致 1.00 显示"还差 0.00"
+  const reqCents = Math.round(Number(required) * 100);
+  const avlCents = Math.round(Number(available) * 100);
+  if (avlCents >= reqCents) return true;
 
-  const short = (required - available).toFixed(2);
+  const short = ((reqCents - avlCents) / 100).toFixed(2);
   const ok = await confirmModal({
     title: `${actionLabel}需冻结 ${required} 元保证金`,
     content: `当前钱包可用余额 ${available.toFixed(2)} 元，还差 ${short} 元。\n是否立即充值 ${short} 元到钱包？充值后会自动回到本页继续${actionLabel}。`,

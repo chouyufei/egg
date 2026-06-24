@@ -102,13 +102,13 @@
     </view>
 
     <!-- 蛋黄颜色：红心 / 黄心 / 双色 + 罗氏色号 -->
-    <view wx:if="{{ isSupply }}" class="input-row">
+    <view class="input-row">
       <view class="label">蛋黄颜色</view>
       <picker bindchange="pickYolkColor" value="{{ yolkColorIndex }}" range="{{ yolkColorOptions }}">
         <view class="picker-val">{{ yolkColorIndex >= 0 ? yolkColorOptions[yolkColorIndex] : '请选择 ▾' }}</view>
       </picker>
     </view>
-    <view wx:if="{{ isSupply && yolkColorIndex >= 0 }}" class="input-row">
+    <view wx:if="{{ yolkColorIndex >= 0 }}" class="input-row">
       <view class="label">蛋黄色号</view>
       <input value="{{ form.yolk_shade }}" data-k="yolk_shade" bindinput="onInput" bindblur="onInput" placeholder="如 12-13 度 (罗氏比色卡)" />
     </view>

@@ -34,8 +34,8 @@
     <video src="{{ r.intro_video }}" controls style="width: 100%; height: 420rpx; display: block;"></video>
   </view>
 
-  <view class="card" style="margin: 0 24rpx 24rpx;">
-    <view class="section-title" style="margin: 0 0 16rpx;">参数明细</view>
+  <view class="card detail-card" style="margin: 0 24rpx 24rpx;">
+    <view class="section-title" style="margin: 0 0 16rpx; font-size: 32rpx;">参数明细</view>
     <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} {{ r.unit_size || '车' }}<text wx:if="{{ r.truck_type }}" class="muted" style="font-size: 22rpx;"> · {{ r.truck_type }} 米车</text></text></view>
     <view wx:if="{{ r.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ r.weight_spec }}</text></view>
     <view wx:if="{{ r.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ r.pack_size }} 枚/箱</text></view>
@@ -86,7 +86,7 @@
     </view>
   </view>
 
-  <view style="height: 160rpx;"></view>
+  <view style="height: 240rpx;"></view>
 
   <!-- 底部操作栏：我要出价 -->
   <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="bid-toolbar">

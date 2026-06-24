@@ -91,11 +91,11 @@ Page({
         blockReason = statusLabel(resource.status);
       } else if (isMine) {
         blockReason = '不能参与自己发布的报价';
-      } else if (isSupply && me.role !== 'buyer') {
-        blockReason = '货源仅限采购商报价';
-      } else if (!isSupply && me.role !== 'farm') {
-        blockReason = '求购仅限养殖场应标';
+      } else if (!isSupply && me.license_status !== 'approved') {
+        // 求购需求：仅资质认证通过的养殖场可应标
+        blockReason = '应标求购需先完成鸡场资质认证';
       } else {
+        // 货源出价：任何登录用户均可（不再限 role）
         canBid = true;
       }
 
@@ -221,9 +221,17 @@ Page({
     this.setData({ bidding: true });
     try {
       await api.post('/bids', { resource_id: this.data.id, price });
-      wx.showToast({ title: this.data.isSupply ? '报价成功' : '报价成功' });
-      this.setData({ bidPrice: '' });
+      this.setData({ bidPrice: '', showHaggle: false });
       await this.load();
+      // 用 modal 替代 toast：保证用户充值返回后能明确看到「报价成功」，
+      // 避免误以为没成功又重复出价
+      wx.showModal({
+        title: '✅ 报价成功',
+        content: `您已成功报价 ¥${price}，当前价格 ¥${this.data.r.current_price}，可在「我的参与」查看进展。`,
+        showCancel: false,
+        confirmText: '我知道了',
+        confirmColor: '#06883b',
+      });
     } catch (e) {} finally { this.setData({ bidding: false }); }
   },
 

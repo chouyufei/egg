@@ -5,6 +5,9 @@
   display: flex; justify-content: space-between;
   padding: 14rpx 0; font-size: 28rpx;
 }
+/* 参数明细卡片字号放大、内边距加厚（适老化），让老年用户看着舒服 */
+.detail-card .kv { font-size: 30rpx; padding: 18rpx 0; line-height: 1.6; }
+.detail-card .kv .muted { font-size: 28rpx; }
 .kv-link { color: #e0a40d; }
 .kv-link:active { opacity: 0.6; }
 

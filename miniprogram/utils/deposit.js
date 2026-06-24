@@ -47,14 +47,21 @@ async function rechargeWallet(amount) {
 }
 
 // 通用：本次操作需冻结一笔保证金，先查钱包余额够不够。
+// resourceId 传入时：先看该资源是否已经冻结过一笔（bound）→ 直接放行，
+// 不再让用户每次出价都被问"是否再交一次"。
 // 不够 → 弹"去充值"；够 → 直接返回 true（实际冻结在 /resources POST 或 /bids 时由后端原子完成）
-async function ensureWalletForDeposit(actionLabel) {
-  let required = 0, available = 0;
+async function ensureWalletForDeposit(actionLabel, resourceId) {
+  let required = 0, available = 0, bound = null;
   try {
-    const ds = await api.get('/deposits/status');
+    const path = resourceId ? `/deposits/status?resource_id=${resourceId}` : '/deposits/status';
+    const ds = await api.get(path);
     required = ds.required;
     available = ds.balance && ds.balance.available || 0;
+    bound = ds.bound;
   } catch (e) { return false; }
+
+  // 同一资源已经冻结过，直接放行（同一订单/同一资源只冻一笔）
+  if (bound && bound.id) return true;
 
   // 用分（整数）比较，避免浮点误差导致 1.00 显示"还差 0.00"
   const reqCents = Math.round(Number(required) * 100);
@@ -81,6 +88,6 @@ async function ensureWalletForDeposit(actionLabel) {
 // 三个原 API 保留对外兼容名字，统一走钱包余额检查
 const ensureFarmDeposit   = () => ensureWalletForDeposit('发布货源');
 const ensureDemandDeposit = () => ensureWalletForDeposit('发布求购');
-const ensureBuyerBidDeposit = () => ensureWalletForDeposit('参与报价');
+const ensureBuyerBidDeposit = (resourceId) => ensureWalletForDeposit('参与报价', resourceId);
 
 module.exports = { rechargeWallet, ensureWalletForDeposit, ensureFarmDeposit, ensureDemandDeposit, ensureBuyerBidDeposit };

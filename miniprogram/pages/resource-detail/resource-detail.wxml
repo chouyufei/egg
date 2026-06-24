@@ -6,22 +6,26 @@
   </swiper>
 
   <view class="card" style="margin: -32rpx 24rpx 24rpx; position: relative; z-index: 2;">
-    <view class="row-between">
+    <!-- 大色块 kind 标识：一眼分清 货源 / 求购 -->
+    <view class="kind-banner {{ isSupply ? 'kind-supply' : 'kind-demand' }}">
+      <text class="kind-icon">{{ isSupply ? '🐔' : '🛒' }}</text>
+      <text class="kind-text">{{ isSupply ? '货源 · 我有蛋要卖' : '求购 · 我要买蛋' }}</text>
+    </view>
+    <view class="row-between mt-16">
       <view>
         <view class="muted">{{ isSupply ? '当前价' : '当前最低报价' }}</view>
         <view class="price-l">¥{{ r.current_price }} <text class="muted" style="font-size: 24rpx;">{{ r.unit_label || '元/箱' }}</text></view>
         <view class="muted">{{ isSupply ? '起报' : '心理价上限' }} ¥{{ r.start_price }} · {{ isSupply ? '加价' : '降价' }} ¥{{ r.min_increment }}</view>
       </view>
       <view style="text-align: right;">
-        <text class="tag {{ kindCls }}" style="font-size: 24rpx;">{{ kindLabel }}</text>
         <text wx:if="{{ !isMine }}" class="report-tag" catchtap="report">⚐ 举报</text>
         <view class="muted mt-8">{{ r.status === 'auctioning' ? '剩余' : statusLabel }}</view>
         <view wx:if="{{ r.status === 'auctioning' }}" class="mt-8"><countdown end-at="{{ r.end_at }}" bindend="onEnd" /></view>
         <view wx:if="{{ r.extend_count > 0 }}" class="muted mt-8">已延时 {{ r.extend_count }} 次</view>
       </view>
     </view>
-    <view class="bold mt-16" style="font-size: 32rpx;">{{ r.title }}</view>
-    <view class="mt-8">
+    <view class="bold mt-16" style="font-size: 32rpx; line-height: 1.5;">{{ r.title }}</view>
+    <view class="mt-12" style="line-height: 1.9;">
       <text wx:if="{{ r.egg_color }}" class="tag">{{ r.egg_color }}</text>
       <text wx:if="{{ r.weight_spec }}" class="tag tag-b">{{ r.weight_spec }}</text>
       <text wx:if="{{ r.region }}" class="tag tag-g">{{ r.region }}</text>

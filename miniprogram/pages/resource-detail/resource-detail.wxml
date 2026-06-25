@@ -40,8 +40,18 @@
 
   <view class="card detail-card" style="margin: 0 24rpx 24rpx;">
     <view class="section-title" style="margin: 0 0 16rpx; font-size: 32rpx;">参数明细</view>
-    <view class="kv"><text class="muted">数量</text><text>{{ r.quantity }} {{ r.unit_size || '车' }}<text wx:if="{{ r.truck_type }}" class="muted" style="font-size: 22rpx;"> · {{ r.truck_type }} 米车</text></text></view>
+    <view wx:if="{{ r.truck_type }}" class="kv"><text class="muted">车型</text><text>{{ r.truck_type }} 米车</text></view>
     <view wx:if="{{ r.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ r.weight_spec }}</text></view>
+
+    <!-- 各斤值规格的箱数 + 价格细分（weight_specs） -->
+    <view wx:if="{{ weightSpecsList.length }}" class="weight-specs">
+      <view class="muted" style="font-size: 26rpx; padding: 8rpx 0;">📦 各规格箱数 / 价格</view>
+      <view wx:for="{{ weightSpecsList }}" wx:key="weight" class="weight-row">
+        <text class="weight-w">{{ item.weight }} 斤箱</text>
+        <text class="weight-b muted">{{ item.boxes }} 箱</text>
+        <text class="weight-p">¥{{ item.price }} <text class="muted" style="font-size: 22rpx;">/箱</text></text>
+      </view>
+    </view>
     <view wx:if="{{ r.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ r.pack_size }} 枚/箱</text></view>
     <view wx:if="{{ r.shell_quality }}" class="kv"><text class="muted">蛋壳质量</text><text>{{ r.shell_quality }}</text></view>
     <view wx:if="{{ r.yolk_color }}" class="kv">

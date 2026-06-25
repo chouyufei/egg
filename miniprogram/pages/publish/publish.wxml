@@ -71,22 +71,36 @@
       <input value="{{ breedCustom }}" bindinput="onBreedCustomInput" bindblur="onBreedCustomInput" placeholder="自填鸡种名称" />
     </view>
 
-    <view wx:if="{{ isSupply }}" class="input-row">
-      <view class="label">养殖规模</view>
-      <input type="digit" value="{{ form.farm_size_wan }}" data-k="farm_size_wan" bindinput="onInput" bindblur="onInput" placeholder="如 1.5" />
-      <text class="muted" style="margin-left: 8rpx;">万只</text>
-    </view>
-
-    <!-- 规格码数：单箱净重区间 -->
+    <!-- 蛋黄颜色：红心 / 黄心 / 双色 + 罗氏色号 -->
     <view class="input-row">
-      <view class="label">单箱净重</view>
-      <input type="digit" value="{{ form.weight_min }}" data-k="weight_min" bindinput="onInput" bindblur="onInput" placeholder="如 38" style="width: 120rpx;" />
-      <text class="muted" style="margin: 0 8rpx;">—</text>
-      <input type="digit" value="{{ form.weight_max }}" data-k="weight_max" bindinput="onInput" bindblur="onInput" placeholder="如 42" style="width: 120rpx;" />
-      <text class="muted" style="margin-left: 8rpx;">斤/箱</text>
+      <view class="label">蛋黄颜色</view>
+      <picker bindchange="pickYolkColor" value="{{ yolkColorIndex }}" range="{{ yolkColorOptions }}">
+        <view class="picker-val">{{ yolkColorIndex >= 0 ? yolkColorOptions[yolkColorIndex] : '请选择 ▾' }}</view>
+      </picker>
+    </view>
+    <view wx:if="{{ yolkColorIndex >= 0 }}" class="input-row">
+      <view class="label">蛋黄色号</view>
+      <input value="{{ form.yolk_shade }}" data-k="yolk_shade" bindinput="onInput" bindblur="onInput" placeholder="如 12-13 度 (罗氏比色卡)" />
     </view>
 
-    <!-- 规格：单箱枚数 -->
+    <!-- 鲜度 -->
+    <view class="input-row">
+      <view class="label">鲜度</view>
+      <input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="如 3" style="width: 160rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">天内</text>
+    </view>
+
+    <!-- 次品率：仅货源 -->
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">次品率</view>
+      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="默认 0.2" style="width: 140rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">%</text>
+    </view>
+    <view wx:if="{{ isSupply }}" class="hint-row">
+      💡 次品率 = 裂纹蛋 + 脏蛋 + 破蛋 占总量的百分比，承诺该比例不超过填写值
+    </view>
+
+    <!-- 规格：单箱枚数（仅货源） -->
     <view wx:if="{{ isSupply }}" class="input-row">
       <view class="label">规格</view>
       <radio-group bindchange="pickPackSize" style="display: flex; gap: 24rpx; flex-wrap: wrap;">
@@ -101,57 +115,45 @@
       <text class="muted" style="margin-left: 8rpx;">枚/箱</text>
     </view>
 
-    <!-- 蛋黄颜色：红心 / 黄心 / 双色 + 罗氏色号 -->
+    <!-- 单箱净重区间（首尾差 ≤ 3） -->
     <view class="input-row">
-      <view class="label">蛋黄颜色</view>
-      <picker bindchange="pickYolkColor" value="{{ yolkColorIndex }}" range="{{ yolkColorOptions }}">
-        <view class="picker-val">{{ yolkColorIndex >= 0 ? yolkColorOptions[yolkColorIndex] : '请选择 ▾' }}</view>
-      </picker>
+      <view class="label">单箱净重</view>
+      <input type="digit" value="{{ form.weight_min }}" data-k="weight_min" bindinput="onInput" bindblur="onWeightBlur" placeholder="如 20" style="width: 120rpx;" />
+      <text class="muted" style="margin: 0 8rpx;">—</text>
+      <input type="digit" value="{{ form.weight_max }}" data-k="weight_max" bindinput="onInput" bindblur="onWeightBlur" placeholder="如 22" style="width: 120rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">斤/箱</text>
     </view>
-    <view wx:if="{{ yolkColorIndex >= 0 }}" class="input-row">
-      <view class="label">蛋黄色号</view>
-      <input value="{{ form.yolk_shade }}" data-k="yolk_shade" bindinput="onInput" bindblur="onInput" placeholder="如 12-13 度 (罗氏比色卡)" />
+    <view wx:if="{{ weightWarn }}" class="hint-row" style="color: #c61212; background: #ffeaea;">
+      ⚠ {{ weightWarn }}
     </view>
 
-    <!-- 次品率 -->
-    <view wx:if="{{ isSupply }}" class="input-row">
-      <view class="label">次品率</view>
-      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="默认 0.2" style="width: 140rpx;" />
-      <text class="muted" style="margin-left: 8rpx;">%</text>
-    </view>
-    <view wx:if="{{ isSupply }}" class="hint-row">
-      💡 次品率 = 裂纹蛋 + 脏蛋 + 破蛋 占总量的百分比，承诺该比例不超过填写值
-    </view>
-    <view class="input-row">
-      <view class="label">鲜度</view>
-      <input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="如 3" style="width: 160rpx;" />
-      <text class="muted" style="margin-left: 8rpx;">天内</text>
-    </view>
-
+    <!-- 车型 -->
     <view class="input-row">
       <view class="label">车型</view>
       <picker bindchange="pickTruckPicker" value="{{ truckIndex }}" range="{{ truckRangeLabels }}">
         <view class="picker-val">{{ truckIndex >= 0 ? truckRangeLabels[truckIndex] : '请选择车型 ▾' }}</view>
       </picker>
     </view>
-    <view wx:if="{{ truckIndex >= 0 }}" class="input-row">
-      <view class="label">数量</view>
-      <input type="number" value="{{ form.truck_count }}" data-k="truck_count" bindinput="onInput" bindblur="onInput" placeholder="如 1" style="width: 160rpx;" />
-      <text class="muted" style="margin-left: 8rpx;">车</text>
+  </view>
+
+  <!-- 单箱净重每个整数斤值的 箱数 + 起报价/心理价上限 -->
+  <view wx:if="{{ weightRows.length }}" class="card">
+    <view class="section-title" style="margin: 0 0 12rpx;">📦 各规格箱数 / 价格</view>
+    <view class="muted mt-8" style="font-size: 22rpx; margin-bottom: 12rpx;">
+      列表展示价以最小净重对应价为准，其它规格在详情页展示
     </view>
-    <view wx:if="{{ truckIndex >= 0 && totalBoxes }}" class="input-row">
-      <view class="label">约多少箱</view>
-      <text class="bold" style="color: #e0a40d;">≈ {{ totalBoxes }} 箱</text>
-      <text class="muted" style="margin-left: 12rpx; font-size: 22rpx;">（{{ truckRangeLabels[truckIndex] }} × {{ form.truck_count }} 车）</text>
+    <view wx:for="{{ weightRows }}" wx:key="weight" class="input-row" style="flex-wrap: wrap; gap: 12rpx;">
+      <view class="label">{{ item.weight }} 斤箱</view>
+      <input type="number" value="{{ item.boxes }}" data-i="{{ index }}" bindinput="onWeightBoxes" bindblur="onWeightBoxes"
+             placeholder="箱数" style="width: 140rpx; background: #f5f6f8; border-radius: 8rpx; padding: 4rpx 10rpx;" />
+      <text class="muted" style="font-size: 22rpx;">箱</text>
+      <input type="digit" value="{{ item.price }}" data-i="{{ index }}" bindinput="onWeightPrice" bindblur="onWeightPrice"
+             placeholder="{{ isSupply ? '起报价' : '心理价' }}" style="width: 160rpx; background: #f5f6f8; border-radius: 8rpx; padding: 4rpx 10rpx;" />
+      <text class="muted" style="font-size: 22rpx;">元/箱</text>
     </view>
   </view>
 
   <view class="card">
-    <view class="input-row">
-      <view class="label">{{ isSupply ? '起报价' : '心理价上限' }}</view>
-      <input type="digit" value="{{ form.start_price }}" data-k="start_price" bindinput="onInput" bindblur="onInput" placeholder="{{ isSupply ? '如 85' : '如 95' }}" />
-      <view class="muted" style="margin-left: 8rpx;">元/箱</view>
-    </view>
     <view class="input-row">
       <view class="label">{{ isSupply ? '加价幅度' : '降价幅度' }}</view>
       <input type="digit" value="{{ form.min_increment }}" data-k="min_increment" bindinput="onInput" bindblur="onInput" placeholder="≥ 1" />

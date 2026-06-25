@@ -81,7 +81,8 @@ Page({
     truckPresets: TRUCK_PRESETS,
     truckRangeLabels: TRUCK_PRESETS.map(t => `${t.value} m 车  ≈ ${t.boxes} 箱`),
     truckIndex: -1,
-    totalBoxes: 0,            // 车型 × 多少车 = 估算总箱数
+    weightWarn: '',           // 净重区间超 3 时的提示
+    weightRows: [],           // [{ weight, boxes, price }]，按 weight_min/max 整数斤值动态生成
     // 当前蛋色对应的鸡种列表 + picker 索引
     breedOptions: BREEDS_BY_COLOR['红壳'],
     breedIndex: -1,                    // -1 表示未选；>= 0 是 picker 索引
@@ -313,14 +314,6 @@ Page({
     const key = e.currentTarget.dataset.k;
     if (!key) return;
     this.setData({ ['form.' + key]: e.detail.value });
-    if (key === 'truck_count') {
-      // 多少车变 → 同步 quantity (整数车数) → 保证金金额随之变化 + 重算箱数
-      const n = Math.max(1, parseInt(e.detail.value, 10) || 0);
-      this.setData({ 'form.quantity': String(n) });
-      this._recomputeBoxes(e.detail.value);
-      clearTimeout(this._qtyTimer);
-      this._qtyTimer = setTimeout(() => this.refreshDepositStatus(), 300);
-    }
   },
 
   // 车型 picker 选择 → 同步 form.truck_type 为车长（米数）
@@ -328,23 +321,51 @@ Page({
     const idx = Number(e.detail.value);
     const t = TRUCK_PRESETS[idx];
     if (!t) return;
-    // 选车型时若没填多少车，默认 1
-    const count = this.data.form.truck_count || 1;
     this.setData({
       truckIndex: idx,
       'form.truck_type': String(t.value),
-      'form.truck_count': count,
-      'form.quantity': String(count),
-      totalBoxes: t.boxes * count,
     });
     this.refreshDepositStatus();
   },
-  // 车长 × 车数 → 估算箱数（用 TRUCK_PRESETS.boxes 作为每车装箱数）
-  _recomputeBoxes(count) {
-    const t = TRUCK_PRESETS[this.data.truckIndex];
-    if (!t) return;
-    const n = Math.max(1, parseInt(count, 10) || 0);
-    this.setData({ totalBoxes: t.boxes * n });
+
+  // 单箱净重区间 blur：校验 max - min ≤ 3，符合则按整数斤生成 weightRows
+  onWeightBlur() {
+    const f = this.data.form;
+    const mn = Number(f.weight_min);
+    const mx = Number(f.weight_max);
+    if (!Number.isFinite(mn) || !Number.isFinite(mx)) return;
+    if (mx < mn) {
+      this.setData({ weightWarn: '单箱净重最大值不能小于最小值', weightRows: [] });
+      return;
+    }
+    if (mx - mn > 3) {
+      this.setData({ weightWarn: `单箱净重区间最多 3（当前 ${mn}-${mx}，请填到 ${mn + 3} 以内）`, weightRows: [] });
+      return;
+    }
+    // 按整数斤展开：20-22 → 20 / 21 / 22 三行；保留已填的 boxes / price
+    const old = this.data.weightRows || [];
+    const rows = [];
+    for (let w = Math.floor(mn); w <= Math.floor(mx); w++) {
+      const prev = old.find(r => r.weight === w);
+      rows.push({ weight: w, boxes: prev ? prev.boxes : '', price: prev ? prev.price : '' });
+    }
+    this.setData({ weightWarn: '', weightRows: rows });
+  },
+  onWeightBoxes(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const rows = this.data.weightRows.slice();
+    if (!rows[i]) return;
+    rows[i].boxes = e.detail.value;
+    this.setData({ weightRows: rows });
+    clearTimeout(this._qtyTimer);
+    this._qtyTimer = setTimeout(() => this.refreshDepositStatus(), 300);
+  },
+  onWeightPrice(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const rows = this.data.weightRows.slice();
+    if (!rows[i]) return;
+    rows[i].price = e.detail.value;
+    this.setData({ weightRows: rows });
   },
 
   async addPhoto() {
@@ -392,10 +413,22 @@ Page({
 
   async submit() {
     const f = this.data.form;
-    // 简单必填校验
-    if (!f.title || !f.quantity || !f.start_price) {
-      return wx.showToast({ title: '请填写标题/数量/起报价', icon: 'none' });
+    // 必填校验：标题、单箱净重区间、车型、每个净重斤值的箱数 + 起报价
+    if (!f.title) return wx.showToast({ title: '请填写标题', icon: 'none' });
+    if (this.data.weightWarn) return wx.showToast({ title: this.data.weightWarn, icon: 'none' });
+    if (!this.data.weightRows.length) return wx.showToast({ title: '请填写单箱净重区间', icon: 'none' });
+    if (!f.truck_type) return wx.showToast({ title: '请选择车型', icon: 'none' });
+    const specs = this.data.weightRows.map(r => ({
+      weight: Number(r.weight),
+      boxes: parseInt(r.boxes, 10) || 0,
+      price: Number(r.price) || 0,
+    }));
+    if (specs.some(s => s.boxes <= 0 || s.price <= 0)) {
+      return wx.showToast({ title: '每个净重斤值都要填箱数和价格', icon: 'none' });
     }
+    // 总箱数 = 各斤值箱数之和；展示价 = 最小斤值对应的价格
+    const totalBoxes = specs.reduce((s, x) => s + x.boxes, 0);
+    const displayPrice = specs[0].price;
 
     // 发布前：确保钱包可用余额够冻结一笔保证金；不够提示去充值
     const ok = this.data.isSupply ? await ensureFarmDeposit() : await ensureDemandDeposit();
@@ -405,29 +438,26 @@ Page({
     await requestSubscribe(['order_received']);
     this.setData({ loading: true });
     try {
-      const farmSizeWan = Number(f.farm_size_wan) || 0;
-      const wMin = String(f.weight_min || '').trim();
-      const wMax = String(f.weight_max || '').trim();
-      const weightSpec = (wMin && wMax) ? `${wMin}-${wMax} 斤/箱` : (wMin || wMax || '');
-      // 把定位带上，用于附近推荐：优先用户在表单里主动选的位置，否则用当前 GPS，
-      // 都没有则为 null（后端会回退用 user.lat/lng）
+      const wMin = specs[0].weight;
+      const wMax = specs[specs.length - 1].weight;
+      const weightSpec = wMin === wMax ? `${wMin} 斤/箱` : `${wMin}-${wMax} 斤/箱`;
       const loc = this.data.pickedLoc || await getLocation();
       const payload = {
         ...f,
         kind: this.data.isSupply ? 'supply' : 'demand',
         province: this.data.provinces[this.data.provinceIndex],
-        // 养殖规模：用户填 1.5 (万只) → 存 15000 (只)
-        farm_size: farmSizeWan ? Math.round(farmSizeWan * 10000) : null,
+        farm_size: null,                 // 已隐藏
         weight_spec: weightSpec,
+        weight_specs: specs,             // 每斤值的 { weight, boxes, price }
         pack_size: f.pack_size !== '' ? Number(f.pack_size) : null,
         yolk_color: f.yolk_color || null,
         yolk_shade: f.yolk_shade || null,
         defect_rate: f.defect_rate !== '' ? Number(f.defect_rate) : null,
         defect_note: f.defect_note || null,
         freshness_days: Number(f.freshness_days) || null,
-        quantity: Math.max(1, parseInt(f.truck_count, 10) || Number(f.quantity) || 1),
+        quantity: totalBoxes,            // 总箱数
         truck_type: f.truck_type || null,
-        start_price: Number(f.start_price),
+        start_price: displayPrice,       // 最小斤值价 → 列表展示
         min_increment: Number(f.min_increment),
         duration_hours: Number(f.duration_hours),
         unit_label: '元/箱',

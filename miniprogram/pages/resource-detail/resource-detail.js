@@ -21,6 +21,7 @@ Page({
     showHaggle: false,
     haggleVal: 0, haggleMin: 0, haggleMax: 0, haggleReasonable: true,
     priceUnit: '箱',
+    weightSpecsList: [],   // 详情页展示各斤值规格的箱数 / 价格
   },
   onLoad(opt) {
     this.setData({ reviewMode: !!app.globalData.reviewMode });
@@ -120,6 +121,15 @@ Page({
       // 价格单位（用于还价弹窗显示 "/箱" / "/车"）
       const unitLabel = resource.unit_label || '元/箱';
       const priceUnit = unitLabel.replace(/^元\//, '');
+      // weight_specs（JSON 字符串）→ 解析成列表，详情页展示各斤值的箱数/价格
+      let weightSpecsList = [];
+      if (resource.weight_specs) {
+        try {
+          const parsed = typeof resource.weight_specs === 'string'
+            ? JSON.parse(resource.weight_specs) : resource.weight_specs;
+          if (Array.isArray(parsed)) weightSpecsList = parsed;
+        } catch (e) {}
+      }
       this.setData({
         r: resource,
         bids: bidsMapped,
@@ -134,6 +144,7 @@ Page({
         farmSizeText,
         distText, distNear, distFar,
         priceUnit,
+        weightSpecsList,
       });
     } catch (e) {}
   },

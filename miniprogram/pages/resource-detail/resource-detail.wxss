@@ -8,6 +8,19 @@
 /* 参数明细卡片字号放大、内边距加厚（适老化），让老年用户看着舒服 */
 .detail-card .kv { font-size: 30rpx; padding: 18rpx 0; line-height: 1.6; }
 .detail-card .kv .muted { font-size: 28rpx; }
+
+/* 各斤值规格 箱数 + 价格 表 */
+.weight-specs { margin: 12rpx 0; padding: 14rpx 18rpx; background: #fff8e6; border-radius: 12rpx; }
+.weight-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 1px dashed #f0c97a;
+  font-size: 28rpx;
+}
+.weight-row:last-child { border-bottom: none; }
+.weight-w { font-weight: 700; color: #8a5a00; min-width: 160rpx; }
+.weight-b { font-size: 26rpx; }
+.weight-p { color: #ee0a24; font-weight: 700; }
 .kv-link { color: #e0a40d; }
 .kv-link:active { opacity: 0.6; }
 

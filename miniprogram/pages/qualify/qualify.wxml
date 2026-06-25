@@ -63,7 +63,7 @@
     <view wx:elif="{{ licenseStatus === 'rejected' }}" class="muted mt-8" style="line-height: 1.7; color: #ee0a24;">
       ⚠ 上次审核未通过，请根据下方表单完善资料后重新提交。
     </view>
-    <view wx:if="{{ !canEdit }}" class="menu-row" style="margin-top: 16rpx; padding: 18rpx 0; border-top: 1px solid #f0f0f0;" bindtap="toggleDetail">
+    <view wx:if="{{ !canEdit }}" class="row-between" style="margin-top: 16rpx; padding: 18rpx 0; border-top: 1px solid #f0f0f0; font-size: 28rpx;" bindtap="toggleDetail">
       <text>📜 查看已提交资质详情</text>
       <text class="muted">{{ showDetail ? '收起 ▲' : '展开 ▼' }}</text>
     </view>
@@ -89,7 +89,8 @@
       <view class="qf-photos-title">· 营业执照</view>
       <view class="upload-grid">
         <view wx:for="{{ form.license_photos }}" wx:key="*this" class="upload-thumb qf-thumb">
-          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.license_photos }}" data-url="{{ item }}" />
+          <image src="{{ item }}" mode="aspectFill" bindtap="preview" binderror="onThumbErr"
+                 data-list="{{ form.license_photos }}" data-url="{{ item }}" />
         </view>
       </view>
     </view>
@@ -97,7 +98,8 @@
       <view class="qf-photos-title">· 鸡场实景</view>
       <view class="upload-grid">
         <view wx:for="{{ form.farm_photos }}" wx:key="*this" class="upload-thumb qf-thumb">
-          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.farm_photos }}" data-url="{{ item }}" />
+          <image src="{{ item }}" mode="aspectFill" bindtap="preview" binderror="onThumbErr"
+                 data-list="{{ form.farm_photos }}" data-url="{{ item }}" />
         </view>
       </view>
     </view>
@@ -105,12 +107,16 @@
       <view class="qf-photos-title">· 检疫合格证 / 其他资质</view>
       <view class="upload-grid">
         <view wx:for="{{ form.quarantine_photos }}" wx:key="*this" class="upload-thumb qf-thumb">
-          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-list="{{ form.quarantine_photos }}" data-url="{{ item }}" />
+          <image src="{{ item }}" mode="aspectFill" bindtap="preview" binderror="onThumbErr"
+                 data-list="{{ form.quarantine_photos }}" data-url="{{ item }}" />
         </view>
       </view>
     </view>
     <view wx:if="{{ !form.license_photos.length && !form.farm_photos.length && !form.quarantine_photos.length }}" class="muted text-c" style="padding: 32rpx 0; font-size: 24rpx;">
       无已上传图片
+    </view>
+    <view wx:if="{{ thumbLoadErr }}" class="muted text-c" style="padding: 16rpx 24rpx; font-size: 22rpx; color: #ee0a24;">
+      ⚠ 图片加载失败：请将服务器域名加进小程序后台「downloadFile 合法域名」白名单后重试。
     </view>
   </view>
 

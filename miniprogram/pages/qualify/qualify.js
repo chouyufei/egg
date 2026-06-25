@@ -154,6 +154,10 @@ Page({
     } catch (e) {} finally { this.setData({ loading: false }); }
   },
   toggleDetail() { this.setData({ showDetail: !this.data.showDetail }); },
+  onThumbErr(e) {
+    console.warn('[qualify] 缩略图加载失败:', e && e.detail && e.detail.errMsg);
+    this.setData({ thumbLoadErr: true });
+  },
 });
 
 function safeParse(s) {

@@ -338,8 +338,8 @@ Page({
       this.setData({ weightWarn: '单箱净重最大值不能小于最小值', weightRows: [] });
       return;
     }
-    if (mx - mn > 3) {
-      this.setData({ weightWarn: `单箱净重区间最多 3（当前 ${mn}-${mx}，请填到 ${mn + 3} 以内）`, weightRows: [] });
+    if (mx - mn > 2) {
+      this.setData({ weightWarn: `单箱净重区间跨度最多 2（如 20-22），当前 ${mn}-${mx}，请填到 ${mn + 2} 以内`, weightRows: [] });
       return;
     }
     // 按整数斤展开：20-22 → 20 / 21 / 22 三行；保留已填的 boxes / price

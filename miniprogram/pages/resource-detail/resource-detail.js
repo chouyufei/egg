@@ -121,13 +121,23 @@ Page({
       // 价格单位（用于还价弹窗显示 "/箱" / "/车"）
       const unitLabel = resource.unit_label || '元/箱';
       const priceUnit = unitLabel.replace(/^元\//, '');
-      // weight_specs（JSON 字符串）→ 解析成列表，详情页展示各斤值的箱数/价格
+      // weight_specs（JSON 字符串）→ 解析成列表
+      // 每条 spec 的 price 是发布时定的"起报价"；展示价 = price + (current_price - start_price) 差额，
+      // 让出价一次后所有斤值价格联动同步（截图反馈）
       let weightSpecsList = [];
       if (resource.weight_specs) {
         try {
           const parsed = typeof resource.weight_specs === 'string'
             ? JSON.parse(resource.weight_specs) : resource.weight_specs;
-          if (Array.isArray(parsed)) weightSpecsList = parsed;
+          if (Array.isArray(parsed)) {
+            const delta = Number(resource.current_price) - Number(resource.start_price);
+            weightSpecsList = parsed.map(s => ({
+              weight: s.weight,
+              boxes: s.boxes,
+              price: s.price,
+              current: Number((Number(s.price) + delta).toFixed(2)),
+            }));
+          }
         } catch (e) {}
       }
       this.setData({
@@ -203,7 +213,21 @@ Page({
     this.setData({ haggleVal: v, haggleReasonable: this._reasonable(v, this.data.haggleMin, this.data.haggleMax) });
   },
   async submitHaggle() {
-    // 走原有 placeBid 逻辑，bidPrice 设为滑块当前值
+    // 出价前再弹一次确认（截图反馈要求）
+    const isSupply = this.data.isSupply;
+    const verb = isSupply ? '加价' : '让价';
+    const confirmed = await new Promise(resolve => {
+      wx.showModal({
+        title: `确认${verb}`,
+        content: `确认以 ¥${this.data.haggleVal}/箱 ${verb}吗？\n该价格将作为最小斤值价，其它斤值价格按差额同步调整。`,
+        confirmText: `确认${verb}`,
+        cancelText: '再想想',
+        confirmColor: '#e0a40d',
+        success: r => resolve(!!r.confirm),
+        fail: () => resolve(false),
+      });
+    });
+    if (!confirmed) return;
     this.setData({ bidPrice: String(this.data.haggleVal) });
     await this.placeBid();
     this.setData({ showHaggle: false });

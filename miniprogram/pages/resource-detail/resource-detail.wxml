@@ -49,7 +49,7 @@
       <view wx:for="{{ weightSpecsList }}" wx:key="weight" class="weight-row">
         <text class="weight-w">{{ item.weight }} 斤箱</text>
         <text class="weight-b muted">{{ item.boxes }} 箱</text>
-        <text class="weight-p">¥{{ item.price }} <text class="muted" style="font-size: 22rpx;">/箱</text></text>
+        <text class="weight-p">¥{{ item.current }} <text class="muted" style="font-size: 22rpx; text-decoration: line-through; margin-left: 4rpx;" wx:if="{{ item.current !== item.price }}">¥{{ item.price }}</text> <text class="muted" style="font-size: 22rpx;">/箱</text></text>
       </view>
     </view>
     <view wx:if="{{ r.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ r.pack_size }} 枚/箱</text></view>
@@ -103,11 +103,11 @@
 
   <view style="height: 240rpx;"></view>
 
-  <!-- 底部操作栏：我要出价 -->
+  <!-- 底部操作栏：我要加价/让价 -->
   <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="bid-toolbar">
     <view class="tb-action tb-action-y" style="flex: 1;" bindtap="openHaggle">
       <view class="tb-action-icon">💰</view>
-      <view class="tb-action-text">我要出价</view>
+      <view class="tb-action-text">我要{{ isSupply ? '加价' : '让价' }}</view>
     </view>
   </view>
 
@@ -144,12 +144,12 @@
   </view>
 </view>
 
-<!-- 我要出价弹窗 -->
+<!-- 我要加价/让价 弹窗 -->
 <view wx:if="{{ showHaggle }}" class="modal-mask" bindtap="closeHaggle">
   <view class="haggle-sheet" catchtap="noop">
     <view class="hg-handle"></view>
     <view class="hg-head">
-      <text class="hg-title">我要出价</text>
+      <text class="hg-title">我要{{ isSupply ? '加价' : '让价' }}</text>
       <text class="hg-close" bindtap="closeHaggle">×</text>
     </view>
 
@@ -173,8 +173,8 @@
       <slider class="hg-slider-bar" min="{{ haggleMin }}" max="{{ haggleMax }}" step="{{ r.min_increment }}" value="{{ haggleVal }}" bindchange="onHaggleSlider" activeColor="#f6b821" block-size="24" block-color="#fff" />
       <text class="hg-slider-max">¥{{ haggleMax }}</text>
     </view>
-    <view class="hg-hint {{ haggleReasonable ? 'on' : 'off' }}">
-      {{ haggleReasonable ? '✓ 该价格区间合理，预估 24h 内可成交' : '⚠ 价格偏离合理区间，成交概率较低' }}
+    <view class="hg-hint on">
+      💡 {{ isSupply ? '加价越高，成功的概率越大' : '让价越高，成功的概率越大' }}
     </view>
 
     <button class="btn hg-submit" bindtap="submitHaggle" loading="{{ bidding }}">确定</button>

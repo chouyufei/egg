@@ -57,7 +57,6 @@
   <view wx:if="{{ user.role === 'buyer' && (order.status === 'communicating' || order.status === 'pending_group') }}" class="card">
     <button class="btn" bindtap="confirm">确认收货</button>
     <view class="muted text-c mt-8">7 天未操作系统自动确认</view>
-    <button class="btn-plain mt-8" bindtap="openDispute" style="color: #ee0a24; border-color: #ee0a24;">货不对板，发起纠纷</button>
   </view>
 </view>
 

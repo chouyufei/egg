@@ -268,6 +268,71 @@ Page({
   openAgreement() { wx.navigateTo({ url: '/pages/agreement/agreement' }); },
   openPrivacy()   { wx.navigateTo({ url: '/pages/privacy/privacy' }); },
 
+  // 沿用上次发布的数据：从 /resources/last-published 拉最近一次的同类资源，
+  // 把表单字段一次性填入（按 onLoad 中"未成交重新上架"的逻辑复用）
+  async fillFromLast() {
+    try {
+      const kind = this.data.isSupply ? 'supply' : 'demand';
+      const { resource: r } = await api.get('/resources/last-published?kind=' + kind);
+      if (!r) return wx.showToast({ title: '暂无上次发布记录', icon: 'none' });
+
+      const [minW, maxW] = parseWeightSpec(r.weight_spec);
+      let pIdx = 0;
+      if (r.province) for (let i = 0; i < PROVINCES.length; i++) {
+        if (PROVINCES[i] === r.province) { pIdx = i; break; }
+      }
+      const color = COLOR_ALIAS[r.egg_color] || r.egg_color || '红壳';
+      const breedOpts = BREEDS_BY_COLOR[color] || BREEDS_BY_COLOR['红壳'];
+      let bIdx = breedOpts.indexOf(r.chicken_breed || '');
+      let bCustom = '';
+      if (bIdx < 0 && r.chicken_breed) { bIdx = breedOpts.indexOf('其它'); bCustom = r.chicken_breed; }
+
+      const ps = r.pack_size != null && r.pack_size !== '' ? String(r.pack_size) : '';
+      const psPreset = ps === '360' || ps === '480' ? ps : (ps ? 'other' : '');
+      const yIdx = ['红心', '黄心', '双色'].indexOf(r.yolk_color || '');
+
+      // weight_specs 复原：上次发的箱数 / 价格直接拿回来
+      let weightRows = [];
+      if (r.weight_specs) {
+        try {
+          const parsed = typeof r.weight_specs === 'string' ? JSON.parse(r.weight_specs) : r.weight_specs;
+          if (Array.isArray(parsed)) {
+            weightRows = parsed.map(s => ({ weight: s.weight, boxes: String(s.boxes || ''), price: String(s.price || '') }));
+          }
+        } catch (e) {}
+      }
+
+      this.setData({
+        provinceIndex: pIdx,
+        breedOptions: breedOpts,
+        breedIndex: bIdx,
+        breedCustom: bCustom,
+        packSizePreset: psPreset,
+        yolkColorIndex: yIdx,
+        truckIndex: r.truck_type ? TRUCK_PRESETS.findIndex(t => Number(t.value) === Number(r.truck_type)) : -1,
+        weightRows,
+        weightWarn: '',
+        'form.title': r.title || '',
+        'form.region': r.region || '',
+        'form.chicken_breed': r.chicken_breed || '',
+        'form.egg_color': color,
+        'form.weight_min': minW,
+        'form.weight_max': maxW,
+        'form.pack_size': ps,
+        'form.yolk_color': r.yolk_color || '',
+        'form.yolk_shade': r.yolk_shade || '',
+        'form.defect_rate': r.defect_rate != null ? String(r.defect_rate) : '0.2',
+        'form.defect_note': r.defect_note || '',
+        'form.freshness_days': r.freshness_days || 3,
+        'form.truck_type': r.truck_type || '',
+        'form.unit_size': r.unit_size || '车',
+        'form.min_increment': r.min_increment || 1,
+        'form.description': r.description || '',
+      });
+      wx.showToast({ title: '已填入上次发布的数据', icon: 'success' });
+    } catch (e) {}
+  },
+
   pickColor(e) {
     const v = e.detail.value;
     const opts = BREEDS_BY_COLOR[v] || BREEDS_BY_COLOR['红壳'];

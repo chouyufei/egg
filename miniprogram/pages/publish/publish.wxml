@@ -1,12 +1,13 @@
 <view class="page-pad">
   <view class="card kind-banner {{ isSupply ? '' : 'demand' }}">
     <view class="kind-icon">{{ isSupply ? '🐔' : '🛒' }}</view>
-    <view>
+    <view class="flex-1">
       <view class="bold" style="font-size: 32rpx;">{{ isSupply ? '发布货源' : '发布求购需求' }}</view>
       <view class="muted mt-8" style="font-size: 24rpx;">
         {{ isSupply ? '采购商在线报价，价高者优先' : '养殖场在线应标，价低者优先' }}
       </view>
     </view>
+    <view class="last-fill" bindtap="fillFromLast">📋 沿用上次</view>
   </view>
 
   <!-- 保证金状态条：发布时从钱包冻结一笔。可用余额够则金色 ✓，不够弹去充值 -->

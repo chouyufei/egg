@@ -175,21 +175,24 @@
 
 .share-card {
   background: linear-gradient(135deg, #fff8e6, #fff);
-  padding: 32rpx 28rpx;
+  padding: 24rpx 28rpx;
 }
-.share-row { display: flex; align-items: center; gap: 24rpx; }
-.share-icon { font-size: 88rpx; }
-.share-card .bold { font-size: 36rpx; }
-.share-card .muted { font-size: 28rpx; }
-.share-btn {
-  flex-shrink: 0;
+.share-head {
+  display: flex; align-items: center; gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+.share-icon { font-size: 48rpx; }
+.share-card .bold { font-size: 32rpx; }
+.share-btn-wide {
+  display: block;
+  width: 100%;
   background: #f6b821;
   color: #fff;
-  font-size: 34rpx;
+  font-size: 32rpx;
   font-weight: 700;
-  padding: 22rpx 56rpx;
+  padding: 18rpx 0;
   border-radius: 999rpx;
   line-height: 1.4;
   margin: 0;
 }
-.share-btn::after { border: none; }
+.share-btn-wide::after { border: none; }

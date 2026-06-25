@@ -182,7 +182,8 @@
       </view>
     </view>
 
-    <view wx:if="{{ isSupply }}" class="upload-block">
+    <!-- 视频介绍：暂时隐藏，业务侧未启用，保留代码以后可恢复 -->
+    <view wx:if="{{ false }}" class="upload-block">
       <view class="upload-title">视频介绍（可选，鸡场实景 / 蛋品展示，60s 内）</view>
       <view wx:if="{{ video }}" class="video-preview">
         <video src="{{ video }}" controls style="width: 100%; height: 380rpx; border-radius: 12rpx;"></video>

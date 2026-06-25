@@ -43,7 +43,7 @@
             🛒 {{ item.related.title }}
           </view>
           <view wx:if="{{ item.related && item.related.order_id }}" class="muted" style="font-size: 22rpx;">
-            订单 #{{ item.related.order_id }}<text wx:if="{{ item.related.final_price }}"> · 成交 ¥{{ item.related.final_price }}</text>
+            订单 {{ item.related.order_no || ('#' + item.related.order_id) }}<text wx:if="{{ item.related.final_price }}"> · 成交 ¥{{ item.related.final_price }}</text>
           </view>
           <view wx:if="{{ item.related && item.related.purpose === 'recharge' }}" class="muted" style="font-size: 22rpx;">
             微信充值 · {{ item.related.out_trade_no }}

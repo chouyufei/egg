@@ -99,13 +99,23 @@ Page({
       // 卖方判定按本订单 farm_id（单个账号可能同时卖货 / 买货）
       const isSellerSide = me && order.farm_id === me.id;
       const other = isSellerSide ? order.buyer : order.farm;
-      // weight_specs JSON 解析，详情页显示按 weight/箱数/价格
+      // weight_specs JSON 解析。订单成交后每个斤值的"成交价" = 该斤值起报价
+      // + (订单 final_price - 资源 start_price) 差额；与详情页"各规格价格联动"
+      // 思路一致，保证所有斤值按同一差额收尾。
       let weightSpecsList = [];
       if (order.resource && order.resource.weight_specs) {
         try {
           const parsed = typeof order.resource.weight_specs === 'string'
             ? JSON.parse(order.resource.weight_specs) : order.resource.weight_specs;
-          if (Array.isArray(parsed)) weightSpecsList = parsed;
+          if (Array.isArray(parsed)) {
+            const delta = Number(order.final_price || 0) - Number(order.resource.start_price || 0);
+            weightSpecsList = parsed.map(s => ({
+              weight: s.weight,
+              boxes: s.boxes,
+              startPrice: s.price,
+              price: Number((Number(s.price) + delta).toFixed(2)),  // 成交价
+            }));
+          }
         } catch (e) {}
       }
       this.setData({

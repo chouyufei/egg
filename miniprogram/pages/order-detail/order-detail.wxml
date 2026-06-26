@@ -34,11 +34,15 @@
     <view wx:if="{{ order.resource.truck_type }}" class="kv"><text class="muted">车型</text><text>{{ order.resource.truck_type }} 米车</text></view>
     <view wx:if="{{ order.resource.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ order.resource.weight_spec }}</text></view>
     <view wx:if="{{ weightSpecsList.length }}" class="weight-specs">
-      <view class="muted" style="font-size: 24rpx; padding: 6rpx 0;">📦 各规格箱数 / 价格</view>
+      <view class="muted" style="font-size: 24rpx; padding: 6rpx 0;">📦 各规格箱数 / 成交价</view>
       <view wx:for="{{ weightSpecsList }}" wx:key="weight" class="weight-row">
         <text class="weight-w">{{ item.weight }} 斤箱</text>
         <text class="weight-b muted">{{ item.boxes }} 箱</text>
-        <text class="weight-p">¥{{ item.price }} <text class="muted" style="font-size: 22rpx;">/箱</text></text>
+        <text class="weight-p">
+          ¥{{ item.price }}
+          <text wx:if="{{ item.price !== item.startPrice }}" class="muted" style="font-size: 22rpx; text-decoration: line-through; margin-left: 4rpx;">¥{{ item.startPrice }}</text>
+          <text class="muted" style="font-size: 22rpx;">/箱</text>
+        </text>
       </view>
     </view>
   </view>

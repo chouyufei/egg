@@ -8,13 +8,38 @@
       </view>
     </view>
     <view class="kv mt-16"><text class="muted">资源</text><text>{{ order.resource.title }}</text></view>
-    <view class="kv"><text class="muted">成交价</text><text class="price">¥{{ order.final_price }}</text></view>
-    <view class="kv"><text class="muted">数量</text><text>{{ order.quantity }} {{ (order.resource && order.resource.unit_size) || '车' }}</text></view>
     <view class="kv"><text class="muted">{{ otherLabel }}</text><text>{{ otherName }}</text></view>
     <view class="kv"><text class="muted">联系电话</text><text>{{ otherPhone }}</text></view>
     <view wx:if="{{ distText }}" class="kv kv-link" catchtap="openRouteMap">
       <text class="muted">📍 距离</text>
       <view>距您 {{ distText }} <text class="muted" style="font-size: 22rpx;">查看路线 ›</text></view>
+    </view>
+  </view>
+
+  <!-- 资源参数明细：蛋品 / 鸡种 / 蛋黄颜色 / 鲜度 / 次品率 / 规格 / 车型 + 单箱净重各斤值 -->
+  <view wx:if="{{ order.resource }}" class="card">
+    <view class="section-title" style="margin: 0 0 16rpx; font-size: 30rpx;">参数明细</view>
+    <view wx:if="{{ order.resource.egg_color }}" class="kv"><text class="muted">蛋品类目</text><text>{{ order.resource.egg_color }}</text></view>
+    <view wx:if="{{ order.resource.chicken_breed }}" class="kv"><text class="muted">鸡种</text><text>{{ order.resource.chicken_breed }}</text></view>
+    <view wx:if="{{ order.resource.yolk_color }}" class="kv">
+      <text class="muted">蛋黄颜色</text>
+      <text>{{ order.resource.yolk_color }}<text wx:if="{{ order.resource.yolk_shade }}" class="muted" style="font-size: 22rpx;"> · {{ order.resource.yolk_shade }}</text></text>
+    </view>
+    <view wx:if="{{ order.resource.freshness_days }}" class="kv"><text class="muted">鲜度</text><text>{{ order.resource.freshness_days }} 天内</text></view>
+    <view wx:if="{{ order.resource.defect_rate != null }}" class="kv">
+      <text class="muted">次品率</text>
+      <text>{{ order.resource.defect_rate }}%</text>
+    </view>
+    <view wx:if="{{ order.resource.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ order.resource.pack_size }} 枚/箱</text></view>
+    <view wx:if="{{ order.resource.truck_type }}" class="kv"><text class="muted">车型</text><text>{{ order.resource.truck_type }} 米车</text></view>
+    <view wx:if="{{ order.resource.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ order.resource.weight_spec }}</text></view>
+    <view wx:if="{{ weightSpecsList.length }}" class="weight-specs">
+      <view class="muted" style="font-size: 24rpx; padding: 6rpx 0;">📦 各规格箱数 / 价格</view>
+      <view wx:for="{{ weightSpecsList }}" wx:key="weight" class="weight-row">
+        <text class="weight-w">{{ item.weight }} 斤箱</text>
+        <text class="weight-b muted">{{ item.boxes }} 箱</text>
+        <text class="weight-p">¥{{ item.price }} <text class="muted" style="font-size: 22rpx;">/箱</text></text>
+      </view>
     </view>
   </view>
 
@@ -54,7 +79,7 @@
     </view>
   </view>
 
-  <view wx:if="{{ user.role === 'buyer' && (order.status === 'communicating' || order.status === 'pending_group') }}" class="card">
+  <view wx:if="{{ isBuyerSide && (order.status === 'communicating' || order.status === 'pending_group') }}" class="card">
     <button class="btn" bindtap="confirm">确认收货</button>
     <view class="muted text-c mt-8">7 天未操作系统自动确认</view>
   </view>

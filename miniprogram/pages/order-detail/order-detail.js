@@ -15,6 +15,8 @@ Page({
     showDispute: false, dispute: { type: '', description: '' },
     serviceQr: { url: '', owner: '' },
     distText: '',
+    isBuyerSide: false,   // 本订单中本人是否为买方（参与货源出价 / 发布求购）
+    weightSpecsList: [],
   },
   onLoad(opt) {
     this.setData({ id: Number(opt.id), user: app.globalData.user });
@@ -94,17 +96,29 @@ Page({
     try {
       const { order, chats, service_qr } = await api.get('/orders/' + this.data.id);
       const me = this.data.user;
-      const isFarm = me && me.role === 'farm';
-      const other = isFarm ? order.buyer : order.farm;
+      // 卖方判定按本订单 farm_id（单个账号可能同时卖货 / 买货）
+      const isSellerSide = me && order.farm_id === me.id;
+      const other = isSellerSide ? order.buyer : order.farm;
+      // weight_specs JSON 解析，详情页显示按 weight/箱数/价格
+      let weightSpecsList = [];
+      if (order.resource && order.resource.weight_specs) {
+        try {
+          const parsed = typeof order.resource.weight_specs === 'string'
+            ? JSON.parse(order.resource.weight_specs) : order.resource.weight_specs;
+          if (Array.isArray(parsed)) weightSpecsList = parsed;
+        } catch (e) {}
+      }
       this.setData({
         order,
         chats: chats.map(c => ({ ...c, mine: c.sender_id === me.id, timeText: formatTime(c.created_at) })),
         statusText: statusLabel(order.status),
         statusCls: statusTag(order.status),
-        otherLabel: isFarm ? '采购商' : '养殖场',
+        otherLabel: isSellerSide ? '采购商' : '养殖场',
         otherName: other ? other.name : '-',
         otherPhone: other ? other.phone : '-',
         serviceQr: service_qr || { url: '', owner: '' },
+        isBuyerSide: !isSellerSide && order.buyer_id === me.id,
+        weightSpecsList,
       });
       this.computeDist();
     } catch (e) {}

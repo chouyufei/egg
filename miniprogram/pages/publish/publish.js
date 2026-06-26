@@ -81,8 +81,10 @@ Page({
     truckPresets: TRUCK_PRESETS,
     truckRangeLabels: TRUCK_PRESETS.map(t => `${t.value} m 车  ≈ ${t.boxes} 箱`),
     truckIndex: -1,
-    weightWarn: '',           // 净重区间超 3 时的提示
+    weightWarn: '',           // 净重区间超 2 时的提示
     weightRows: [],           // [{ weight, boxes, price }]，按 weight_min/max 整数斤值动态生成
+    totalBoxesNow: 0,         // 各斤值箱数实时合计
+    totalBoxesOver: false,    // 是否超过车型容量 + 50
     // 当前蛋色对应的鸡种列表 + picker 索引
     breedOptions: BREEDS_BY_COLOR['红壳'],
     breedIndex: -1,                    // -1 表示未选；>= 0 是 picker 索引
@@ -390,6 +392,7 @@ Page({
       truckIndex: idx,
       'form.truck_type': String(t.value),
     });
+    this._recalcTotalBoxes();
     this.refreshDepositStatus();
   },
 
@@ -422,6 +425,7 @@ Page({
     if (!rows[i]) return;
     rows[i].boxes = e.detail.value;
     this.setData({ weightRows: rows });
+    this._recalcTotalBoxes();
     clearTimeout(this._qtyTimer);
     this._qtyTimer = setTimeout(() => this.refreshDepositStatus(), 300);
   },
@@ -431,6 +435,12 @@ Page({
     if (!rows[i]) return;
     rows[i].price = e.detail.value;
     this.setData({ weightRows: rows });
+  },
+  _recalcTotalBoxes() {
+    const sum = (this.data.weightRows || []).reduce((s, r) => s + (parseInt(r.boxes, 10) || 0), 0);
+    const t = TRUCK_PRESETS[this.data.truckIndex];
+    const cap = t ? t.boxes + 50 : Infinity;
+    this.setData({ totalBoxesNow: sum, totalBoxesOver: sum > cap });
   },
 
   async addPhoto() {
@@ -491,8 +501,18 @@ Page({
     if (specs.some(s => s.boxes <= 0 || s.price <= 0)) {
       return wx.showToast({ title: '每个净重斤值都要填箱数和价格', icon: 'none' });
     }
-    // 总箱数 = 各斤值箱数之和；展示价 = 最小斤值对应的价格
+    // 总箱数 = 各斤值箱数之和；上限 = 选定车型对应箱数 + 50（允许少量装载冗余）
     const totalBoxes = specs.reduce((s, x) => s + x.boxes, 0);
+    const truckPreset = TRUCK_PRESETS[this.data.truckIndex];
+    const cap = truckPreset ? truckPreset.boxes + 50 : Infinity;
+    if (totalBoxes > cap) {
+      return wx.showModal({
+        title: '总箱数超过车型上限',
+        content: `当前总箱数 ${totalBoxes}，所选车型「${truckPreset.value} m 车 ≈ ${truckPreset.boxes} 箱」最多允许 ${cap} 箱（含 50 箱冗余），请调整各斤值的箱数。`,
+        showCancel: false,
+        confirmText: '我知道了',
+      });
+    }
     const displayPrice = specs[0].price;
 
     // 发布前：确保钱包可用余额够冻结一笔保证金；不够提示去充值

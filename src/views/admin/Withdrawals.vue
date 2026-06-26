@@ -57,7 +57,11 @@
               </template>
               <template v-else-if="w.status === 'approved'">
                 <button class="btn-small btn-green" @click="markPaid(w)">标记已打款</button>
-                <button class="btn-small btn-danger-sm" @click="reject(w)">拒绝</button>
+                <button class="btn-small btn-danger-sm" @click="markFailed(w)">标记打款失败 (退款)</button>
+              </template>
+              <template v-else-if="w.status === 'paid'">
+                <button class="btn-small btn-danger-sm" @click="markFailed(w)">标记打款失败 (退款)</button>
+                <span v-if="w.out_trade_no" class="muted" style="margin-left: 8px;">流水 {{ w.out_trade_no }}</span>
               </template>
               <span v-else-if="w.failure_reason" class="muted">{{ w.failure_reason }}</span>
               <span v-else-if="w.out_trade_no" class="muted">流水 {{ w.out_trade_no }}</span>
@@ -144,6 +148,20 @@ async function reject(w) {
   try {
     await api.post(`/admin/withdrawals/${w.id}/reject`, { reason });
     showSuccessToast('已拒绝，金额已退回用户余额');
+    await load();
+  } catch (e) { showFailToast(e?.message); }
+}
+
+// 标记打款失败：把金额退回用户钱包 + 发"提现失败，请稍后再试"通知。
+// 适用于"已标记打款但银行卡转账实际没成功"（status=paid → failed）和
+// "已批准但还没动手就发现商户余额不足"（status=approved → failed）等场景。
+async function markFailed(w) {
+  const reason = prompt('打款失败原因（用户可见）', '银行卡转账失败，请稍后再试');
+  if (!reason) return;
+  if (!confirm(`确认将 ¥${w.amount} 提现标记为打款失败？\n金额会退回用户钱包，用户会收到失败通知。`)) return;
+  try {
+    await api.post(`/admin/withdrawals/${w.id}/mark-failed`, { reason });
+    showSuccessToast('已标记失败，金额已退回');
     await load();
   } catch (e) { showFailToast(e?.message); }
 }

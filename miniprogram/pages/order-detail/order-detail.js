@@ -33,11 +33,15 @@ Page({
     const km = distanceKm(this._myLoc.lat, this._myLoc.lng, dst.lat, dst.lng);
     if (km != null) this.setData({ distText: formatDistance(km) });
   },
-  // "对方"端点：买家看货源位置；卖家看买家位置
+  // "对方"端点：按本订单角色判（不依赖 user.role 全局切换）
+  //   我=卖方（farm_id===me）→ 对方=买家
+  //   我=买方（buyer_id===me）→ 对方=货源点（优先 resource.lat/lng）/ 养殖场
+  //   都不匹配（admin / 看他人订单）→ 默认按"我是买家"看货源点
   _otherPoint(order) {
     if (!order) return null;
-    const isFarm = this.data.user && this.data.user.role === 'farm';
-    if (isFarm) {
+    const me = this.data.user;
+    const meIsSeller = !!(me && order.farm_id === me.id);
+    if (meIsSeller) {
       const b = order.buyer;
       return (b && b.lat != null && b.lng != null)
         ? { lat: b.lat, lng: b.lng, label: b.name || '采购方', address: b.region || '' }
@@ -54,7 +58,9 @@ Page({
     return null;
   },
   report() {
-    wx.navigateTo({ url: '/pages/report/report?t=order&id=' + this.data.id });
+    const o = this.data.order;
+    const no = (o && o.order_no) ? '&no=' + encodeURIComponent(o.order_no) : '';
+    wx.navigateTo({ url: '/pages/report/report?t=order&id=' + this.data.id + no });
   },
 
   copyOrderNo() {

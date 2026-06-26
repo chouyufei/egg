@@ -22,10 +22,13 @@ Page({
   async onLoad(opt) {
     const t = String(opt.t || 'resource');
     const id = Number(opt.id || 0);
+    const no = opt.no ? decodeURIComponent(opt.no) : '';
+    // 订单优先显示 16 位 order_no（用户可读），其它类型仍用 #+id
+    const idLabel = (t === 'order' && no) ? no : ('#' + id);
     this.setData({
       target_type: t,
       target_id: id,
-      targetLabel: (TYPE_LABEL[t] || '内容') + ' #' + id,
+      targetLabel: (TYPE_LABEL[t] || '内容') + ' ' + idLabel,
     });
     try {
       const r = await api.get('/reports/categories');

@@ -43,7 +43,8 @@
             <td>{{ w.method === 'wechat' ? '微信零钱' : '银行卡' }}</td>
             <td>
               <template v-if="w.method === 'bank'">
-                {{ w.account_name }} · {{ maskCard(w.account_no) }}<br/>
+                {{ w.account_name }}<br/>
+                <span class="card-no" @click="copyCard(w.account_no)">{{ w.account_no }} 📋</span><br/>
                 <span class="muted">{{ w.bank_name }}</span>
               </template>
               <span v-else class="muted">本人微信号</span>
@@ -95,7 +96,19 @@ const tabs = [
 ];
 
 function fmt(t) { return dayjs(t).format('MM-DD HH:mm'); }
-function maskCard(n) { if (!n) return ''; return n.length > 8 ? n.slice(0, 4) + '****' + n.slice(-4) : n; }
+// 人工打款需看完整卡号，不脱敏；点击复制方便填进网银
+function copyCard(no) {
+  if (!no) return;
+  const done = () => showSuccessToast('卡号已复制');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(String(no)).then(done).catch(() => {});
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = String(no); document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+}
 function roleLabel(r) { return ({ farm: '养殖场', buyer: '采购商' })[r] || r; }
 function statusLabel(s) {
   return ({ pending: '待审核', approved: '已批准', paid: '已打款', rejected: '已拒绝', cancelled: '已取消', failed: '打款失败' })[s] || s;
@@ -193,6 +206,12 @@ onMounted(load);
 .tag-r { color: #c61212; background: #ffeaea; border-color: #ee0a24; }
 .tag-d { color: #666; background: #f0f0f0; border-color: #ccc; }
 .muted { color: #8a8d93; font-size: 12px; }
+.card-no {
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 13px; color: #1c5bd8; cursor: pointer;
+  letter-spacing: 1px; word-break: break-all;
+}
+.card-no:hover { text-decoration: underline; }
 .btn-small {
   padding: 6px 12px; border: 1px solid #d0d0d0;
   background: #fff; border-radius: 4px; cursor: pointer;

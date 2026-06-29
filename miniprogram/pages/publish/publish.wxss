@@ -48,6 +48,12 @@
   position: relative;
 }
 .upload-thumb image { width: 100%; height: 100%; border-radius: 12rpx; }
+.cover-badge {
+  position: absolute; left: 0; bottom: 0;
+  background: rgba(246,184,33,0.92); color: #fff;
+  font-size: 18rpx; padding: 2rpx 10rpx;
+  border-radius: 0 8rpx 0 12rpx;
+}
 .upload-del {
   position: absolute; top: -10rpx; right: -10rpx;
   width: 40rpx; height: 40rpx; line-height: 36rpx;

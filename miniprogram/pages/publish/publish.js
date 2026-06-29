@@ -460,6 +460,32 @@ Page({
   preview(e) {
     wx.previewImage({ current: e.currentTarget.dataset.url, urls: this.data.photos });
   },
+  // 长按图片调整顺序：弹菜单 设为封面 / 前移 / 后移
+  reorderPhoto(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const arr = this.data.photos.slice();
+    const n = arr.length;
+    if (n < 2) return;
+    const items = [];
+    const acts = [];
+    if (i !== 0) { items.push('⬆ 设为封面（第 1 张）'); acts.push('cover'); }
+    if (i > 0)     { items.push('← 前移一位'); acts.push('prev'); }
+    if (i < n - 1) { items.push('后移一位 →'); acts.push('next'); }
+    wx.showActionSheet({
+      itemList: items,
+      success: (r) => {
+        const a = acts[r.tapIndex];
+        let to = i;
+        if (a === 'cover') to = 0;
+        else if (a === 'prev') to = i - 1;
+        else if (a === 'next') to = i + 1;
+        if (to === i) return;
+        const [moved] = arr.splice(i, 1);
+        arr.splice(to, 0, moved);
+        this.setData({ photos: arr });
+      },
+    });
+  },
 
   addVideo() {
     wx.chooseMedia({

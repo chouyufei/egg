@@ -179,10 +179,13 @@
     <view class="input-row"><view class="label">描述</view><textarea value="{{ form.description }}" data-k="description" bindinput="onInput" bindblur="onInput" placeholder="{{ isSupply ? '饲养方式、检疫情况、发货时效...' : '需求详情、自提/送货、付款方式...' }}" auto-height /></view>
 
     <view class="upload-block">
-      <view class="upload-title">图片（最多 9 张，拍照或从相册选择）</view>
+      <view class="upload-title">图片（最多 9 张，第 1 张为封面；长按可调整顺序）</view>
       <view class="upload-grid">
-        <view wx:for="{{ photos }}" wx:key="*this" class="upload-thumb">
-          <image src="{{ item }}" mode="aspectFill" bindtap="preview" data-url="{{ item }}" />
+        <view wx:for="{{ photos }}" wx:key="*this" class="upload-thumb"
+              bindtap="preview" data-url="{{ item }}" data-i="{{ index }}"
+              bindlongpress="reorderPhoto">
+          <image src="{{ item }}" mode="aspectFill" />
+          <view wx:if="{{ index === 0 }}" class="cover-badge">封面</view>
           <view class="upload-del" catchtap="delPhoto" data-i="{{ index }}">×</view>
         </view>
         <view wx:if="{{ photos.length < 9 }}" class="upload-add" bindtap="addPhoto">+</view>

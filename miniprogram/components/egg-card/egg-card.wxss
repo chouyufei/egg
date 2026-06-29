@@ -25,17 +25,17 @@
 .ec-body { padding: 16rpx 18rpx 20rpx; }
 
 .ec-title {
-  font-size: 26rpx; font-weight: 600; color: #1d1d1f;
-  line-height: 1.35;
+  font-size: 32rpx; font-weight: 700; color: #1d1d1f;
+  line-height: 1.4;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
   overflow: hidden;
-  min-height: 70rpx;
+  min-height: 80rpx;
 }
 
-.ec-tags { margin-top: 10rpx; min-height: 28rpx; }
+.ec-tags { margin-top: 12rpx; min-height: 36rpx; }
 .ec-tag {
-  display: inline-block; font-size: 20rpx;
-  padding: 2rpx 10rpx; border-radius: 8rpx; margin-right: 6rpx;
+  display: inline-block; font-size: 24rpx;
+  padding: 4rpx 14rpx; border-radius: 8rpx; margin-right: 8rpx;
   background: #fff7e0; color: #b78300;
 }
 .ec-tag-g { background: #e7f7eb; color: #06883b; }
@@ -44,8 +44,8 @@
 
 .ec-foot {
   display: flex; justify-content: space-between; align-items: flex-end;
-  margin-top: 12rpx;
+  margin-top: 14rpx;
 }
-.ec-price { font-size: 34rpx; font-weight: 800; color: #ee0a24; }
-.ec-unit { font-size: 18rpx; color: #8a8d93; margin-left: 4rpx; }
-.ec-meta { font-size: 20rpx; color: #8a8d93; }
+.ec-price { font-size: 40rpx; font-weight: 800; color: #ee0a24; }
+.ec-unit { font-size: 22rpx; color: #8a8d93; margin-left: 4rpx; }
+.ec-meta { font-size: 24rpx; color: #8a8d93; }

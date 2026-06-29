@@ -32,6 +32,20 @@
       </picker>
     </view>
 
+    <!-- 求购：允许参与地区（多选，默认不限） -->
+    <view wx:if="{{ !isSupply }}" class="allow-block">
+      <view class="row-between" style="padding: 16rpx 0 8rpx;">
+        <text class="label">允许参与地区</text>
+        <text class="muted" style="font-size: 22rpx;">{{ allowProvinces.length ? '已选 ' + allowProvinces.length + ' 个' : '不限（全部可参与）' }}</text>
+      </view>
+      <view class="allow-chips">
+        <view class="allow-chip {{ allowProvinces.length === 0 ? 'on' : '' }}" bindtap="clearAllowProvinces">不限</view>
+        <view wx:for="{{ provinces }}" wx:key="*this"
+              class="allow-chip {{ allowMap[item] ? 'on' : '' }}"
+              bindtap="toggleAllowProvince" data-p="{{ item }}">{{ item }}</view>
+      </view>
+    </view>
+
     <!-- 定位：选定后自动填省/市/地址，作为具体地区 -->
     <view class="input-row loc-row">
       <view class="label">📍 定位</view>

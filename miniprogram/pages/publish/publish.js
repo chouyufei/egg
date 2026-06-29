@@ -83,6 +83,8 @@ Page({
     truckIndex: -1,
     weightWarn: '',           // 净重区间超 2 时的提示
     weightRows: [],           // [{ weight, boxes, price }]，按 weight_min/max 整数斤值动态生成
+    allowProvinces: [],       // 求购：允许参与地区（空=不限）
+    allowMap: {},             // { 省份: true } 便于 wxml 判选中
     totalBoxesNow: 0,         // 各斤值箱数实时合计
     totalBoxesOver: false,    // 是否超过车型容量 + 50
     // 当前蛋色对应的鸡种列表 + picker 索引
@@ -391,6 +393,18 @@ Page({
   pickDur(e) { this.setData({ 'form.duration_hours': Number(e.detail.value) }); },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
 
+  // 求购 允许参与地区 多选
+  toggleAllowProvince(e) {
+    const p = e.currentTarget.dataset.p;
+    const arr = this.data.allowProvinces.slice();
+    const i = arr.indexOf(p);
+    if (i >= 0) arr.splice(i, 1); else arr.push(p);
+    const map = {};
+    arr.forEach(x => { map[x] = true; });
+    this.setData({ allowProvinces: arr, allowMap: map });
+  },
+  clearAllowProvinces() { this.setData({ allowProvinces: [], allowMap: {} }); },
+
   onInput(e) {
     const key = e.currentTarget.dataset.k;
     if (!key) return;
@@ -582,6 +596,7 @@ Page({
         freshness_days: Number(f.freshness_days) || null,
         quantity: totalBoxes,            // 总箱数
         truck_type: f.truck_type || null,
+        allow_provinces: this.data.isSupply ? null : (this.data.allowProvinces.length ? this.data.allowProvinces : null),
         start_price: displayPrice,       // 最小斤值价 → 列表展示
         min_increment: Number(f.min_increment),
         duration_hours: Number(f.duration_hours),

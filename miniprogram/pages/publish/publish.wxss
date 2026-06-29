@@ -150,3 +150,13 @@
   padding: 0 18rpx; font-size: 30rpx; box-sizing: border-box;
 }
 .ws-unit { font-size: 26rpx; color: #8a8d93; }
+
+/* 求购 允许参与地区 多选 chip */
+.allow-block { border-top: 1px solid #f0f0f0; }
+.allow-chips { display: flex; flex-wrap: wrap; gap: 12rpx; padding: 4rpx 0 12rpx; }
+.allow-chip {
+  font-size: 24rpx; color: #555;
+  padding: 8rpx 20rpx; border-radius: 999rpx;
+  background: #f5f6f8; border: 2rpx solid transparent;
+}
+.allow-chip.on { background: #fff7e0; color: #b78300; border-color: #f6b821; font-weight: 700; }

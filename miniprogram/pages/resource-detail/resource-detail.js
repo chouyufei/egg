@@ -22,6 +22,7 @@ Page({
     haggleVal: 0, haggleMin: 0, haggleMax: 0, haggleReasonable: true,
     priceUnit: '箱',
     weightSpecsList: [],   // 详情页展示各斤值规格的箱数 / 价格
+    allowProvinces: [],    // 求购允许参与地区
   },
   onLoad(opt) {
     this.setData({ reviewMode: !!app.globalData.reviewMode });
@@ -83,6 +84,15 @@ Page({
         ? Number((resource.current_price + resource.min_increment).toFixed(2))
         : Number((resource.current_price - resource.min_increment).toFixed(2));
 
+      // 求购允许参与地区
+      let allowProvinces = [];
+      if (resource.allow_provinces) {
+        try {
+          const p = typeof resource.allow_provinces === 'string'
+            ? JSON.parse(resource.allow_provinces) : resource.allow_provinces;
+          if (Array.isArray(p)) allowProvinces = p;
+        } catch (e) {}
+      }
       // 未登录访客（通过分享链接进入）：允许浏览，不允许出价；提示登录
       const needLogin = !me;
       let canBid = false, blockReason = '';
@@ -95,6 +105,9 @@ Page({
       } else if (!isSupply && me.license_status !== 'approved') {
         // 求购需求：仅资质认证通过的养殖场可应标
         blockReason = '应标求购需先完成鸡场资质认证';
+      } else if (!isSupply && allowProvinces.length && !allowProvinces.some(p => String(me.region || '').indexOf(p) >= 0)) {
+        // 求购"允许参与地区"限制
+        blockReason = `该求购仅限 ${allowProvinces.join('、')} 的养殖场参与`;
       } else {
         // 货源出价：任何登录用户均可（不再限 role）
         canBid = true;
@@ -155,6 +168,7 @@ Page({
         distText, distNear, distFar,
         priceUnit,
         weightSpecsList,
+        allowProvinces,
       });
     } catch (e) {}
   },

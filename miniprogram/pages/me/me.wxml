@@ -7,6 +7,7 @@
           {{ user.name }} <text class="hero-edit">✎</text>
         </view>
         <view class="hero-sub">{{ user.phone }}</view>
+        <view class="hero-sub" bindtap="goSetLoc" style="margin-top: 6rpx;">📍 {{ locName || '未设置位置，点此设置' }} ›</view>
         <view class="mt-8">
           <text class="tag {{ licCls }}">资质 {{ licText }}</text>
         </view>

@@ -30,6 +30,15 @@
     </div>
 
     <div class="admin-card">
+      <h3 style="margin-top: 0;">📍 消息提醒推送距离</h3>
+      <p class="muted" style="margin-top: 0; line-height: 1.7;">新货源 / 求购发布时，会给定位在此距离范围内的用户推送订阅消息 + 站内提醒。距离按用户主页选择的定位与货源位置计算。默认 500km。</p>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <input v-model.number="s.push_radius_km" type="number" min="0" max="5000" style="width: 160px; padding: 8px;" />
+        <span class="muted">km</span>
+      </div>
+    </div>
+
+    <div class="admin-card">
       <h3 style="margin-top: 0;">企业微信群机器人 webhook</h3>
       <p class="muted" style="margin-top: 0;">报价成交时往该机器人推送一条文本消息（含货源标题 + 买卖双方账号/手机号）。在企业微信群里添加「群机器人」→ 复制 Webhook URL 粘贴到此。留空 = 不发企业微信通知。</p>
       <input v-model="s.wecom_webhook_url" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=..." style="width: 100%; padding: 8px; box-sizing: border-box;" />
@@ -80,6 +89,7 @@ const s = reactive({
   notify_platform_sms: false,
   platform_phones: [],
   wecom_webhook_url: '',
+  push_radius_km: 500,
   service_qr_url: '',
   service_qr_owner: '',
 });
@@ -125,6 +135,7 @@ async function save() {
       notify_platform_sms: s.notify_platform_sms,
       platform_phones: phones,
       wecom_webhook_url: s.wecom_webhook_url,
+      push_radius_km: s.push_radius_km,
     });
     // 客服二维码走单独接口
     await api.put('/admin/service-qr', {

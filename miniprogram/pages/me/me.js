@@ -12,10 +12,18 @@ Page({
     roleText: '',
     walletBalance: '0.00',
     reviewMode: false,
+    locName: '',     // 主页选定的位置名（与首页定位同步，用于附近推荐 + 推送匹配）
   },
+  // 点位置 → 回首页选位置
+  goSetLoc() { wx.switchTab({ url: '/pages/index/index' }); },
   async onShow() {
     if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
     this.setData({ reviewMode: !!app.globalData.reviewMode });
+    // 顶部位置：优先首页自选定位名，否则空
+    try {
+      const c = wx.getStorageSync('customLoc');
+      this.setData({ locName: (c && c.name) || '' });
+    } catch (e) {}
     const user = app.globalData.user;
     if (!user) return;
     const roleMap = { farm: '养殖场', buyer: '采购商', admin: '管理员' };

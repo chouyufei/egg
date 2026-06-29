@@ -10,14 +10,15 @@ const PROVINCES = ['北京', '天津', '河北', '山西', '辽宁', '吉林', '
 Page({
   data: {
     form: {
-      name: '', contact_name: '', contact_phone: '', address: '',
+      name: '', contact_name: '', contact_phone: '', address: '', lat: null, lng: null,
       business_license: '', farm_size_int: '', daily_output: '', main_products: '',
       license_photos: [], farm_photos: [], quarantine_photos: [],
     },
     provinces: PROVINCES, provinceIndex: 0,
     statusText: '未提交', statusCls: 'tag-d',
     licenseStatus: '',     // approved / pending / rejected / none
-    canEdit: true,         // 仅 rejected / none / 未提交 时可填表 + 提交
+    canEdit: true,         // rejected / none / 未提交 / 主动 editing 时可填表
+    editing: false,        // approved 用户主动点"修改资质"进入编辑
     showDetail: false,     // 已通过 / 审核中时，是否展开已提交资料的只读视图
     loading: false,
   },
@@ -52,7 +53,7 @@ Page({
       statusText: statusLabel(u.license_status),
       statusCls: statusTag(u.license_status),
       licenseStatus: u.license_status || '',
-      canEdit: !['approved', 'pending'].includes(u.license_status),
+      canEdit: this.data.editing || !['approved', 'pending'].includes(u.license_status),
     });
   },
   onShow() {
@@ -62,7 +63,7 @@ Page({
       statusText: statusLabel(u.license_status),
       statusCls: statusTag(u.license_status),
       licenseStatus: u.license_status || '',
-      canEdit: !['approved', 'pending'].includes(u.license_status),
+      canEdit: this.data.editing || !['approved', 'pending'].includes(u.license_status),
     });
   },
   pickProvince(e) { this.setData({ provinceIndex: Number(e.detail.value) }); },
@@ -149,11 +150,31 @@ Page({
         statusText: statusLabel(me.user.license_status),
         statusCls: statusTag(me.user.license_status),
         licenseStatus: me.user.license_status || '',
+        editing: false,
         canEdit: !['approved', 'pending'].includes(me.user.license_status),
       });
     } catch (e) {} finally { this.setData({ loading: false }); }
   },
   toggleDetail() { this.setData({ showDetail: !this.data.showDetail }); },
+  // approved 用户点"修改资质"：进入编辑态，展开表单（已填入现有数据）
+  startEdit() {
+    this.setData({ editing: true, canEdit: true, showDetail: false });
+    wx.pageScrollTo({ scrollTop: 99999, duration: 300 });
+  },
+  // 地图选点填详细地址（直接用 wx.chooseLocation，不污染首页自选定位）
+  pickAddrOnMap() {
+    wx.chooseLocation({
+      success: (r) => {
+        const addr = (r.address || '') + (r.name && r.name !== r.address ? ' ' + r.name : '');
+        this.setData({
+          'form.address': addr.trim() || r.name || '',
+          'form.lat': r.latitude,
+          'form.lng': r.longitude,
+        });
+      },
+      fail: () => {},
+    });
+  },
   onThumbErr(e) {
     console.warn('[qualify] 缩略图加载失败:', e && e.detail && e.detail.errMsg);
     this.setData({ thumbLoadErr: true });

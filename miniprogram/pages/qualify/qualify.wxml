@@ -67,6 +67,8 @@
       <text>📜 查看已提交资质详情</text>
       <text class="muted">{{ showDetail ? '收起 ▲' : '展开 ▼' }}</text>
     </view>
+    <button wx:if="{{ licenseStatus === 'approved' && !editing }}" class="btn-plain mt-16" bindtap="startEdit">✏️ 修改资质并重新提交审核</button>
+    <view wx:if="{{ editing }}" class="muted mt-8" style="font-size: 22rpx; color: #b78300;">修改后提交将重新进入审核，审核通过前仍按现有资质生效。</view>
   </view>
 
   <!-- 已通过 / 审核中：只读详情 -->
@@ -133,7 +135,12 @@
         <view class="picker-val">{{ provinces[provinceIndex] }} ▾</view>
       </picker>
     </view>
-    <view class="input-row" id="field-address"><view class="label">详细地址 *</view><input value="{{ form.address }}" data-k="address" bindinput="onInput" bindblur="onInput" placeholder="如：青州市某某镇某某村" /></view>
+    <view class="input-row" id="field-address">
+      <view class="label">详细地址 *</view>
+      <input value="{{ form.address }}" data-k="address" bindinput="onInput" bindblur="onInput" placeholder="点右侧地图选点 / 手填" />
+      <text class="addr-map-btn" bindtap="pickAddrOnMap">📍 地图</text>
+    </view>
+    <view wx:if="{{ form.lat }}" class="muted" style="font-size: 22rpx; padding: 4rpx 0 8rpx;">📍 已定位：{{ form.lat }}, {{ form.lng }}</view>
   </view>
 
   <view class="card">

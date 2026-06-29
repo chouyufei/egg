@@ -78,3 +78,11 @@
   margin-bottom: 14rpx;
 }
 .qf-thumb { background: #f5f6f8; }   /* 图片 src 失败时仍可见占位灰底 */
+
+.addr-map-btn {
+  flex-shrink: 0; margin-left: 12rpx;
+  font-size: 24rpx; color: #e0a40d;
+  padding: 6rpx 18rpx; border: 2rpx solid #f6b821;
+  border-radius: 999rpx; background: #fff7e0;
+}
+.addr-map-btn:active { opacity: 0.6; }

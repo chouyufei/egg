@@ -6,6 +6,7 @@
       <router-link to="/admin/users" active-class="active">👤 用户管理</router-link>
       <router-link to="/admin/qualifications" active-class="active">📜 资质审核</router-link>
       <router-link to="/admin/resources" active-class="active">🛒 资源监管</router-link>
+      <router-link to="/admin/orders" active-class="active">📦 订单管理</router-link>
       <router-link to="/admin/deposits" active-class="active">💰 保证金</router-link>
       <router-link to="/admin/deposit-settings" active-class="active">💴 保证金金额规则</router-link>
       <router-link to="/admin/withdrawals" active-class="active">💸 提现审核</router-link>

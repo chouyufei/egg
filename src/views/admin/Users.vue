@@ -16,7 +16,7 @@
 
     <div class="admin-card">
       <table class="admin-tbl">
-        <thead><tr><th>ID</th><th>姓名</th><th>手机号</th><th>角色</th><th>地区</th><th>资质</th><th>状态</th><th>操作</th></tr></thead>
+        <thead><tr><th>ID</th><th>姓名</th><th>手机号</th><th>角色</th><th>地区</th><th>注册时间</th><th>资质</th><th>状态</th><th>操作</th></tr></thead>
         <tbody>
           <tr v-for="u in list" :key="u.id">
             <td>{{ u.id }}</td>
@@ -24,6 +24,7 @@
             <td>{{ u.phone }}</td>
             <td>{{ roleLabel(u.role) }}</td>
             <td>{{ u.region || '-' }}</td>
+            <td>{{ regTime(u.created_at) }}</td>
             <td><span class="pill" :class="licClass(u.license_status)">{{ licLabel(u.license_status) }}</span></td>
             <td><span class="pill" :class="u.banned ? 'pill-r' : 'pill-g'">{{ u.banned ? '已冻结' : '正常' }}</span></td>
             <td>
@@ -43,11 +44,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '../../api';
+import dayjs from 'dayjs';
 
 const list = ref([]);
 const role = ref('');
 const status = ref('');
 
+function regTime(t) { return t ? dayjs(t).format('YYYY-MM-DD HH:mm') : '-'; }
 function roleLabel(r) { return ({ farm: '养殖场', buyer: '采购商', admin: '管理员' }[r]); }
 function licLabel(s) { return ({ pending: '待审', approved: '已通过', rejected: '未通过', none: '无需' }[s]); }
 function licClass(s) { return ({ pending: 'pill-y', approved: 'pill-g', rejected: 'pill-r', none: 'pill-d' }[s]); }

@@ -32,6 +32,7 @@ const routes = [
       { path: 'users', component: () => import('../views/admin/Users.vue') },
       { path: 'qualifications', component: () => import('../views/admin/Qualifications.vue') },
       { path: 'resources', component: () => import('../views/admin/Resources.vue') },
+      { path: 'orders', component: () => import('../views/admin/Orders.vue') },
       { path: 'deposits', component: () => import('../views/admin/Deposits.vue') },
       { path: 'disputes', component: () => import('../views/admin/Disputes.vue') },
       { path: 'settings', component: () => import('../views/admin/Settings.vue') },

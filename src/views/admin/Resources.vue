@@ -15,7 +15,9 @@
             <td>{{ bidsOf(r) }}</td>
             <td>{{ formatTime(r.end_at) }}</td>
             <td>
+              <button @click="editRes(r)">编辑</button>
               <button v-if="r.status === 'auctioning' || r.status === 'draft'" @click="takedown(r)">下架</button>
+              <button class="danger" @click="delRes(r)">删除</button>
             </td>
           </tr>
         </tbody>
@@ -45,5 +47,26 @@ async function takedown(r) {
   await api.post(`/admin/resources/${r.id}/takedown`, { reason });
   load();
 }
+async function editRes(r) {
+  const title = prompt('标题', r.title);
+  if (title === null) return;
+  const start_price = prompt('起报价', r.start_price);
+  if (start_price === null) return;
+  const quantity = prompt('数量(箱)', r.quantity);
+  if (quantity === null) return;
+  const description = prompt('描述', r.description || '');
+  if (description === null) return;
+  await api.patch(`/admin/resources/${r.id}`, { title, start_price, quantity, description });
+  load();
+}
+async function delRes(r) {
+  if (!confirm(`确认删除资源「${r.title}」？删除后用户端不再展示。`)) return;
+  await api.delete(`/admin/resources/${r.id}`);
+  load();
+}
 onMounted(load);
 </script>
+
+<style scoped>
+.danger { color: #ee0a24; }
+</style>

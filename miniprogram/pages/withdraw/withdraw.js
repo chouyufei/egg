@@ -2,7 +2,7 @@ const api = require('../../utils/api');
 const app = getApp();
 
 const DEFAULT_RULES = {
-  min_amount: 1,
+  min_amount: 0.01,
   processing_hours: 1,
   arrival_hours: 2,
   fee_pct: 0,

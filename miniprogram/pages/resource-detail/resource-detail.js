@@ -44,8 +44,8 @@ Page({
     const region = r.region || '';
     const tag = r.egg_color || '';
     const title = isSupply
-      ? `🔥 一车${region}${tag}鸡蛋已 ${watchers} 人围观，现价 ¥${r.current_price}/${r.unit_size || '箱'}，赶紧抢锁！`
-      : `🛒 ${region}求购${tag}鸡蛋 ${r.quantity} ${r.unit_size || '车'}，有货速来抢报，价高者优先！`;
+      ? `🔥 ${region}${tag}鸡蛋已 ${watchers} 人围观，现价 ¥${r.current_price}/箱，赶紧抢锁！`
+      : `🛒 ${region}求购${tag}鸡蛋 ${r.quantity} 箱，有货速来抢报，价高者优先！`;
     return {
       title,
       path,
@@ -62,8 +62,8 @@ Page({
     const region = r.region || '';
     const tag = r.egg_color || '';
     const title = isSupply
-      ? `🔥 ${region}${tag}鸡蛋 现价 ¥${r.current_price}/${r.unit_size || '箱'}，多人围观中`
-      : `🛒 ${region}求购${tag}鸡蛋 ${r.quantity} ${r.unit_size || '车'}，有货请进`;
+      ? `🔥 ${region}${tag}鸡蛋 现价 ¥${r.current_price}/箱，多人围观中`
+      : `🛒 ${region}求购${tag}鸡蛋 ${r.quantity} 箱，有货请进`;
     return {
       title,
       query: 'id=' + id,

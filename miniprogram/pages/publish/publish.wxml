@@ -147,14 +147,18 @@
       总箱数当前：<text style="color: {{ totalBoxesOver ? '#ee0a24' : '#e0a40d' }}; font-weight: 700;">{{ totalBoxesNow }}</text>
       / 上限 {{ truckPresets[truckIndex].boxes + 50 }} 箱（{{ truckPresets[truckIndex].value }} m 车 ≈ {{ truckPresets[truckIndex].boxes }} 箱 + 50 冗余）
     </view>
-    <view wx:for="{{ weightRows }}" wx:key="weight" class="input-row" style="flex-wrap: wrap; gap: 12rpx;">
-      <view class="label">{{ item.weight }} 斤箱</view>
-      <input type="number" value="{{ item.boxes }}" data-i="{{ index }}" bindinput="onWeightBoxes" bindblur="onWeightBoxes"
-             placeholder="箱数" style="width: 140rpx; background: #f5f6f8; border-radius: 8rpx; padding: 4rpx 10rpx;" />
-      <text class="muted" style="font-size: 22rpx;">箱</text>
-      <input type="digit" value="{{ item.price }}" data-i="{{ index }}" bindinput="onWeightPrice" bindblur="onWeightPrice"
-             placeholder="{{ isSupply ? '起报价' : '心理价' }}" style="width: 160rpx; background: #f5f6f8; border-radius: 8rpx; padding: 4rpx 10rpx;" />
-      <text class="muted" style="font-size: 22rpx;">元/箱</text>
+    <view wx:for="{{ weightRows }}" wx:key="weight" class="ws-row">
+      <view class="ws-w">{{ item.weight }} 斤箱</view>
+      <view class="ws-field">
+        <input type="number" value="{{ item.boxes }}" data-i="{{ index }}" bindinput="onWeightBoxes" bindblur="onWeightBoxes"
+               placeholder="箱数" class="ws-input" />
+        <text class="ws-unit">箱</text>
+      </view>
+      <view class="ws-field">
+        <input type="digit" value="{{ item.price }}" data-i="{{ index }}" bindinput="onWeightPrice" bindblur="onWeightPrice"
+               placeholder="{{ isSupply ? '起报价' : '心理价' }}" class="ws-input" />
+        <text class="ws-unit">元/箱</text>
+      </view>
     </view>
   </view>
 

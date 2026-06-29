@@ -185,6 +185,20 @@ Page({
     const user = app.globalData.user;
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
     const isSupply = user.role === 'farm';
+    // 发布货源需先完成养殖场资质认证（求购不限）
+    if (isSupply && user.license_status !== 'approved') {
+      wx.showModal({
+        title: '暂不能发布货源',
+        content: '发布货源需先完成养殖场资质认证并通过审核。是否前往认证？',
+        confirmText: '去认证',
+        cancelText: '返回',
+        success: (r) => {
+          if (r.confirm) wx.redirectTo({ url: '/pages/qualify/qualify' });
+          else { wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/index/index' }) }); }
+        },
+      });
+      return;
+    }
     let idx = 0;
     if (user.region) for (let i = 0; i < PROVINCES.length; i++) {
       if (user.region.indexOf(PROVINCES[i]) >= 0) { idx = i; break; }
@@ -583,9 +597,15 @@ Page({
       delete payload.weight_max;
       delete payload.truck_count;
       delete payload.shell_quality;
-      await api.post('/resources', payload);
-      wx.showToast({ title: '发布成功' });
-      setTimeout(() => wx.navigateBack(), 500);
+      // 重新上架：复用原资源（PATCH 重置为 auctioning），不再新建，避免列表重复
+      if (this.data.fromId) {
+        await api.post('/resources/' + this.data.fromId + '/relist', payload);
+      } else {
+        await api.post('/resources', payload);
+      }
+      wx.showToast({ title: this.data.fromId ? '已重新上架' : '发布成功' });
+      // 发布 / 重新上架成功后统一回首页（避免重新上架页残留旧资源数据）
+      setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 600);
     } catch (e) {} finally { this.setData({ loading: false }); }
   },
 });

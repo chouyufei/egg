@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/login/login",
     "pages/select-mode/select-mode",
-    "pages/index/index",
     "pages/category/category",
     "pages/auction/auction",
     "pages/orders/orders",

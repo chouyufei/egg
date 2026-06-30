@@ -1,6 +1,7 @@
 const api = require('../../utils/api');
 const { getAndReportLocation, getLocation, chooseLocation } = require('../../utils/location');
 const { defaultShare } = require('../../utils/share');
+const { requireLogin } = require('../../utils/auth');
 const app = getApp();
 
 const CUSTOM_LOC_KEY = 'customLoc';   // 持久化自选位置
@@ -35,6 +36,7 @@ Page({
   onShareTimeline()   { return defaultShare(); },
   data: {
     user: null,
+    isGuest: false,       // 游客模式：未登录浏览
     unread: 0,
     reviewMode: false,    // 审核模式：藏起金融/复杂功能
 
@@ -69,25 +71,30 @@ Page({
   },
 
   onLoad() {
-    const user = app.globalData.user || wx.getStorageSync('user');
-    if (!user) return wx.reLaunch({ url: '/pages/login/login' });
-    this.setData({ user });
+    // 游客模式：未登录也能进首页浏览，不再强制跳登录
+    const user = app.globalData.user || wx.getStorageSync('user') || null;
+    this.setData({ user, isGuest: !user });
     // 站内消息提醒是平台自带功能，无需弹框征求授权 → 不再弹"开启消息提醒"。
     // 微信订阅消息授权改到用户真正触发动作（出价 / 发布）时静默请求即可。
   },
 
-  async onShow() {
-    if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
-    this.setData({ reviewMode: !!app.globalData.reviewMode });
+  goLogin() { wx.navigateTo({ url: '/pages/login/login' }); },
 
-    // 同步 DB role 到当前 UI 模式，让发布 / 报价 等操作能通过权限校验
-    const targetRole = this.data.activeMode === 'sell' ? 'farm' : 'buyer';
-    if (this.data.user && this.data.user.role !== 'admin' && this.data.user.role !== targetRole) {
-      try {
-        const res = await api.post('/auth/switch-role', { role: targetRole });
-        app.setAuth(app.globalData.token, res.user);
-        this.setData({ user: res.user });
-      } catch (e) {}
+  async onShow() {
+    this.setData({ reviewMode: !!app.globalData.reviewMode });
+    const isGuest = !app.globalData.token;
+    this.setData({ isGuest, user: app.globalData.user || this.data.user || null });
+
+    // 已登录才同步 DB role 到当前 UI 模式（游客无需，也无权限）
+    if (!isGuest) {
+      const targetRole = this.data.activeMode === 'sell' ? 'farm' : 'buyer';
+      if (this.data.user && this.data.user.role !== 'admin' && this.data.user.role !== targetRole) {
+        try {
+          const res = await api.post('/auth/switch-role', { role: targetRole });
+          app.setAuth(app.globalData.token, res.user);
+          this.setData({ user: res.user });
+        } catch (e) {}
+      }
     }
 
     // 自选位置优先；没有再用 GPS 定位
@@ -136,19 +143,27 @@ Page({
   },
 
   async refresh() {
-    try { const m = await api.get('/messages/unread-count'); this.setData({ unread: m.count || 0 }); } catch (e) {}
+    if (app.globalData.token) {
+      try { const m = await api.get('/messages/unread-count'); this.setData({ unread: m.count || 0 }); } catch (e) {}
+    } else {
+      this.setData({ unread: 0 });
+    }
     await this.load();
   },
 
   async load() {
-    // 我的发布（按 kind 分两堆）
-    try {
-      const { resources } = await api.get('/resources/mine');
-      this.setData({
-        mineDemands: resources.filter(r => (r.kind || 'supply') === 'demand'),
-        mineSupplies: resources.filter(r => (r.kind || 'supply') === 'supply'),
-      });
-    } catch (e) {}
+    // 我的发布（按 kind 分两堆）—— 游客没有"我的"，跳过
+    if (app.globalData.token) {
+      try {
+        const { resources } = await api.get('/resources/mine');
+        this.setData({
+          mineDemands: resources.filter(r => (r.kind || 'supply') === 'demand'),
+          mineSupplies: resources.filter(r => (r.kind || 'supply') === 'supply'),
+        });
+      } catch (e) {}
+    } else {
+      this.setData({ mineDemands: [], mineSupplies: [] });
+    }
 
     // 对方发布（买视角看 supply，卖视角看 demand），带筛选 + 附近优先
     const browseKind = this.data.activeMode === 'sell' ? 'demand' : 'supply';
@@ -168,6 +183,13 @@ Page({
   async setMode(e) {
     const m = e.currentTarget.dataset.m;
     if (m === this.data.activeMode) return;
+
+    // 游客：仅本地切换买/卖视角（看 supply / demand），无需同步 DB role
+    if (!app.globalData.token || !this.data.user) {
+      this.setData({ activeMode: m });
+      await this.load();
+      return;
+    }
 
     // 切换 UI 模式 + 同步 DB role
     const targetRole = m === 'sell' ? 'farm' : 'buyer';
@@ -222,8 +244,8 @@ Page({
   },
 
   openRes(e) { wx.navigateTo({ url: '/pages/resource-detail/resource-detail?id=' + e.currentTarget.dataset.id }); },
-  goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
-  goPublishDemand() { wx.navigateTo({ url: '/pages/publish/publish' }); },
-  goPublishSupply() { wx.navigateTo({ url: '/pages/publish/publish' }); },
+  goMessages() { if (!requireLogin('查看消息')) return; wx.navigateTo({ url: '/pages/messages/messages' }); },
+  goPublishDemand() { if (!requireLogin('发布求购')) return; wx.navigateTo({ url: '/pages/publish/publish' }); },
+  goPublishSupply() { if (!requireLogin('发布货源')) return; wx.navigateTo({ url: '/pages/publish/publish' }); },
   logout() { app.logout(); },
 });

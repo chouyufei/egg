@@ -38,6 +38,7 @@ App({
   },
   logout() {
     this.setAuth('', null);
-    wx.reLaunch({ url: '/pages/login/login' });
+    // 退出后回到首页，以游客身份继续浏览（而不是强制停在登录页）
+    wx.switchTab({ url: '/pages/index/index' });
   },
 });

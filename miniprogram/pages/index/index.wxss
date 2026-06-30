@@ -1,3 +1,8 @@
+.guest-login {
+  background: #fff; color: #e0a40d; font-weight: 700;
+  font-size: 26rpx; padding: 8rpx 22rpx; border-radius: 999rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.08);
+}
 .bell { position: relative; color: #fff; font-size: 40rpx; }
 .bell-badge {
   position: absolute; top: -8rpx; right: -16rpx;

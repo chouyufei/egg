@@ -50,3 +50,29 @@
     </view>
   </view>
 </view>
+
+<!-- 游客视图：未登录 -->
+<view wx:if="{{ isGuest }}">
+  <view class="hero">
+    <view class="row" style="gap: 24rpx;">
+      <view class="avatar">🥚</view>
+      <view class="flex-1">
+        <view class="hero-title">未登录</view>
+        <view class="hero-sub">登录后可发布货源、报价、下单、查看钱包</view>
+      </view>
+    </view>
+    <button class="btn mt-16" bindtap="goLogin">登录 / 注册</button>
+  </view>
+
+  <view class="card menu-card" style="margin: 32rpx 24rpx;">
+    <view class="menu-row" bindtap="goAgreement">
+      <text>📜 用户协议</text><text class="muted">›</text>
+    </view>
+    <view class="menu-row" bindtap="goPrivacy">
+      <text>🛡 隐私政策</text><text class="muted">›</text>
+    </view>
+    <view class="menu-row" bindtap="goAbout">
+      <text>ℹ️ 关于我们</text><text class="muted">v1.0.0 ›</text>
+    </view>
+  </view>
+</view>

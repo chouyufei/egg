@@ -18,10 +18,12 @@ function request(method, path, data) {
         } else {
           const msg = (res.data && res.data.error) || '请求失败 (' + res.statusCode + ')';
           if (res.statusCode === 401) {
+            // 登录态失效：清掉本地登录信息，退回首页以游客身份继续浏览，
+            // 不再强制跳登录页（游客也能逛）。
             wx.removeStorageSync('token');
             wx.removeStorageSync('user');
             if (app) app.setAuth('', null);
-            wx.reLaunch({ url: '/pages/login/login' });
+            wx.switchTab({ url: '/pages/index/index' });
           }
           wx.showToast({ title: msg, icon: 'none' });
           reject(new Error(msg));

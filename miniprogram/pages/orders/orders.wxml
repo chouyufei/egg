@@ -1,4 +1,12 @@
 <view class="page-pad">
+  <!-- 游客：未登录提示 -->
+  <view wx:if="{{ isGuest }}" class="card text-c" style="padding: 80rpx 32rpx;">
+    <view style="font-size: 80rpx;">📦</view>
+    <view class="bold mt-8">登录后查看您的订单</view>
+    <view class="muted mt-8">游客可浏览货源与求购，登录后才能下单、查看订单</view>
+    <button class="btn mt-16" bindtap="goLogin">登录 / 注册</button>
+  </view>
+
   <view wx:for="{{ orders }}" wx:key="id" class="card order-card" bindtap="open" data-id="{{ item.id }}">
     <!-- 顶部一行大色块标识：买 / 卖，整张卡左侧也描一条色边强化 -->
     <view class="{{ item.sideCls }}">{{ item.sideLabel }}</view>
@@ -18,5 +26,5 @@
       </view>
     </view>
   </view>
-  <empty wx:if="{{ !orders.length }}" icon="📦" text="暂无订单" />
+  <empty wx:if="{{ !orders.length && !isGuest }}" icon="📦" text="暂无订单" />
 </view>

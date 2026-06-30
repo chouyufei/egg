@@ -6,12 +6,16 @@ const app = getApp();
 Page({
   onShareAppMessage() { return defaultShare(); },
   onShareTimeline()   { return defaultShare(); },
-  data: { orders: [], otherLabel: '' },
-  onShow() { this.load(); },
+  data: { orders: [], otherLabel: '', isGuest: false },
+  goLogin() { wx.navigateTo({ url: '/pages/login/login' }); },
+  onShow() {
+    this.setData({ isGuest: !app.globalData.token });
+    this.load();
+  },
   async onPullDownRefresh() { await this.load(); wx.stopPullDownRefresh(); },
   async load() {
     const user = app.globalData.user;
-    if (!user) return;
+    if (!app.globalData.token || !user) { this.setData({ orders: [] }); return; }
     try {
       const { orders } = await api.get('/orders');
       const mapped = orders.map(o => {

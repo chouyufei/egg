@@ -7,7 +7,7 @@ Page({
   onShareAppMessage() { return defaultShare(); },
   onShareTimeline()   { return defaultShare(); },
   data: {
-    user: null, unread: 0,
+    user: null, isGuest: false, unread: 0,
     licText: '', licCls: '', depositText: '未缴纳 →',
     roleText: '',
     walletBalance: '0.00',
@@ -16,9 +16,14 @@ Page({
   },
   // 点位置 → 回首页选位置
   goSetLoc() { wx.switchTab({ url: '/pages/index/index' }); },
+  goLogin() { wx.navigateTo({ url: '/pages/login/login' }); },
   async onShow() {
-    if (!app.globalData.token) return wx.reLaunch({ url: '/pages/login/login' });
-    this.setData({ reviewMode: !!app.globalData.reviewMode });
+    // 游客模式：未登录展示登录引导卡，不强制跳登录页
+    if (!app.globalData.token) {
+      this.setData({ isGuest: true, user: null, reviewMode: !!app.globalData.reviewMode });
+      return;
+    }
+    this.setData({ isGuest: false, reviewMode: !!app.globalData.reviewMode });
     // 顶部位置：优先首页自选定位名，否则空
     try {
       const c = wx.getStorageSync('customLoc');

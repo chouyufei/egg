@@ -1,7 +1,6 @@
 const api = require('../../utils/api');
 const { getAndReportLocation, getLocation, chooseLocation } = require('../../utils/location');
 const { defaultShare } = require('../../utils/share');
-const { requestSubscribe } = require('../../utils/subscribe');
 const app = getApp();
 
 const CUSTOM_LOC_KEY = 'customLoc';   // 持久化自选位置
@@ -73,24 +72,8 @@ Page({
     const user = app.globalData.user || wx.getStorageSync('user');
     if (!user) return wx.reLaunch({ url: '/pages/login/login' });
     this.setData({ user });
-    // 首次进入引导开启"附近新货/新报价"消息提醒（一次性，记 storage 标记）
-    this.maybeAskPush();
-  },
-
-  // 进入主页引导订阅消息授权（requestSubscribeMessage 需用户手势，故用 modal 确认）
-  maybeAskPush() {
-    if (wx.getStorageSync('push_asked')) return;
-    wx.setStorageSync('push_asked', 1);
-    wx.showModal({
-      title: '开启消息提醒',
-      content: '开启后，附近有新货源 / 新求购、您发布的货源被报价、您的报价被反超时，会第一时间提醒您。',
-      confirmText: '开启',
-      cancelText: '暂不',
-      success: (r) => {
-        if (!r.confirm) return;
-        requestSubscribe(['nearby', 'new_bid', 'outbid', 'order_received']);
-      },
-    });
+    // 站内消息提醒是平台自带功能，无需弹框征求授权 → 不再弹"开启消息提醒"。
+    // 微信订阅消息授权改到用户真正触发动作（出价 / 发布）时静默请求即可。
   },
 
   async onShow() {

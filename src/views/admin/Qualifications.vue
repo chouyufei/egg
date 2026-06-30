@@ -20,6 +20,7 @@
         <div>
           <span class="qf-name">🐔 {{ u.name || '未填写' }}</span>
           <span class="pill" :class="licClass(u.license_status)" style="margin-left: 10px;">{{ licLabel(u.license_status) }}</span>
+          <span v-if="u._pending" class="pill pill-y" style="margin-left: 8px;">本次为修改提交</span>
         </div>
         <div class="muted" style="font-size: 12px;">提交时间：{{ formatTime(u.created_at) }} · ID #{{ u.id }}</div>
       </div>
@@ -107,11 +108,22 @@ function parsePhotos(s) {
   catch (e) { return []; }
 }
 
+// 已通过的养殖场重新提交时，新资料存在 license_pending 快照里，正式字段不动。
+// 审核页要展示"本次实际提交"的内容，否则会看到旧资料、误以为新提交不见了。
+function applyPending(u) {
+  if (!u.license_pending) return u;
+  let p = null;
+  try { p = JSON.parse(u.license_pending); } catch (e) { return u; }
+  if (!p || typeof p !== 'object') return u;
+  // 用快照覆盖展示字段，保留 id/phone/license_status/created_at 等基础信息
+  return { ...u, ...p, _pending: true };
+}
+
 async function load() {
   const params = { role: 'farm' };
   if (status.value) params.status = status.value;
   const { users } = await api.get('/admin/users', { params });
-  list.value = users.filter(u => u.license_status !== 'none');
+  list.value = users.filter(u => u.license_status !== 'none').map(applyPending);
   await loadCounts();
 }
 

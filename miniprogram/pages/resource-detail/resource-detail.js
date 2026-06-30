@@ -3,6 +3,7 @@ const { formatDateTime, statusLabel } = require('../../utils/format');
 const { requestSubscribe } = require('../../utils/subscribe');
 const { ensureBuyerBidDeposit } = require('../../utils/deposit');
 const { getLocation, distanceKm, formatDistance, FAR_THRESHOLD_KM } = require('../../utils/location');
+const { SHARE_LOGO } = require('../../utils/share');
 const app = getApp();
 
 Page({
@@ -50,7 +51,7 @@ Page({
     return {
       title,
       path,
-      imageUrl: (r.photos && r.photos[0]) || '',
+      imageUrl: (r.photos && r.photos[0]) || SHARE_LOGO,
     };
   },
 
@@ -68,7 +69,7 @@ Page({
     return {
       title,
       query: 'id=' + id,
-      imageUrl: (r.photos && r.photos[0]) || '',
+      imageUrl: (r.photos && r.photos[0]) || SHARE_LOGO,
     };
   },
   async load() {

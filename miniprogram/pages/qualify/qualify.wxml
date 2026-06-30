@@ -45,7 +45,7 @@
     <view class="qf-kv"><text class="qf-k">详细地址</text><text class="qf-v">{{ form.address || '—' }}</text></view>
 
     <view class="qf-section-title mt-16">🐔 养殖信息</view>
-    <view class="qf-kv"><text class="qf-k">养殖规模</text><text class="qf-v">{{ form.farm_size_int ? form.farm_size_int + ' 只' : '—' }}</text></view>
+    <view class="qf-kv"><text class="qf-k">养殖规模</text><text class="qf-v">{{ form.farm_size_wan ? form.farm_size_wan + ' 万只' : '—' }}</text></view>
     <view wx:if="{{ form.daily_output }}" class="qf-kv"><text class="qf-k">日产量</text><text class="qf-v">{{ form.daily_output }} 箱/天</text></view>
     <view class="qf-kv"><text class="qf-k">主营蛋品</text><text class="qf-v">{{ form.main_products || '—' }}</text></view>
     <view class="qf-kv"><text class="qf-k">营业执照号</text><text class="qf-v">{{ form.business_license || '—' }}</text></view>
@@ -108,8 +108,8 @@
   </view>
 
   <view class="card">
-    <view class="input-row" id="field-farm_size_int"><view class="label">养殖规模 *</view>
-      <input type="number" value="{{ form.farm_size_int }}" data-k="farm_size_int" bindinput="onInput" bindblur="onInput" placeholder="存栏只数" /><text class="muted" style="margin-left: 8rpx;">只</text>
+    <view class="input-row" id="field-farm_size_wan"><view class="label">养殖规模 *</view>
+      <input type="digit" value="{{ form.farm_size_wan }}" data-k="farm_size_wan" bindinput="onInput" bindblur="onInput" placeholder="存栏（万只）" /><text class="muted" style="margin-left: 8rpx;">万只</text>
     </view>
     <view class="input-row"><view class="label">日产量</view>
       <input type="number" value="{{ form.daily_output }}" data-k="daily_output" bindinput="onInput" bindblur="onInput" placeholder="日产量" /><text class="muted" style="margin-left: 8rpx;">箱/天</text>

@@ -11,7 +11,7 @@ Page({
   data: {
     form: {
       name: '', contact_name: '', contact_phone: '', address: '', lat: null, lng: null,
-      business_license: '', farm_size_int: '', daily_output: '', main_products: '',
+      business_license: '', farm_size_int: '', farm_size_wan: '', daily_output: '', main_products: '',
       license_photos: [], farm_photos: [], quarantine_photos: [],
     },
     provinces: PROVINCES, provinceIndex: 0,
@@ -45,6 +45,7 @@ Page({
       'form.business_license': u.business_license || '',
       'form.contact_name': u.contact_name || '',
       'form.farm_size_int': u.farm_size_int || '',
+      'form.farm_size_wan': u.farm_size_int ? +(u.farm_size_int / 10000).toFixed(2) : '',
       'form.daily_output': u.daily_output || '',
       'form.main_products': u.main_products || '',
       'form.license_photos': safeParse(u.license_photos),
@@ -117,7 +118,7 @@ Page({
       { key: 'contact_name', label: '联系人', missing: !f.contact_name },
       { key: 'contact_phone', label: '联系电话', missing: !f.contact_phone },
       { key: 'address', label: '详细地址', missing: !f.address },
-      { key: 'farm_size_int', label: '养殖规模', missing: !f.farm_size_int },
+      { key: 'farm_size_wan', label: '养殖规模', missing: !f.farm_size_wan },
       { key: 'main_products', label: '主营蛋品', missing: !f.main_products },
       { key: 'business_license', label: '营业执照号', missing: !f.business_license },
       { key: 'license_photos', label: '营业执照照片', missing: !f.license_photos.length },
@@ -139,8 +140,11 @@ Page({
     try {
       const province = this.data.provinces[this.data.provinceIndex];
       const region = province + (f.address.indexOf(province) >= 0 ? '' : '·' + (f.address.split(/[市县区]/)[0] || ''));
+      // 养殖规模以「万只」录入，存库仍按「只」整数
+      const farm_size_int = f.farm_size_wan ? Math.round(Number(f.farm_size_wan) * 10000) : '';
       await api.post('/auth/qualify', {
         ...f,
+        farm_size_int,
         region,
       });
       wx.showToast({ title: '已提交，等待审核' });

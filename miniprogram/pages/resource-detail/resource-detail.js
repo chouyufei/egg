@@ -129,10 +129,8 @@ Page({
       }
 
       const sizeNum = Number(resource.farm_size);
-      // 直接按"只"展示（带千分位），不再换算成"万只"
-      const farmSizeText = sizeNum
-        ? String(sizeNum).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' 只'
-        : '';
+      // 养殖规模统一按「万只」展示
+      const farmSizeText = sizeNum ? (+(sizeNum / 10000).toFixed(2)) + ' 万只' : '';
       // 价格单位（用于还价弹窗显示 "/箱" / "/车"）
       const unitLabel = resource.unit_label || '元/箱';
       const priceUnit = unitLabel.replace(/^元\//, '');

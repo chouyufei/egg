@@ -37,7 +37,7 @@
   <view wx:if="{{ seller.main_products || seller.daily_output || seller.farm_size_int }}" class="card" style="margin: 0 24rpx 24rpx;">
     <view class="section-title" style="margin: 0 0 12rpx;">养殖场信息</view>
     <view wx:if="{{ seller.contact_name }}" class="kv"><text class="muted">联系人</text><text>{{ seller.contact_name }}</text></view>
-    <view wx:if="{{ seller.farm_size_int }}" class="kv"><text class="muted">养殖规模</text><text>{{ seller.farm_size_int }} 只</text></view>
+    <view wx:if="{{ seller.farm_size_int }}" class="kv"><text class="muted">养殖规模</text><text>{{ seller.farm_size_int / 10000 }} 万只</text></view>
     <view wx:if="{{ seller.daily_output }}" class="kv"><text class="muted">日产蛋</text><text>{{ seller.daily_output }} 枚</text></view>
     <view wx:if="{{ seller.main_products }}" class="kv"><text class="muted">主营</text><text>{{ seller.main_products }}</text></view>
   </view>

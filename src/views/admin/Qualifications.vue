@@ -30,7 +30,7 @@
         <div><span class="muted">手机号：</span>{{ u.phone }}</div>
         <div><span class="muted">地区：</span>{{ u.region || '-' }}</div>
         <div><span class="muted">详细地址：</span>{{ u.address || '-' }}</div>
-        <div><span class="muted">养殖规模：</span>{{ u.farm_size_int ? u.farm_size_int + ' 只' : '-' }}</div>
+        <div><span class="muted">养殖规模：</span>{{ u.farm_size_int ? (+(u.farm_size_int / 10000).toFixed(2)) + ' 万只' : '-' }}</div>
         <div><span class="muted">日产量：</span>{{ u.daily_output ? u.daily_output + ' 箱/天' : '-' }}</div>
         <div style="grid-column: span 2;"><span class="muted">主营蛋品：</span>{{ u.main_products || '-' }}</div>
         <div style="grid-column: span 2;"><span class="muted">营业执照号：</span><code style="background: #f5f6f8; padding: 2px 6px; border-radius: 4px;">{{ u.business_license || '-' }}</code></div>

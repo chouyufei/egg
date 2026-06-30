@@ -24,6 +24,7 @@ Page({
     priceUnit: '箱',
     weightSpecsList: [],   // 详情页展示各斤值规格的箱数 / 价格
     allowProvinces: [],    // 求购允许参与地区
+    allowProvincesText: '',
   },
   onLoad(opt) {
     this.setData({ reviewMode: !!app.globalData.reviewMode });
@@ -169,6 +170,7 @@ Page({
         priceUnit,
         weightSpecsList,
         allowProvinces,
+        allowProvincesText: allowProvinces.join('、'),
       });
     } catch (e) {}
   },

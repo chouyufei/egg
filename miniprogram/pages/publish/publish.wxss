@@ -138,18 +138,18 @@
 
 /* 各规格箱数 / 价格 行：字号 + 输入框放大（适老化） */
 .ws-row {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 16rpx;
-  padding: 18rpx 0; border-bottom: 1px solid #f0f0f0;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 18rpx;
+  padding: 24rpx 0; border-bottom: 1px solid #f0f0f0;
 }
 .ws-row:last-child { border-bottom: none; }
-.ws-w { font-size: 30rpx; font-weight: 700; color: #8a5a00; min-width: 150rpx; }
-.ws-field { display: flex; align-items: center; gap: 8rpx; }
+.ws-w { font-size: 36rpx; font-weight: 700; color: #8a5a00; min-width: 168rpx; }
+.ws-field { display: flex; align-items: center; gap: 10rpx; }
 .ws-input {
-  width: 180rpx; height: 72rpx; line-height: 72rpx;
-  background: #f5f6f8; border-radius: 12rpx;
-  padding: 0 18rpx; font-size: 30rpx; box-sizing: border-box;
+  width: 210rpx; height: 92rpx; line-height: 92rpx;
+  background: #f5f6f8; border-radius: 14rpx;
+  padding: 0 22rpx; font-size: 36rpx; font-weight: 600; box-sizing: border-box;
 }
-.ws-unit { font-size: 26rpx; color: #8a8d93; }
+.ws-unit { font-size: 30rpx; color: #8a8d93; }
 
 /* 求购 允许参与地区 多选 chip */
 .allow-block { border-top: 1px solid #f0f0f0; }

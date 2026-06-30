@@ -18,8 +18,8 @@
 }
 .mode-seg {
   flex: 1; text-align: center;
-  padding: 18rpx 0; border-radius: 999rpx;
-  font-size: 32rpx; font-weight: 600;
+  padding: 20rpx 0; border-radius: 999rpx;
+  font-size: 36rpx; font-weight: 700;
   color: #fff;
   margin-right: 6rpx;
 }
@@ -34,8 +34,8 @@
   margin-top: 16rpx;
   display: flex; align-items: center;
   background: rgba(255,255,255,0.92);
-  padding: 22rpx 24rpx; border-radius: 999rpx;
-  font-size: 32rpx;
+  padding: 24rpx 26rpx; border-radius: 999rpx;
+  font-size: 36rpx;
 }
 .filter-icon { color: #8a8d93; margin-right: 12rpx; }
 .filter-text { flex: 1; color: #1d1d1f; }
@@ -43,7 +43,7 @@
 
 .near-hint {
   margin-top: 14rpx;
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: rgba(255,255,255,0.95);
   text-align: left;
 }
@@ -51,7 +51,7 @@
 
 .near-edit {
   flex-shrink: 0;
-  font-size: 28rpx;
+  font-size: 30rpx;
   background: rgba(255,255,255,0.95);
   color: #b78300; font-weight: 600;
   padding: 8rpx 22rpx; border-radius: 999rpx;
@@ -69,7 +69,7 @@
 }
 .sub-tab {
   flex: 1; text-align: center;
-  padding: 26rpx 0; font-size: 34rpx; color: #8a8d93;
+  padding: 28rpx 0; font-size: 36rpx; color: #8a8d93;
   position: relative;
 }
 .sub-tab.on { color: #1d1d1f; font-weight: 700; }

@@ -154,10 +154,10 @@
   <!-- 单箱净重每个整数斤值的 箱数 + 起报价/心理价上限 -->
   <view wx:if="{{ weightRows.length }}" class="card">
     <view class="section-title" style="margin: 0 0 12rpx;">📦 各规格箱数 / 价格</view>
-    <view class="muted mt-8" style="font-size: 22rpx; margin-bottom: 6rpx;">
+    <view class="muted mt-8" style="font-size: 26rpx; margin-bottom: 6rpx;">
       列表展示价以最小净重对应价为准，其它规格在详情页展示
     </view>
-    <view wx:if="{{ truckIndex >= 0 }}" class="muted" style="font-size: 22rpx; margin-bottom: 12rpx;">
+    <view wx:if="{{ truckIndex >= 0 }}" class="muted" style="font-size: 26rpx; margin-bottom: 12rpx;">
       总箱数当前：<text style="color: {{ totalBoxesOver ? '#ee0a24' : '#e0a40d' }}; font-weight: 700;">{{ totalBoxesNow }}</text>
       / 上限 {{ truckPresets[truckIndex].boxes + 50 }} 箱（{{ truckPresets[truckIndex].value }} m 车 ≈ {{ truckPresets[truckIndex].boxes }} 箱 + 50 冗余）
     </view>

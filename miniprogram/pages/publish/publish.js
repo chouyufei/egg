@@ -237,6 +237,24 @@ Page({
         const psPreset = ps === '360' || ps === '480' ? ps : (ps ? 'other' : '');
         // 还原蛋黄颜色 picker
         const yIdx = ['红心', '黄心', '双色'].indexOf(r.yolk_color || '');
+        // 复原每个斤值的「箱数 / 价格」（流拍重新上架时一并带回，无需重填）
+        let weightRows = [];
+        if (r.weight_specs) {
+          try {
+            const parsed = typeof r.weight_specs === 'string' ? JSON.parse(r.weight_specs) : r.weight_specs;
+            if (Array.isArray(parsed)) {
+              weightRows = parsed.map(s => ({ weight: s.weight, boxes: String(s.boxes || ''), price: String(s.price || '') }));
+            }
+          } catch (e) {}
+        }
+        // 复原求购「允许参与地区」
+        let allowProvinces = [], allowMap = {};
+        if (r.allow_provinces) {
+          try {
+            const ap = typeof r.allow_provinces === 'string' ? JSON.parse(r.allow_provinces) : r.allow_provinces;
+            if (Array.isArray(ap)) { allowProvinces = ap; ap.forEach(p => { allowMap[p] = true; }); }
+          } catch (e) {}
+        }
         this.setData({
           provinceIndex: pIdx,
           breedOptions: breedOpts,
@@ -244,6 +262,10 @@ Page({
           breedCustom: bCustom,
           packSizePreset: psPreset,
           yolkColorIndex: yIdx,
+          weightRows,
+          weightWarn: '',
+          allowProvinces,
+          allowMap,
           'form.title': r.title || '',
           'form.region': r.region || '',
           'form.chicken_breed': r.chicken_breed || '',

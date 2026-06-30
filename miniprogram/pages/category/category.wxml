@@ -1,0 +1,13 @@
+<view class="page-pad">
+  <view class="hint muted">选择你关心的蛋品类目，回到首页只看这类货源</view>
+
+  <view class="cat-grid">
+    <view wx:for="{{ categories }}" wx:key="value"
+          class="cat-card {{ activeColor === item.value ? 'on' : '' }}"
+          bindtap="pick" data-v="{{ item.value }}">
+      <view class="cat-icon">{{ item.icon }}</view>
+      <view class="cat-label">{{ item.label }}</view>
+      <view class="cat-tip muted">{{ item.tip }}</view>
+    </view>
+  </view>
+</view>

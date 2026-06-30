@@ -1,0 +1,35 @@
+<view class="page-pad">
+  <view class="card text-c" style="padding: 48rpx 32rpx;">
+    <view style="font-size: 100rpx;">🥚</view>
+    <view class="bold" style="font-size: 36rpx; margin-top: 12rpx;">凤伯乐</view>
+    <view class="muted mt-8" style="font-size: 24rpx;">让你的蛋，自己定价</view>
+    <view class="muted mt-8" style="font-size: 22rpx;">版本 v1.0.0</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">运营主体</view>
+    <view class="kv"><text class="muted">公司名称</text><text>湖北省乘子农业科技有限公司</text></view>
+    <view class="kv"><text class="muted">统一社会信用代码</text><text class="small">91420115MACU7XUEX0</text></view>
+    <view class="kv"><text class="muted">经营范围</text><text class="small">食用农产品销售 / 食品销售 / 平台技术服务</text></view>
+    <view class="kv"><text class="muted">ICP 备案</text><text>鄂 ICP 备 2026027874 号-2X</text></view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">协议与政策</view>
+    <view class="menu-row" bindtap="goAgreement"><text>📜 用户协议</text><text class="muted">›</text></view>
+    <view class="menu-row" bindtap="goPrivacy"><text>🛡 隐私政策</text><text class="muted">›</text></view>
+    <view class="menu-row" bindtap="goFund"><text>💰 资金管理说明</text><text class="muted">›</text></view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">联系我们</view>
+    <view class="kv"><text class="muted">客服电话</text><text bindtap="callCs" class="link">186-7554-5968</text></view>
+    <view class="kv"><text class="muted">客服邮箱</text><text class="small">18675545968@163.com</text></view>
+    <view class="kv"><text class="muted">工作时间</text><text>工作日 9:00-18:00</text></view>
+    <button class="btn mt-16" open-type="contact">📲 联系在线客服</button>
+  </view>
+
+  <view class="muted text-c" style="font-size: 22rpx; padding: 24rpx 0;">
+    Copyright © 2026 凤伯乐 · 湖北省乘子农业科技有限公司
+  </view>
+</view>

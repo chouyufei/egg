@@ -1,0 +1,23 @@
+.thumb { width: 120rpx; height: 120rpx; border-radius: 12rpx; flex-shrink: 0; }
+
+/* 订单卡左侧 6rpx 色边 + 顶部大色块标识，一眼区分买/卖 */
+.order-card { position: relative; padding-left: 28rpx; }
+
+.side-pill {
+  display: inline-block;
+  font-size: 26rpx;
+  font-weight: 700;
+  padding: 8rpx 20rpx;
+  border-radius: 12rpx;
+  letter-spacing: 1rpx;
+}
+.side-pill-sell {
+  background: #e7f7eb;
+  color: #06883b;
+  border-left: 8rpx solid #06883b;
+}
+.side-pill-buy {
+  background: #e6f0ff;
+  color: #1c5bd8;
+  border-left: 8rpx solid #1c5bd8;
+}

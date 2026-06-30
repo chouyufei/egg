@@ -1,0 +1,14 @@
+.kv {
+  display: flex; justify-content: space-between;
+  padding: 14rpx 0; font-size: 28rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+.kv:last-child { border-bottom: none; }
+.kv .small { font-size: 22rpx; color: #5a5a5a; }
+.menu-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24rpx 0; border-bottom: 1px solid #f0f0f0;
+  font-size: 28rpx;
+}
+.menu-row:last-child { border-bottom: none; }
+.link { color: #e0a40d; }

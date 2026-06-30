@@ -1,0 +1,39 @@
+.avatar {
+  width: 100rpx; height: 100rpx; border-radius: 50%;
+  background: #fff; color: #f6b821; display: flex;
+  align-items: center; justify-content: center; font-size: 56rpx;
+}
+.menu-card { padding: 0; overflow: hidden; }
+.hero-edit {
+  display: inline-block;
+  margin-left: 12rpx;
+  font-size: 26rpx;
+  opacity: .8;
+  vertical-align: middle;
+}
+.menu-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28rpx 32rpx; border-bottom: 1px solid #f0f0f0;
+  font-size: 30rpx;
+}
+.menu-row:last-child { border-bottom: none; }
+
+/* "在线客服" 行用 <button open-type="contact"> 包住一个标准 .menu-row，
+   按钮自己只做点击触发，没有任何视觉影响；inner view 维持与其它行
+   一致的 flex 布局 + 字号 + 内边距。 */
+.menu-row-btn {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  line-height: 1;
+  font-size: inherit;
+  color: inherit;
+  text-align: left;
+}
+.menu-row-btn::after { border: none; }
+.menu-row-btn-hover { background: #f5f6f8; }
+.menu-row-divider { height: 1rpx; background: #f0f0f0; margin: 0 32rpx; }

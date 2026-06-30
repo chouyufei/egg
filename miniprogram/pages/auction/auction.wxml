@@ -1,0 +1,22 @@
+<view class="tabs sub-tabs">
+  <view class="tab {{ sub === 'active' ? 'on' : '' }}" bindtap="setSub" data-s="active">进行中</view>
+  <view class="tab {{ sub === 'won' ? 'on' : '' }}" bindtap="setSub" data-s="won">已中</view>
+  <view class="tab {{ sub === 'lost' ? 'on' : '' }}" bindtap="setSub" data-s="lost">未中</view>
+</view>
+<view class="page-pad">
+  <view wx:for="{{ filteredMine }}" wx:key="id" class="card row" bindtap="openRes" data-id="{{ item.id }}">
+    <image class="thumb" src="{{ item.photos[0] || 'https://placehold.co/100x100/f6b821/fff?text=Egg' }}" mode="aspectFill" />
+    <view class="flex-1" style="margin-left: 20rpx;">
+      <view class="bold ellipsis">{{ item.title }}</view>
+      <view class="mt-8">
+        <text class="tag {{ item.leading ? 'tag-g' : 'tag-r' }}">{{ item.statusText }}</text>
+        <text wx:if="{{ item.region }}" class="tag tag-b">{{ item.region }}</text>
+      </view>
+      <view class="row-between mt-8">
+        <text class="price">¥{{ item.current_price }} {{ item.unit_label || '元/箱' }}</text>
+        <text class="muted">{{ item.timeText }}</text>
+      </view>
+    </view>
+  </view>
+  <empty wx:if="{{ !filteredMine.length }}" icon="🔥" text="暂无记录" />
+</view>

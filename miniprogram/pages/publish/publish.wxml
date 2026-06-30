@@ -1,0 +1,232 @@
+<view class="page-pad">
+  <view class="card kind-banner {{ isSupply ? '' : 'demand' }}">
+    <view class="kind-icon">{{ isSupply ? '🐔' : '🛒' }}</view>
+    <view class="flex-1">
+      <view class="bold" style="font-size: 32rpx;">{{ isSupply ? '发布货源' : '发布求购需求' }}</view>
+      <view class="muted mt-8" style="font-size: 24rpx;">
+        {{ isSupply ? '采购商在线报价，价高者优先' : '养殖场在线应标，价低者优先' }}
+      </view>
+    </view>
+    <view class="last-fill" bindtap="fillFromLast">📋 沿用上次</view>
+  </view>
+
+  <!-- 保证金状态条：发布时从钱包冻结一笔。可用余额够则金色 ✓，不够弹去充值 -->
+  <view class="deposit-bar {{ depositPaid ? 'paid' : 'unpaid' }}" bindtap="onDepositTap">
+    <view class="deposit-icon">{{ depositPaid ? '✓' : '⚠' }}</view>
+    <view class="flex-1">
+      <view class="deposit-title">
+        {{ depositPaid ? '钱包余额可冻结 ' + depositAmount + ' 元保证金' : '可用余额不足 ' + depositAmount + ' 元，需充值' }}
+      </view>
+      <view class="deposit-sub">
+        当前可用 ¥{{ walletAvailable }} · 发布后将冻结，订单完成后扣服务费，余款解冻
+      </view>
+    </view>
+    <view wx:if="{{ !depositPaid }}" class="deposit-arrow">›</view>
+  </view>
+
+  <view class="card">
+    <view class="input-row"><view class="label">标题</view><input value="{{ form.title }}" data-k="title" bindinput="onInput" bindblur="onInput" placeholder="{{ isSupply ? '如：青州散养土鸡蛋·30 箱' : '如：求购红壳鸡蛋 20 箱·北京自提' }}" /></view>
+    <view class="input-row"><view class="label">省份</view>
+      <picker bindchange="pickProvince" value="{{ provinceIndex }}" range="{{ provinces }}">
+        <view class="picker-val">{{ provinces[provinceIndex] }} ▾</view>
+      </picker>
+    </view>
+
+    <!-- 求购：允许参与地区（多选，默认不限） -->
+    <view wx:if="{{ !isSupply }}" class="allow-block">
+      <view class="row-between" style="padding: 16rpx 0 8rpx;">
+        <text class="label">允许参与地区</text>
+        <text class="muted" style="font-size: 22rpx;">{{ allowProvinces.length ? '已选 ' + allowProvinces.length + ' 个' : '不限（全部可参与）' }}</text>
+      </view>
+      <view class="allow-chips">
+        <view class="allow-chip {{ allowProvinces.length === 0 ? 'on' : '' }}" bindtap="clearAllowProvinces">不限</view>
+        <view wx:for="{{ provinces }}" wx:key="*this"
+              class="allow-chip {{ allowMap[item] ? 'on' : '' }}"
+              bindtap="toggleAllowProvince" data-p="{{ item }}">{{ item }}</view>
+      </view>
+    </view>
+
+    <!-- 定位：选定后自动填省/市/地址，作为具体地区 -->
+    <view class="input-row loc-row">
+      <view class="label">📍 定位</view>
+      <view class="flex-1">
+        <block wx:if="{{ locText }}">
+          <view class="loc-main">{{ locText }}</view>
+          <view wx:if="{{ locSub }}" class="loc-sub muted">{{ locSub }}</view>
+        </block>
+        <view wx:else class="loc-main muted">未定位（可选）</view>
+      </view>
+      <view class="loc-actions">
+        <text class="loc-act" bindtap="pickLocation">{{ locText ? '修改' : '定位' }}</text>
+        <text wx:if="{{ locText }}" class="loc-act loc-act-del" bindtap="clearLocation">清除</text>
+      </view>
+    </view>
+
+    <!-- 蛋品类目（蛋壳颜色 + 品种） -->
+    <view class="input-row egg-type-row">
+      <view class="label">蛋品类目</view>
+      <radio-group bindchange="pickColor" class="egg-type-group">
+        <label class="egg-type-opt"><radio value="粉壳" checked="{{ form.egg_color === '粉壳' }}" />粉壳蛋</label>
+        <label class="egg-type-opt"><radio value="红壳" checked="{{ form.egg_color === '红壳' }}" />红壳蛋</label>
+        <label class="egg-type-opt"><radio value="土鸡" checked="{{ form.egg_color === '土鸡' || form.egg_color === '杂色' }}" />土鸡蛋</label>
+        <label class="egg-type-opt"><radio value="乌鸡" checked="{{ form.egg_color === '乌鸡' }}" />乌鸡蛋</label>
+        <label class="egg-type-opt"><radio value="白壳" checked="{{ form.egg_color === '白壳' }}" />白壳蛋</label>
+      </radio-group>
+    </view>
+
+    <!-- 鸡种：根据上方蛋色自动给出常见品种下拉 -->
+    <view class="input-row">
+      <view class="label">鸡种</view>
+      <picker bindchange="pickBreed" value="{{ breedIndex }}" range="{{ breedOptions }}">
+        <view class="picker-val">{{ breedIndex >= 0 ? breedOptions[breedIndex] : '请选择 ▾' }}</view>
+      </picker>
+    </view>
+    <view wx:if="{{ breedIndex >= 0 && breedOptions[breedIndex] === '其它' }}" class="input-row">
+      <view class="label">鸡种名</view>
+      <input value="{{ breedCustom }}" bindinput="onBreedCustomInput" bindblur="onBreedCustomInput" placeholder="自填鸡种名称" />
+    </view>
+
+    <!-- 蛋黄颜色：红心 / 黄心 / 双色 + 罗氏色号 -->
+    <view class="input-row">
+      <view class="label">蛋黄颜色</view>
+      <picker bindchange="pickYolkColor" value="{{ yolkColorIndex }}" range="{{ yolkColorOptions }}">
+        <view class="picker-val">{{ yolkColorIndex >= 0 ? yolkColorOptions[yolkColorIndex] : '请选择 ▾' }}</view>
+      </picker>
+    </view>
+    <view wx:if="{{ yolkColorIndex >= 0 }}" class="input-row">
+      <view class="label">蛋黄色号</view>
+      <input value="{{ form.yolk_shade }}" data-k="yolk_shade" bindinput="onInput" bindblur="onInput" placeholder="如 12-13 度 (罗氏比色卡)" />
+    </view>
+
+    <!-- 鲜度 -->
+    <view class="input-row">
+      <view class="label">鲜度</view>
+      <input type="number" value="{{ form.freshness_days }}" data-k="freshness_days" bindinput="onInput" bindblur="onInput" placeholder="如 3" style="width: 160rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">天内</text>
+    </view>
+
+    <!-- 次品率：仅货源 -->
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">次品率</view>
+      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="默认 0.2" style="width: 140rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">%</text>
+    </view>
+    <view wx:if="{{ isSupply }}" class="hint-row">
+      💡 次品率 = 裂纹蛋 + 脏蛋 + 破蛋 占总量的百分比，承诺该比例不超过填写值
+    </view>
+
+    <!-- 规格：单箱枚数（仅货源） -->
+    <view wx:if="{{ isSupply }}" class="input-row">
+      <view class="label">规格</view>
+      <radio-group bindchange="pickPackSize" style="display: flex; gap: 24rpx; flex-wrap: wrap;">
+        <label><radio value="360" checked="{{ packSizePreset === '360' }}" />360 枚/箱</label>
+        <label><radio value="480" checked="{{ packSizePreset === '480' }}" />480 枚/箱</label>
+        <label><radio value="other" checked="{{ packSizePreset === 'other' }}" />其它</label>
+      </radio-group>
+    </view>
+    <view wx:if="{{ isSupply && packSizePreset === 'other' }}" class="input-row">
+      <view class="label">单箱枚数</view>
+      <input type="number" value="{{ form.pack_size }}" data-k="pack_size" bindinput="onInput" bindblur="onInput" placeholder="如 300" style="width: 160rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">枚/箱</text>
+    </view>
+
+    <!-- 单箱净重区间（首尾差 ≤ 3） -->
+    <view class="input-row">
+      <view class="label">单箱净重</view>
+      <input type="digit" value="{{ form.weight_min }}" data-k="weight_min" bindinput="onInput" bindblur="onWeightBlur" placeholder="如 20" style="width: 120rpx;" />
+      <text class="muted" style="margin: 0 8rpx;">—</text>
+      <input type="digit" value="{{ form.weight_max }}" data-k="weight_max" bindinput="onInput" bindblur="onWeightBlur" placeholder="如 22" style="width: 120rpx;" />
+      <text class="muted" style="margin-left: 8rpx;">斤/箱</text>
+    </view>
+    <view wx:if="{{ weightWarn }}" class="hint-row" style="color: #c61212; background: #ffeaea;">
+      ⚠ {{ weightWarn }}
+    </view>
+
+    <!-- 车型 -->
+    <view class="input-row">
+      <view class="label">车型</view>
+      <picker bindchange="pickTruckPicker" value="{{ truckIndex }}" range="{{ truckRangeLabels }}">
+        <view class="picker-val">{{ truckIndex >= 0 ? truckRangeLabels[truckIndex] : '请选择车型 ▾' }}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 单箱净重每个整数斤值的 箱数 + 起报价/心理价上限 -->
+  <view wx:if="{{ weightRows.length }}" class="card">
+    <view class="section-title" style="margin: 0 0 12rpx;">📦 各规格箱数 / 价格</view>
+    <view class="muted mt-8" style="font-size: 22rpx; margin-bottom: 6rpx;">
+      列表展示价以最小净重对应价为准，其它规格在详情页展示
+    </view>
+    <view wx:if="{{ truckIndex >= 0 }}" class="muted" style="font-size: 22rpx; margin-bottom: 12rpx;">
+      总箱数当前：<text style="color: {{ totalBoxesOver ? '#ee0a24' : '#e0a40d' }}; font-weight: 700;">{{ totalBoxesNow }}</text>
+      / 上限 {{ truckPresets[truckIndex].boxes + 50 }} 箱（{{ truckPresets[truckIndex].value }} m 车 ≈ {{ truckPresets[truckIndex].boxes }} 箱 + 50 冗余）
+    </view>
+    <view wx:for="{{ weightRows }}" wx:key="weight" class="ws-row">
+      <view class="ws-w">{{ item.weight }} 斤箱</view>
+      <view class="ws-field">
+        <input type="number" value="{{ item.boxes }}" data-i="{{ index }}" bindinput="onWeightBoxes" bindblur="onWeightBoxes"
+               placeholder="箱数" class="ws-input" />
+        <text class="ws-unit">箱</text>
+      </view>
+      <view class="ws-field">
+        <input type="digit" value="{{ item.price }}" data-i="{{ index }}" bindinput="onWeightPrice" bindblur="onWeightPrice"
+               placeholder="{{ isSupply ? '起报价' : '心理价' }}" class="ws-input" />
+        <text class="ws-unit">元/箱</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="input-row">
+      <view class="label">{{ isSupply ? '加价幅度' : '降价幅度' }}</view>
+      <input type="digit" value="{{ form.min_increment }}" data-k="min_increment" bindinput="onInput" bindblur="onInput" placeholder="≥ 1" />
+      <view class="muted" style="margin-left: 8rpx;">元/箱</view>
+    </view>
+    <view class="input-row">
+      <view class="label">订单有效期</view>
+      <radio-group bindchange="pickDur" style="display: flex; gap: 24rpx; flex-wrap: wrap;">
+        <label><radio value="0.5" checked="{{ form.duration_hours == 0.5 }}" />30 分钟</label>
+        <label><radio value="1" checked="{{ form.duration_hours == 1 }}" />60 分钟</label>
+        <label><radio value="1.5" checked="{{ form.duration_hours == 1.5 }}" />90 分钟</label>
+      </radio-group>
+    </view>
+    <view class="hint-row">💡 到期后系统自动选当前最优报价成交</view>
+  </view>
+
+  <view class="card">
+    <view class="input-row"><view class="label">描述</view><textarea value="{{ form.description }}" data-k="description" bindinput="onInput" bindblur="onInput" placeholder="{{ isSupply ? '饲养方式、检疫情况、发货时效...' : '需求详情、自提/送货、付款方式...' }}" auto-height /></view>
+
+    <view class="upload-block">
+      <view class="upload-title">图片（最多 9 张，第 1 张为封面；长按可调整顺序）</view>
+      <view class="upload-grid">
+        <view wx:for="{{ photos }}" wx:key="*this" class="upload-thumb"
+              bindtap="preview" data-url="{{ item }}" data-i="{{ index }}"
+              bindlongpress="reorderPhoto">
+          <image src="{{ item }}" mode="aspectFill" />
+          <view wx:if="{{ index === 0 }}" class="cover-badge">封面</view>
+          <view class="upload-del" catchtap="delPhoto" data-i="{{ index }}">×</view>
+        </view>
+        <view wx:if="{{ photos.length < 9 }}" class="upload-add" bindtap="addPhoto">+</view>
+      </view>
+    </view>
+
+    <!-- 视频介绍：暂时隐藏，业务侧未启用，保留代码以后可恢复 -->
+    <view wx:if="{{ false }}" class="upload-block">
+      <view class="upload-title">视频介绍（可选，鸡场实景 / 蛋品展示，60s 内）</view>
+      <view wx:if="{{ video }}" class="video-preview">
+        <video src="{{ video }}" controls style="width: 100%; height: 380rpx; border-radius: 12rpx;"></video>
+        <view class="video-del" bindtap="delVideo">删除视频</view>
+      </view>
+      <view wx:else class="upload-add" style="width: 100%; height: 200rpx;" bindtap="addVideo">+ 上传视频</view>
+    </view>
+  </view>
+
+  <view class="agree-row" bindtap="toggleAgree">
+    <text class="agree-box {{ agreed ? 'on' : '' }}">{{ agreed ? '✓' : '' }}</text>
+    <text class="agree-text">我已阅读并同意 <text class="link" catchtap="openAgreement">《用户服务协议》</text> 和 <text class="link" catchtap="openPrivacy">《隐私政策》</text>，承诺所发布信息真实有效</text>
+  </view>
+
+  <button class="btn mt-16" bindtap="submit" loading="{{ loading }}" disabled="{{ !agreed }}">
+    立即发布{{ isSupply ? '货源' : '求购' }}
+  </button>
+</view>

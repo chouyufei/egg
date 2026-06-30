@@ -1,0 +1,5 @@
+<view class="cd">
+  <text class="cd-box">{{ hh }}</text>
+  <text class="cd-box">{{ mm }}</text>
+  <text class="cd-box">{{ ss }}</text>
+</view>

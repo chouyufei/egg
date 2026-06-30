@@ -1,0 +1,52 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd84d"/>
+      <stop offset="0.55" stop-color="#f6b821"/>
+      <stop offset="1" stop-color="#f08a00"/>
+    </linearGradient>
+    <linearGradient id="eggShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fff4d6"/>
+    </linearGradient>
+    <radialGradient id="eggHi" cx="0.35" cy="0.3" r="0.4">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bgGold)"/>
+
+  <!-- 蛋身 -->
+  <path d="M 256 132
+           C 178 132 142 240 142 310
+           C 142 384 192 426 256 426
+           C 320 426 370 384 370 310
+           C 370 240 334 132 256 132 Z"
+        fill="url(#eggShade)"/>
+  <path d="M 256 132
+           C 178 132 142 240 142 310
+           C 142 384 192 426 256 426
+           C 320 426 370 384 370 310
+           C 370 240 334 132 256 132 Z"
+        fill="url(#eggHi)"/>
+
+  <!-- 凤羽：自蛋顶升起，向右卷曲，像一缕火苗 -->
+  <path d="M 248 142
+           C 232 110 234 78 258 60
+           C 252 76 258 88 270 92
+           C 264 102 268 112 280 112
+           C 268 122 276 134 286 132
+           C 274 144 264 148 248 142 Z"
+        fill="#f08a00"/>
+  <path d="M 258 60
+           C 282 50 304 64 298 88
+           C 290 72 274 72 270 92"
+        fill="none" stroke="#e0a40d" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- 凤 字（暗金，作为蛋身上的标识） -->
+  <text x="256" y="362"
+        font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif"
+        font-size="148" font-weight="900" text-anchor="middle"
+        fill="#e0a40d" letter-spacing="0">凤</text>
+</svg>

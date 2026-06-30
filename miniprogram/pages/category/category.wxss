@@ -1,0 +1,22 @@
+.hint { padding: 8rpx 8rpx 24rpx; font-size: 24rpx; }
+
+.cat-grid {
+  display: flex; flex-wrap: wrap;
+  justify-content: space-between;
+}
+.cat-card {
+  width: 49%;
+  background: #fff; border-radius: 20rpx;
+  padding: 32rpx 24rpx; box-sizing: border-box;
+  border: 2rpx solid transparent;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  margin-bottom: 16rpx;
+}
+.cat-grid::after { content: ''; width: 49%; }
+.cat-card.on {
+  border-color: #f6b821;
+  background: #fff7e0;
+}
+.cat-icon { font-size: 60rpx; }
+.cat-label { font-size: 32rpx; font-weight: 700; margin-top: 12rpx; }
+.cat-tip { margin-top: 6rpx; font-size: 22rpx; }

@@ -1,0 +1,25 @@
+/* 提现规则卡：金色高亮，让审核员一眼看到 */
+.rules-card {
+  background: linear-gradient(135deg, #fff7e0 0%, #ffe9a8 100%);
+  border: 2rpx solid #f6b821;
+}
+.rules-title {
+  font-size: 30rpx; font-weight: 800;
+  color: #5a4810; margin-bottom: 16rpx;
+}
+.rule-row {
+  display: flex; justify-content: space-between;
+  padding: 12rpx 0;
+  font-size: 26rpx;
+  border-bottom: 1px dashed rgba(246,184,33,0.3);
+}
+.rule-row:last-child { border-bottom: none; }
+.rule-label {
+  color: #8a6b15; font-weight: 600;
+  flex-shrink: 0; margin-right: 16rpx;
+}
+
+.hint-card {
+  background: #fafafa;
+}
+.b-tip { color: #b78300; font-weight: 600; }

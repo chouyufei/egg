@@ -1,0 +1,211 @@
+.banner { width: 100%; height: 460rpx; }
+.banner-img { width: 100%; height: 460rpx; }
+
+.kv {
+  display: flex; justify-content: space-between;
+  padding: 14rpx 0; font-size: 28rpx;
+}
+/* 参数明细卡片字号放大、内边距加厚（适老化），让老年用户看着舒服 */
+.detail-card .kv { font-size: 30rpx; padding: 18rpx 0; line-height: 1.6; }
+.detail-card .kv .muted { font-size: 28rpx; }
+
+/* 各斤值规格 箱数 + 价格 表 */
+.weight-specs { margin: 12rpx 0; padding: 14rpx 18rpx; background: #fff8e6; border-radius: 12rpx; }
+.weight-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 1px dashed #f0c97a;
+  font-size: 28rpx;
+}
+.weight-row:last-child { border-bottom: none; }
+.weight-w { font-weight: 700; color: #8a5a00; min-width: 160rpx; }
+.weight-b { font-size: 26rpx; }
+.weight-p { color: #ee0a24; font-weight: 700; }
+.kv-link { color: #e0a40d; }
+.kv-link:active { opacity: 0.6; }
+
+/* 距离 chip：用 view 替代 text 让 catchtap 100% 可用，给点点击反馈 */
+.dist-tag {
+  display: inline-block;
+  cursor: pointer;
+  padding: 6rpx 16rpx;
+}
+.dist-tag:active { opacity: 0.6; }
+
+.bid-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18rpx 0; border-bottom: 1px solid #f0f0f0;
+}
+.bid-row:last-child { border-bottom: none; }
+
+.bid-input {
+  flex: 1; background: #f5f6f8; border-radius: 999rpx;
+  padding: 14rpx 24rpx; font-size: 28rpx;
+}
+
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 1000; display: flex; align-items: center; justify-content: center;
+}
+.modal { background: #fff; border-radius: 24rpx; padding: 40rpx; width: 600rpx; }
+
+/* 4 按钮底部操作栏（参考行业批发议价模式） */
+.bid-toolbar {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  display: flex; align-items: stretch;
+  padding: 12rpx 20rpx;
+  padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 16rpx rgba(0,0,0,0.06);
+  z-index: 100;
+  gap: 12rpx;
+}
+.tb-icon {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 96rpx; flex-shrink: 0;
+}
+.tb-icon-emoji { font-size: 36rpx; }
+.tb-icon-text { font-size: 20rpx; color: #5a5a5a; margin-top: 4rpx; }
+.tb-icon:active { opacity: 0.6; }
+
+.tb-action {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx; font-weight: 700;
+  padding: 18rpx 0;
+}
+.tb-action:active { opacity: 0.85; }
+.tb-action-y { background: #f6b821; color: #fff; }
+.tb-action-g { background: #07c160; color: #fff; }
+.tb-action-icon { font-size: 30rpx; }
+
+/* 我要还价弹层 */
+.haggle-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  border-top-left-radius: 28rpx;
+  border-top-right-radius: 28rpx;
+  padding: 16rpx 32rpx 36rpx;
+  padding-bottom: calc(36rpx + env(safe-area-inset-bottom));
+}
+.hg-handle {
+  width: 80rpx; height: 8rpx; background: #d0d0d0;
+  border-radius: 4rpx; margin: 0 auto 16rpx;
+}
+.hg-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 16rpx;
+}
+.hg-title { font-size: 32rpx; font-weight: 800; color: #1d1d1f; }
+.hg-close { font-size: 48rpx; color: #8a8d93; line-height: 1; padding: 0 12rpx; }
+
+.hg-label { font-size: 24rpx; color: #5a5a5a; margin: 12rpx 0 12rpx; }
+.hg-spec { display: flex; gap: 16rpx; }
+.hg-spec-card {
+  flex: 1;
+  background: #fff7e0; border: 2rpx solid #f6b821;
+  border-radius: 16rpx;
+  padding: 18rpx;
+}
+.hg-spec-card.on { background: #fff; border-color: #f6b821; }
+.hg-spec-name { font-size: 26rpx; font-weight: 700; color: #1d1d1f; }
+.hg-spec-price { color: #ee0a24; font-weight: 800; margin-top: 6rpx; }
+.hg-spec-num { font-size: 40rpx; }
+.hg-spec-unit { font-size: 22rpx; color: #8a8d93; font-weight: 400; }
+.hg-spec-stock { font-size: 22rpx; color: #8a8d93; margin-top: 4rpx; }
+
+.hg-input-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 32rpx; margin: 16rpx 0;
+}
+.hg-input-minus, .hg-input-plus {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: #f5f6f8; color: #1d1d1f;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; font-weight: 700;
+}
+.hg-input-big {
+  color: #ee0a24; font-weight: 800;
+  font-size: 32rpx;
+  min-width: 280rpx; text-align: center;
+}
+.hg-input-unit { color: #8a8d93; font-size: 22rpx; font-weight: 400; }
+
+.hg-slider {
+  display: flex; align-items: center; gap: 12rpx;
+  padding: 0 8rpx;
+}
+.hg-slider-min, .hg-slider-max {
+  font-size: 22rpx; color: #5a5a5a;
+  flex-shrink: 0;
+}
+.hg-slider-bar { flex: 1; }
+
+.hg-hint {
+  text-align: center; font-size: 24rpx;
+  padding: 16rpx 0 8rpx;
+}
+.hg-hint.on { color: #06883b; }
+.hg-hint.off { color: #ee0a24; }
+
+.hg-submit {
+  margin-top: 16rpx;
+}
+
+.report-tag {
+  display: inline-block;
+  margin-left: 12rpx;
+  font-size: 20rpx;
+  color: #8a8d93;
+  padding: 4rpx 12rpx;
+  border: 2rpx solid #d0d0d0;
+  border-radius: 999rpx;
+}
+.report-tag:active { opacity: 0.6; }
+
+/* 货源 / 求购 大色块标识，资源详情页顶部一眼可辨 */
+.kind-banner {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 18rpx 24rpx;
+  border-radius: 16rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  margin-bottom: 8rpx;
+}
+.kind-supply {
+  background: linear-gradient(135deg, #fff7e0 0%, #ffe9a8 100%);
+  color: #8a5a00;
+  border-left: 10rpx solid #f6b821;
+}
+.kind-demand {
+  background: linear-gradient(135deg, #e6f0ff 0%, #b8d4ff 100%);
+  color: #0e3a96;
+  border-left: 10rpx solid #1c5bd8;
+}
+.kind-icon { font-size: 44rpx; }
+.kind-text { font-size: 30rpx; }
+
+.share-card {
+  background: linear-gradient(135deg, #fff8e6, #fff);
+  padding: 24rpx 28rpx;
+}
+.share-head {
+  display: flex; align-items: center; gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+.share-icon { font-size: 48rpx; }
+.share-card .bold { font-size: 32rpx; }
+.share-btn-wide {
+  display: block;
+  width: 100%;
+  background: #f6b821;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+  padding: 18rpx 0;
+  border-radius: 999rpx;
+  line-height: 1.4;
+  margin: 0;
+}
+.share-btn-wide::after { border: none; }

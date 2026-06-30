@@ -1,0 +1,56 @@
+<view class="doc">
+  <view class="doc-title">凤伯乐隐私政策</view>
+  <view class="doc-date">最近更新：2026 年 6 月</view>
+
+  <view class="p">凤伯乐（以下简称"我们"）深知个人信息保护的重要性，并将依法严格保护您的个人信息。本政策将向您说明我们如何收集、使用、存储、共享、转让和保护您的信息，以及您如何行使相关权利。</view>
+
+  <view class="h2">一、我们收集的信息</view>
+  <view class="p">1.1 <text class="b">注册信息</text>：手机号、微信 openid、昵称、头像（用于账号登录与身份识别）</view>
+  <view class="p">1.2 <text class="b">资质信息</text>：营业执照、食品流通许可证、法人身份证（仅养殖场用户，用于资质审核）</view>
+  <view class="p">1.3 <text class="b">交易信息</text>：发布的货源 / 求购、报价、订单、聊天记录（用于完成交易与争议处理）</view>
+  <view class="p">1.4 <text class="b">设备信息</text>：手机型号、操作系统、网络类型（用于排查故障）</view>
+  <view class="p">1.5 <text class="b">位置信息</text>：经您授权获取的地理位置（用于按距离推荐附近货源 / 求购）。您可在小程序设置中随时关闭定位权限。</view>
+
+  <view class="h2">二、信息使用</view>
+  <view class="p">我们仅在以下情形使用您的信息：</view>
+  <view class="li">· 完成账号注册、登录、身份验证</view>
+  <view class="li">· 撮合买卖双方、生成订单</view>
+  <view class="li">· 向您推送站内消息、订阅消息、短信通知</view>
+  <view class="li">· 防范欺诈、洗钱、违规行为</view>
+  <view class="li">· 在征得您同意后，向您发送营销或行业资讯</view>
+
+  <view class="h2">三、信息共享</view>
+  <view class="p">除以下情形外，我们不会与任何第三方共享您的个人信息：</view>
+  <view class="li">· 在订单生成后，向交易对方展示您的姓名、手机号，便于发货对接</view>
+  <view class="li">· 应法律法规要求向司法机关、监管部门提供</view>
+  <view class="li">· 经您单独授权后，向合作伙伴提供</view>
+
+  <view class="h2">四、信息存储</view>
+  <view class="p">您的个人信息存储于中国境内的服务器，存储期限为法律法规要求的最低期限或为完成本服务必需的期限，以较长者为准。</view>
+
+  <view class="h2">五、信息安全</view>
+  <view class="p">我们采用 HTTPS 传输、密码加盐哈希、敏感字段加密等技术手段保护您的信息，严格限制员工的访问权限。如发生数据泄露事件，我们将在 72 小时内告知您并通知监管部门。</view>
+
+  <view class="h2">六、您的权利</view>
+  <view class="p">您可以随时通过以下方式行使权利：</view>
+  <view class="li">· <text class="b">访问 / 更正</text>：在"我的"页中查看、修改个人信息</view>
+  <view class="li">· <text class="b">删除</text>：在"我的"→"账号注销"中申请删除账号及全部信息</view>
+  <view class="li">· <text class="b">撤回授权</text>：在微信"设置 → 隐私 → 授权管理"中撤回小程序权限</view>
+  <view class="li">· <text class="b">投诉</text>：通过客服电话或邮箱投诉，我们将在 15 个工作日内回复</view>
+
+  <view class="h2">七、未成年人保护</view>
+  <view class="p">本平台不面向未成年人提供服务。如发现未成年人注册，请家长或监护人联系客服注销账号。</view>
+
+  <view class="h2">八、Cookie 与同类技术</view>
+  <view class="p">小程序运行依赖微信本地缓存保存登录态、定位等信息，仅在本设备上保存，不会上传第三方。</view>
+
+  <view class="h2">九、政策更新</view>
+  <view class="p">我们可能根据法律法规变化更新本政策。重大变更将通过小程序公告告知，并征求您的同意。</view>
+
+  <view class="h2">十、联系方式</view>
+  <view class="p">客服电话：186-7554-5968</view>
+  <view class="p">客服邮箱：18675545968@163.com</view>
+  <view class="p">公司：湖北省乘子农业科技有限公司</view>
+
+  <view style="height: 80rpx;"></view>
+</view>

@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/select-mode/select-mode",
+    "pages/index/index",
+    "pages/category/category",
+    "pages/auction/auction",
+    "pages/orders/orders",
+    "pages/me/me",
+    "pages/resource-detail/resource-detail",
+    "pages/order-detail/order-detail",
+    "pages/publish/publish",
+    "pages/qualify/qualify",
+    "pages/deposit/deposit",
+    "pages/messages/messages",
+    "pages/seller-profile/seller-profile",
+    "pages/wallet/wallet",
+    "pages/withdraw/withdraw",
+    "pages/recharge/recharge",
+    "pages/route-map/route-map",
+    "pages/about/about",
+    "pages/agreement/agreement",
+    "pages/privacy/privacy",
+    "pages/report/report"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#f6b821",
+    "navigationBarTitleText": "凤伯乐",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#8a8d93",
+    "selectedColor": "#f6b821",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/orders/orders", "text": "订单" },
+      { "pagePath": "pages/me/me", "text": "我的" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于按距离推荐附近 500km 内的货源 / 采购"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation", "chooseLocation"]
+}

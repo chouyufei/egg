@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "卖家信用",
+  "usingComponents": {
+    "egg-card": "/components/egg-card/egg-card",
+    "empty": "/components/empty/empty"
+  }
+}

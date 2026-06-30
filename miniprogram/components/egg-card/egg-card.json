@@ -1,0 +1,1 @@
+{ "component": true, "usingComponents": { "countdown": "/components/countdown/countdown" } }

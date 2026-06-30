@@ -1,0 +1,36 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd84d"/>
+      <stop offset="0.55" stop-color="#f6b821"/>
+      <stop offset="1" stop-color="#f08a00"/>
+    </linearGradient>
+    <radialGradient id="eggHi" cx="0.35" cy="0.3" r="0.45">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fff4d6"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bgGold)"/>
+
+  <!-- 蛋身（居中放大） -->
+  <path d="M 256 150
+           C 168 150 130 268 130 342
+           C 130 410 184 446 256 446
+           C 328 446 382 410 382 342
+           C 382 268 344 150 256 150 Z"
+        fill="url(#eggHi)"/>
+
+  <!-- 凤羽：自蛋顶卷起 -->
+  <path d="M 246 160
+           C 226 122 230 80 262 56
+           C 254 78 264 92 280 96
+           C 270 110 278 124 296 122
+           C 280 140 290 156 304 154
+           C 286 170 270 174 246 160 Z"
+        fill="#f08a00"/>
+  <path d="M 262 56
+           C 296 44 322 64 314 96
+           C 304 76 284 76 280 96"
+        fill="none" stroke="#e0a40d" stroke-width="7" stroke-linecap="round"/>
+</svg>

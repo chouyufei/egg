@@ -1,0 +1,85 @@
+<view class="hero">
+  <view class="muted" style="color: rgba(255,255,255,0.8); font-size: 24rpx;">账户余额（元）</view>
+  <view class="big-bal">¥ {{ balance }}</view>
+  <view class="row" style="margin-top: 16rpx; gap: 32rpx; color: rgba(255,255,255,0.92); font-size: 24rpx;">
+    <view>可提现：{{ available }}</view>
+    <view>冻结：{{ locked }}</view>
+  </view>
+</view>
+
+<view class="page-pad" style="margin-top: -32rpx; position: relative; z-index: 2;">
+  <view class="card">
+    <view class="row" style="gap: 16rpx;">
+      <button class="btn flex-1" bindtap="goRecharge">💰 充值</button>
+      <button class="btn-plain flex-1" bindtap="goWithdraw">💸 申请提现</button>
+    </view>
+    <view class="muted mt-8 text-c" style="font-size: 22rpx;">发布货源 / 求购 / 报价时会冻结 {{ depositAmount }} 元服务保障金，订单完成由卖方扣 {{ serviceFee }} 元服务费后解冻余款</view>
+  </view>
+</view>
+
+<view class="sub-tabs">
+  <view class="sub-tab {{ tab === 'tx' ? 'on' : '' }}" bindtap="setTab" data-t="tx">
+    余额流水 ({{ transactions.length }})
+  </view>
+  <view class="sub-tab {{ tab === 'withdraw' ? 'on' : '' }}" bindtap="setTab" data-t="withdraw">
+    提现记录 ({{ withdrawals.length }})
+  </view>
+</view>
+
+<view wx:if="{{ tab === 'tx' }}" class="legend">
+  <text class="lg-item"><text class="tx-in" style="font-size: 22rpx;">+绿色</text> 实际到账</text>
+  <text class="lg-item"><text class="tx-out" style="font-size: 22rpx;">-红色</text> 实际出账</text>
+  <text class="lg-item"><text class="tx-lock" style="font-size: 20rpx;">🔒</text> 冻结（不扣款）</text>
+  <text class="lg-item"><text class="tx-unlock" style="font-size: 20rpx;">🔓</text> 解冻</text>
+</view>
+
+<view class="page-pad">
+  <block wx:if="{{ tab === 'tx' }}">
+    <view class="card" wx:if="{{ transactions.length }}">
+      <view wx:for="{{ transactions }}" wx:key="id" class="tx-row" bindtap="onTxTap" data-i="{{ index }}">
+        <view class="flex-1">
+          <view class="bold">{{ item.type_label }}</view>
+          <view wx:if="{{ item.related && item.related.title }}" class="muted mt-4" style="font-size: 24rpx; color: #1d1d1f;">
+            🛒 {{ item.related.title }}
+          </view>
+          <view wx:if="{{ item.related && item.related.order_id }}" class="muted" style="font-size: 22rpx;">
+            订单 {{ item.related.order_no || ('#' + item.related.order_id) }}<text wx:if="{{ item.related.final_price }}"> · 成交 ¥{{ item.related.final_price }}</text>
+          </view>
+          <view wx:if="{{ item.related && item.related.purpose === 'recharge' }}" class="muted" style="font-size: 22rpx;">
+            微信充值 · {{ item.related.out_trade_no }}
+          </view>
+          <view wx:if="{{ item.related && item.related.kind === 'withdrawal' }}" class="muted" style="font-size: 22rpx;">
+            提现 #{{ item.related.withdrawal_id }} · {{ item.related.method === 'wechat' ? '微信零钱' : '银行卡' }}
+          </view>
+          <view class="muted" style="font-size: 22rpx;">{{ item.time_str }}<text wx:if="{{ item.note }}"> · {{ item.note }}</text></view>
+        </view>
+        <view class="{{ item.amount_cls }}">{{ item.amount_str }}</view>
+      </view>
+    </view>
+    <empty wx:else icon="💴" text="还没有任何余额变动" />
+  </block>
+
+  <block wx:else>
+    <view class="card" wx:if="{{ withdrawals.length }}">
+      <view wx:for="{{ withdrawals }}" wx:key="id" class="tx-row">
+        <view class="flex-1">
+          <view class="bold">¥ {{ item.amount }} · {{ item.method === 'wechat' ? '微信零钱' : '银行卡' }}</view>
+          <view class="muted" style="font-size: 22rpx;">申请于 {{ item.time_str }}</view>
+          <view wx:if="{{ item.out_trade_no }}" class="muted" style="font-size: 22rpx;">打款流水：{{ item.out_trade_no }}</view>
+          <view wx:if="{{ item.status === 'paid' }}" class="muted" style="font-size: 22rpx; color: #06883b;">💡 微信零钱实时到账；银行卡通常 2 小时内到账</view>
+          <view wx:if="{{ item.failure_reason && item.status !== 'paid' }}" class="muted" style="font-size: 22rpx; color: #ee0a24;">{{ item.failure_reason }}</view>
+        </view>
+        <view style="text-align: right;">
+          <text class="tag {{ item.status_cls }}">{{ item.status_label }}</text>
+          <view wx:if="{{ item.can_confirm }}" class="mt-8">
+            <text class="link" style="font-size: 22rpx;" bindtap="confirmReceive" data-id="{{ item.id }}">去微信确认收款 ›</text>
+          </view>
+          <view wx:if="{{ item.status === 'pending' }}" class="mt-8">
+            <text class="muted" style="font-size: 22rpx; color: #ee0a24;" bindtap="cancelWithdraw" data-id="{{ item.id }}">取消</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <empty wx:else icon="📭" text="还没有提现申请" />
+  </block>
+</view>

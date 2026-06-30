@@ -1,0 +1,27 @@
+<view class="sm-page">
+  <view class="sm-brand">
+    <view class="sm-egg">🥚</view>
+    <view class="sm-name">凤伯乐</view>
+    <view class="sm-sub">您今天想做什么？</view>
+  </view>
+
+  <view class="sm-card sm-sell" bindtap="pick" data-r="farm">
+    <view class="sm-icon sm-icon-sell">🐔</view>
+    <view class="flex-1">
+      <view class="sm-main">我要卖蛋</view>
+      <view class="sm-tip">发布货源 / 接采购商订单</view>
+    </view>
+    <view class="sm-arrow">›</view>
+  </view>
+
+  <view class="sm-card sm-buy" bindtap="pick" data-r="buyer">
+    <view class="sm-icon sm-icon-buy">🛒</view>
+    <view class="flex-1">
+      <view class="sm-main">我要买蛋</view>
+      <view class="sm-tip">报价货源 / 发布求购需求</view>
+    </view>
+    <view class="sm-arrow">›</view>
+  </view>
+
+  <view class="sm-foot muted text-c">同一账号可随时在「我的 → 切换身份」中变更</view>
+</view>

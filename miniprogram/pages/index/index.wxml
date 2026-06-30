@@ -1,0 +1,153 @@
+<view wx:if="{{ !user }}" class="empty">未登录，请重新打开应用</view>
+
+<block wx:if="{{ user.role === 'admin' }}">
+  <view class="page-pad">
+    <view class="card text-c" style="padding: 80rpx 32rpx;">
+      <view style="font-size: 80rpx;">⚙️</view>
+      <view class="bold mt-8">管理员请使用 Web 后台</view>
+      <view class="muted mt-8">在电脑上访问 http://localhost:5173/#/admin</view>
+      <button class="btn-plain mt-16" bindtap="logout">退出登录</button>
+    </view>
+  </view>
+</block>
+
+<block wx:if="{{ user.role !== 'admin' }}">
+  <!-- 顶部 -->
+  <view class="hero">
+    <view class="row-between" style="margin-bottom: 16rpx;">
+      <view class="hero-title">🥚 凤伯乐</view>
+      <view class="bell" bindtap="goMessages">🔔<text wx:if="{{ unread }}" class="bell-badge">{{ unread }}</text></view>
+    </view>
+
+    <!-- 顺序：买 / 卖；审核模式下只显示"浏览"单段 -->
+    <view class="mode-bar">
+      <view wx:if="{{ !reviewMode }}" class="mode-seg {{ activeMode === 'buy' ? 'on' : '' }}" bindtap="setMode" data-m="buy">🛒 买</view>
+      <view wx:if="{{ !reviewMode }}" class="mode-seg {{ activeMode === 'sell' ? 'on' : '' }}" bindtap="setMode" data-m="sell">🐔 卖</view>
+      <view wx:if="{{ reviewMode }}" class="mode-seg on">🥚 浏览货源</view>
+    </view>
+
+    <!-- 合并的检索框：类目 + 区域 -->
+    <view class="filter-bar" bindtap="openFilter">
+      <text class="filter-icon">🔍</text>
+      <text class="filter-text">{{ filterText }}</text>
+      <text class="filter-arrow">▾</text>
+    </view>
+
+    <view wx:if="{{ myLoc }}" class="near-hint row-between">
+      <text class="flex-1 ellipsis">📍 {{ locSource === 'custom' ? '自选：' + locName : '当前定位' }} · 优先 {{ nearRadius }}km 内</text>
+      <text class="near-edit" catchtap="pickCustomLoc">{{ locSource === 'custom' ? '更换' : '选位置' }}</text>
+      <text wx:if="{{ locSource === 'custom' }}" class="near-edit near-edit-x" catchtap="resetToGps">↻</text>
+    </view>
+    <view wx:else class="near-hint near-hint-off row-between">
+      <text bindtap="askLocation">📍 开启定位 · 优先看附近</text>
+      <text class="near-edit" catchtap="pickCustomLoc">手动选</text>
+    </view>
+  </view>
+
+  <!-- ========== 买 视角 ========== -->
+  <block wx:if="{{ activeMode === 'buy' }}">
+    <view class="sub-tabs">
+      <view class="sub-tab {{ buyerTab === 'browse' ? 'on' : '' }}" bindtap="setBuyerTab" data-t="browse">
+        在售货源 ({{ others.length }})
+      </view>
+      <view class="sub-tab {{ buyerTab === 'mine' ? 'on' : '' }}" bindtap="setBuyerTab" data-t="mine">
+        我的采购 ({{ mineDemands.length }})
+      </view>
+    </view>
+
+    <view class="page-pad">
+      <block wx:if="{{ buyerTab === 'browse' }}">
+        <view class="grid">
+          <view class="grid-cell" wx:for="{{ others }}" wx:key="id">
+            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+          </view>
+        </view>
+        <empty wx:if="{{ !others.length }}" icon="🛒" text="暂无在售货源" />
+      </block>
+
+      <block wx:else>
+        <!-- + 发布求购 CTA 移进"我的采购"tab -->
+        <view class="publish-cta" bindtap="goPublishDemand">
+          <view class="publish-plus">+</view>
+          <view class="flex-1">
+            <view class="publish-title">发布求购</view>
+            <view class="publish-sub">说出我要的，让养殖场来报价</view>
+          </view>
+          <view class="publish-arrow">›</view>
+        </view>
+        <view class="grid">
+          <view class="grid-cell" wx:for="{{ mineDemands }}" wx:key="id">
+            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+          </view>
+        </view>
+        <empty wx:if="{{ !mineDemands.length }}" icon="📭" text="还没发布过求购，点上方按钮立即发布" />
+      </block>
+    </view>
+  </block>
+
+  <!-- ========== 卖 视角 ========== -->
+  <block wx:if="{{ activeMode === 'sell' }}">
+    <view class="sub-tabs">
+      <view class="sub-tab {{ sellerTab === 'browse' ? 'on' : '' }}" bindtap="setSellerTab" data-t="browse">
+        在征求购 ({{ others.length }})
+      </view>
+      <view class="sub-tab {{ sellerTab === 'mine' ? 'on' : '' }}" bindtap="setSellerTab" data-t="mine">
+        我的货源 ({{ mineSupplies.length }})
+      </view>
+    </view>
+
+    <view class="page-pad">
+      <block wx:if="{{ sellerTab === 'browse' }}">
+        <view class="grid">
+          <view class="grid-cell" wx:for="{{ others }}" wx:key="id">
+            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+          </view>
+        </view>
+        <empty wx:if="{{ !others.length }}" icon="🐔" text="暂无在征求购" />
+      </block>
+
+      <block wx:else>
+        <view class="publish-cta" bindtap="goPublishSupply">
+          <view class="publish-plus">+</view>
+          <view class="flex-1">
+            <view class="publish-title">发布货源</view>
+            <view class="publish-sub">上架我的鸡蛋等买家报价</view>
+          </view>
+          <view class="publish-arrow">›</view>
+        </view>
+        <view class="grid">
+          <view class="grid-cell" wx:for="{{ mineSupplies }}" wx:key="id">
+            <egg-card r="{{ item }}" bind:cardtap="openRes" data-id="{{ item.id }}" />
+          </view>
+        </view>
+        <empty wx:if="{{ !mineSupplies.length }}" icon="📭" text="还没发布过货源，点上方按钮立即发布" />
+      </block>
+    </view>
+  </block>
+</block>
+
+<!-- 筛选弹层（蛋品类目 + 区域） -->
+<view wx:if="{{ showFilter }}" class="modal-mask" bindtap="closeFilter">
+  <view class="filter-sheet" catchtap="noop">
+    <view class="sheet-handle"></view>
+    <view class="sheet-title">蛋品类目</view>
+    <view class="chip-row">
+      <view wx:for="{{ categories }}" wx:key="value"
+            class="chip {{ tempColor === item.value ? 'on' : '' }}"
+            bindtap="tempPickColor" data-v="{{ item.value }}">{{ item.icon }} {{ item.label }}</view>
+    </view>
+    <view class="sheet-title">区域分类</view>
+    <scroll-view scroll-y class="chip-scroll">
+      <view class="chip-row">
+        <view class="chip {{ tempProvince === '' ? 'on' : '' }}" bindtap="tempPickProvince" data-v="">不限</view>
+        <view wx:for="{{ allProvinces }}" wx:key="*this"
+              class="chip {{ tempProvince === item ? 'on' : '' }}"
+              bindtap="tempPickProvince" data-v="{{ item }}">{{ item }}</view>
+      </view>
+    </scroll-view>
+    <view class="row mt-16" style="gap: 16rpx; padding: 0 24rpx;">
+      <button class="btn-plain flex-1" bindtap="resetFilter">重置</button>
+      <button class="btn flex-1" bindtap="applyFilter">应用</button>
+    </view>
+  </view>
+</view>

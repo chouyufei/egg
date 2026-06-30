@@ -1,0 +1,28 @@
+<view class="page-pad">
+  <view class="card">
+    <view class="muted">当前可用余额</view>
+    <view class="price-l" style="margin-top: 8rpx;">¥ {{ available }}</view>
+  </view>
+
+  <view class="card">
+    <view class="input-row">
+      <view class="label">充值金额</view>
+      <input type="digit" value="{{ amount }}" bindinput="onInput" placeholder="请输入金额" />
+      <text class="muted" style="margin-left: 8rpx;">元</text>
+    </view>
+    <view class="muted mt-8" style="font-size: 22rpx;">常用金额（点击填入）</view>
+    <view class="preset-row mt-8">
+      <view wx:for="{{ presets }}" wx:key="*this" class="preset" bindtap="pickPreset" data-v="{{ item }}">¥ {{ item }}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="muted" style="line-height: 1.7;">
+      · 充值通过微信支付完成，金额到账钱包余额，用于冻结发布 / 报价的保证金<br/>
+      · 钱包余额可用于提现至微信零钱 / 银行卡<br/>
+      · 充值即视为同意《用户协议》及《资金管理说明》
+    </view>
+  </view>
+
+  <button class="btn mt-16" bindtap="submit" loading="{{ paying }}">立即充值</button>
+</view>

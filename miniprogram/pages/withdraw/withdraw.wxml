@@ -1,0 +1,61 @@
+<view class="page-pad">
+  <view class="card">
+    <view class="muted">可用余额</view>
+    <view class="price-l" style="margin-top: 8rpx;">¥ {{ available }}</view>
+  </view>
+
+  <!-- 提现规则（按微信审核要求显式展示） -->
+  <view class="card rules-card">
+    <view class="rules-title">📋 提现规则</view>
+    <view class="rule-row"><text class="rule-label">微信零钱</text><text>单笔 ≤ {{ rules.methods.wechat.max_per_request }} 元 · 每日 {{ rules.methods.wechat.max_daily_count }} 次 / 累计 {{ rules.methods.wechat.max_daily_amount }} 元</text></view>
+    <view class="rule-row"><text class="rule-label">银行卡</text><text>单笔 ≤ {{ rules.methods.bank.max_per_request }} 元 · 每日 {{ rules.methods.bank.max_daily_count }} 次 / 累计 {{ rules.methods.bank.max_daily_amount }} 元</text></view>
+    <view class="rule-row"><text class="rule-label">最低单笔</text><text>{{ rules.min_amount }} 元</text></view>
+    <view class="rule-row"><text class="rule-label">受理时段</text><text>{{ rules.window }}（提交后实时处理，无需人工审核）</text></view>
+    <view class="rule-row"><text class="rule-label">到账时长</text><text>微信零钱 实时到账 · 银行卡 ≤ {{ rules.arrival_hours }} 小时</text></view>
+    <view class="rule-row"><text class="rule-label">提现手续费</text><text>{{ rules.fee_pct > 0 ? rules.fee_pct + '%' : '免手续费' }}</text></view>
+    <view class="rule-row"><text class="rule-label">资金来源</text><text>钱包可用余额（保证金释放 + 充值入账）</text></view>
+  </view>
+
+  <view class="card">
+    <view class="input-row">
+      <view class="label">提现金额</view>
+      <input type="digit" value="{{ amount }}" data-k="amount" bindinput="onInput" bindblur="onInput" placeholder="{{ rules.min_amount }} - {{ current.max_per_request }} 元" />
+      <text class="muted" style="margin-left: 8rpx;" bindtap="fillAll">全部</text>
+    </view>
+    <view class="input-row">
+      <view class="label">提现方式</view>
+      <radio-group bindchange="pickMethod" style="display: flex; gap: 24rpx;">
+        <label><radio value="wechat" checked="{{ method === 'wechat' }}" />微信零钱</label>
+        <label><radio value="bank" checked="{{ method === 'bank' }}" />银行卡</label>
+      </radio-group>
+    </view>
+
+    <block wx:if="{{ method === 'bank' }}">
+      <view class="input-row">
+        <view class="label">持卡人</view>
+        <input value="{{ account_name }}" data-k="account_name" bindinput="onInput" bindblur="onInput" placeholder="姓名" />
+      </view>
+      <view class="input-row">
+        <view class="label">银行卡号</view>
+        <input type="number" value="{{ account_no }}" data-k="account_no" bindinput="onInput" bindblur="onInput" placeholder="卡号" />
+      </view>
+      <view class="input-row">
+        <view class="label">开户行</view>
+        <input value="{{ bank_name }}" data-k="bank_name" bindinput="onInput" bindblur="onInput" placeholder="如：中国工商银行 北京建国门支行" />
+      </view>
+    </block>
+  </view>
+
+  <view class="card hint-card">
+    <view class="muted" style="line-height: 1.8; font-size: 24rpx;">
+      <view><text class="b-tip">·</text> <text class="b-tip">微信零钱</text>：提交后立即调用微信「商家转账到零钱」，无需人工审核；在弹出的微信确认收款窗口点确认即实时到账（转入您登录所用的微信号）</view>
+      <view><text class="b-tip">·</text> <text class="b-tip">银行卡</text>：大额提现走人工打款，{{ rules.arrival_hours }} 小时内到账</view>
+      <view><text class="b-tip">·</text> 提交后金额会冻结在「提现冻结」中，未到账前可在「提现记录」里取消</view>
+      <view><text class="b-tip">·</text> 微信零钱与银行卡分别计算每日次数 / 累计金额，互不相通</view>
+      <view><text class="b-tip">·</text> 提现规则如有调整，将以平台公告为准</view>
+    </view>
+  </view>
+
+  <button class="btn mt-16" bindtap="submit" loading="{{ submitting }}">提交申请</button>
+  <view class="muted text-c mt-8" style="font-size: 22rpx;">点击「提交申请」即表示您已阅读并同意上述提现规则</view>
+</view>

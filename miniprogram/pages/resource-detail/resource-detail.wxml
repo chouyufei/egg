@@ -1,0 +1,195 @@
+<view wx:if="{{ r }}">
+  <swiper class="banner" autoplay circular indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff">
+    <swiper-item wx:for="{{ photos }}" wx:key="*this">
+      <image class="banner-img" src="{{ item }}" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+
+  <view class="card" style="margin: -32rpx 24rpx 24rpx; position: relative; z-index: 2;">
+    <!-- 大色块 kind 标识：一眼分清 货源 / 求购 -->
+    <view class="kind-banner {{ isSupply ? 'kind-supply' : 'kind-demand' }}">
+      <text class="kind-icon">{{ isSupply ? '🐔' : '🛒' }}</text>
+      <text class="kind-text">{{ isSupply ? '货源 · 我有蛋要卖' : '求购 · 我要买蛋' }}</text>
+    </view>
+    <view class="row-between mt-16">
+      <view>
+        <view class="muted">{{ isSupply ? '当前价' : '当前最低报价' }}</view>
+        <view class="price-l">¥{{ r.current_price }} <text class="muted" style="font-size: 24rpx;">{{ r.unit_label || '元/箱' }}</text></view>
+        <view class="muted">{{ isSupply ? '起报' : '心理价上限' }} ¥{{ r.start_price }} · {{ isSupply ? '加价' : '降价' }} ¥{{ r.min_increment }}</view>
+      </view>
+      <view style="text-align: right;">
+        <text wx:if="{{ !isMine }}" class="report-tag" catchtap="report">⚐ 举报</text>
+        <view class="muted mt-8">{{ r.status === 'auctioning' ? '剩余' : statusLabel }}</view>
+        <view wx:if="{{ r.status === 'auctioning' }}" class="mt-8"><countdown end-at="{{ r.end_at }}" bindend="onEnd" /></view>
+        <view wx:if="{{ r.extend_count > 0 }}" class="muted mt-8">已延时 {{ r.extend_count }} 次</view>
+      </view>
+    </view>
+    <view class="bold mt-16" style="font-size: 32rpx; line-height: 1.5;">{{ r.title }}</view>
+    <view class="mt-12" style="line-height: 1.9;">
+      <text wx:if="{{ r.egg_color }}" class="tag">{{ r.egg_color }}</text>
+      <text wx:if="{{ r.weight_spec }}" class="tag tag-b">{{ r.weight_spec }}</text>
+      <text wx:if="{{ r.region }}" class="tag tag-g">{{ r.region }}</text>
+      <text wx:if="{{ r.chicken_breed }}" class="tag tag-b">{{ r.chicken_breed }}</text>
+      <view wx:if="{{ distText }}" class="tag dist-tag {{ distNear ? '' : 'tag-d' }}" catchtap="openRouteMap">📍 距您 {{ distText }} ›</view>
+    </view>
+  </view>
+
+  <view wx:if="{{ r.intro_video }}" class="card" style="margin: 0 24rpx 24rpx; padding: 0; overflow: hidden;">
+    <video src="{{ r.intro_video }}" controls style="width: 100%; height: 420rpx; display: block;"></video>
+  </view>
+
+  <view class="card detail-card" style="margin: 0 24rpx 24rpx;">
+    <view class="section-title" style="margin: 0 0 16rpx; font-size: 32rpx;">参数明细</view>
+    <view wx:if="{{ r.truck_type }}" class="kv"><text class="muted">车型</text><text>{{ r.truck_type }} 米车</text></view>
+    <view wx:if="{{ r.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ r.weight_spec }}</text></view>
+
+    <!-- 各斤值规格的箱数 + 价格细分（weight_specs） -->
+    <view wx:if="{{ weightSpecsList.length }}" class="weight-specs">
+      <view class="muted" style="font-size: 26rpx; padding: 8rpx 0;">📦 各规格箱数 / 价格</view>
+      <view wx:for="{{ weightSpecsList }}" wx:key="weight" class="weight-row">
+        <text class="weight-w">{{ item.weight }} 斤箱</text>
+        <text class="weight-b muted">{{ item.boxes }} 箱</text>
+        <text class="weight-p">¥{{ item.current }} <text class="muted" style="font-size: 22rpx; text-decoration: line-through; margin-left: 4rpx;" wx:if="{{ item.current !== item.price }}">¥{{ item.price }}</text> <text class="muted" style="font-size: 22rpx;">/箱</text></text>
+      </view>
+    </view>
+    <view wx:if="{{ r.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ r.pack_size }} 枚/箱</text></view>
+    <view wx:if="{{ r.shell_quality }}" class="kv"><text class="muted">蛋壳质量</text><text>{{ r.shell_quality }}</text></view>
+    <view wx:if="{{ r.yolk_color }}" class="kv">
+      <text class="muted">蛋黄颜色</text>
+      <text>{{ r.yolk_color }}<text wx:if="{{ r.yolk_shade }}" class="muted" style="font-size: 22rpx;"> · {{ r.yolk_shade }}</text></text>
+    </view>
+    <view wx:if="{{ r.defect_rate != null }}" class="kv">
+      <text class="muted">次品率</text>
+      <text>{{ r.defect_rate }}%<text wx:if="{{ r.defect_note }}" class="muted" style="font-size: 22rpx;"> · {{ r.defect_note }}</text></text>
+    </view>
+    <view wx:if="{{ r.freshness_days }}" class="kv"><text class="muted">鲜度</text><text>{{ r.freshness_days }} 天内</text></view>
+    <view wx:if="{{ !isSupply && allowProvinces.length }}" class="kv"><text class="muted">允许参与地区</text><text>{{ allowProvinces }}</text></view>
+    <view wx:if="{{ r.farm_size }}" class="kv"><text class="muted">规模</text><text>{{ farmSizeText }}</text></view>
+    <view class="kv kv-link" bindtap="openSeller">
+      <text class="muted">{{ isSupply ? '养殖场' : '采购方' }}</text>
+      <text>{{ r.farm.name }} <text class="muted" style="font-size: 22rpx;">查看信用 / 主页 ›</text></text>
+    </view>
+    <view wx:if="{{ r.description }}" class="mt-16" style="line-height: 1.7;">{{ r.description }}</view>
+  </view>
+
+  <view class="card" style="margin: 0 24rpx 24rpx;">
+    <view class="row-between section-title" style="margin: 0 0 16rpx;">
+      <text>{{ isSupply ? '报价记录' : '报价记录' }} ({{ bids.length }})</text>
+      <text class="muted">{{ r.bidder_count }} 位参与</text>
+    </view>
+    <empty wx:if="{{ !bids.length }}" icon="💰" text="{{ isSupply ? '暂无报价，期待第一次报价' : '暂无报价，等待养殖场应标' }}" />
+    <view wx:for="{{ bids }}" wx:key="id" class="bid-row">
+      <view>
+        <text>{{ item.bidder_name }}</text>
+        <text wx:if="{{ item.is_auto }}" class="muted"> (自动)</text>
+        <view class="muted" style="font-size: 22rpx;">{{ item.timeText }}</view>
+      </view>
+      <text class="price">¥{{ item.price }}</text>
+    </view>
+  </view>
+
+  <!-- 分享：邀请好友围观，越多关注成交越快 -->
+  <view wx:if="{{ r.status === 'auctioning' }}" class="card share-card" style="margin: 0 24rpx 24rpx;">
+    <!-- 第一行：📣 标题 + 副说明  第二行：分享按钮整宽 -->
+    <view class="share-head">
+      <text class="share-icon">📣</text>
+      <view class="flex-1">
+        <text class="bold">邀请好友围观</text>
+        <text class="muted" style="font-size: 24rpx; margin-left: 12rpx;">关注越多，越快成交</text>
+      </view>
+    </view>
+    <button class="btn share-btn-wide" open-type="share">立即分享</button>
+  </view>
+
+  <view style="height: 240rpx;"></view>
+
+  <!-- 底部操作栏：我要加价/让价 -->
+  <view wx:if="{{ !reviewMode && canBid && r.status === 'auctioning' }}" class="bid-toolbar">
+    <view class="tb-action tb-action-y" style="flex: 1;" bindtap="openHaggle">
+      <view class="tb-action-icon">💰</view>
+      <view class="tb-action-text">我要{{ isSupply ? '加价' : '让价' }}</view>
+    </view>
+  </view>
+
+  <!-- 审核模式：把报价区换成"联系客服咨询" -->
+  <view wx:if="{{ reviewMode && r.status === 'auctioning' && !isMine }}" class="fixed-bottom-bar">
+    <button class="btn" style="flex: 1;" open-type="contact">📞 联系客服咨询</button>
+  </view>
+
+  <!-- 发布者自己 + 无人报价时可取消 -->
+  <view wx:if="{{ isMine && r.status === 'auctioning' && bids.length === 0 }}" class="fixed-bottom-bar">
+    <button class="btn btn-danger" style="flex: 1; padding: 14rpx 0;" bindtap="cancel">取消报价</button>
+  </view>
+
+  <!-- 发布者自己 + 已有报价：可手动结束按当前最高价成交 -->
+  <view wx:if="{{ isMine && r.status === 'auctioning' && bids.length > 0 }}" class="fixed-bottom-bar">
+    <button class="btn" style="flex: 1; padding: 14rpx 0; background: #07c160; color: #fff;" bindtap="endNow" loading="{{ ending }}">
+      ✓ 确认成交 · 以 ¥{{ r.current_price }} 成交
+    </button>
+  </view>
+
+  <!-- 未成交 / 已取消 + 发布者：可快速重新上架 / 删除 -->
+  <view wx:if="{{ isMine && (r.status === 'failed' || r.status === 'cancelled') }}" class="fixed-bottom-bar" style="gap: 16rpx;">
+    <button class="btn-plain" style="flex: 1; padding: 14rpx 0; color: #ee0a24; border-color: #ee0a24;" bindtap="deleteRes">🗑 删除</button>
+    <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="relist">↻ 重新上架</button>
+  </view>
+
+  <!-- 未登录访客（分享进来）：信息可看，底部固定一条登录 CTA -->
+  <view wx:if="{{ needLogin }}" class="fixed-bottom-bar">
+    <button class="btn" style="flex: 1; padding: 14rpx 0;" bindtap="goLogin">🔑 登录后参与报价 / 联系卖方</button>
+  </view>
+
+  <view wx:elif="{{ !canBid && !isMine }}" class="fixed-bottom-bar">
+    <button class="btn-plain" style="flex: 1;" disabled>{{ blockReason }}</button>
+  </view>
+</view>
+
+<!-- 我要加价/让价 弹窗 -->
+<view wx:if="{{ showHaggle }}" class="modal-mask" bindtap="closeHaggle">
+  <view class="haggle-sheet" catchtap="noop">
+    <view class="hg-handle"></view>
+    <view class="hg-head">
+      <text class="hg-title">我要{{ isSupply ? '加价' : '让价' }}</text>
+      <text class="hg-close" bindtap="closeHaggle">×</text>
+    </view>
+
+    <view class="hg-label">选择当前要出价的规格</view>
+    <view class="hg-spec">
+      <view class="hg-spec-card on">
+        <view class="hg-spec-name">{{ r.weight_spec || '默认规格' }}</view>
+        <view class="hg-spec-price"><text class="hg-spec-num">{{ r.current_price }}</text> <text class="hg-spec-unit">/{{ priceUnit }}</text></view>
+        <view class="hg-spec-stock">剩余 {{ r.quantity }} {{ r.unit_size || '车' }}</view>
+      </view>
+    </view>
+
+    <view class="hg-label">选择可接受价格</view>
+    <view class="hg-input-row">
+      <view class="hg-input-minus" bindtap="haggleMinus">−</view>
+      <view class="hg-input-big">¥<text style="font-size: 60rpx;">{{ haggleVal }}</text><text class="hg-input-unit"> /{{ priceUnit }}</text></view>
+      <view class="hg-input-plus" bindtap="hagglePlus">+</view>
+    </view>
+    <view class="hg-slider">
+      <text class="hg-slider-min">¥{{ haggleMin }}</text>
+      <slider class="hg-slider-bar" min="{{ haggleMin }}" max="{{ haggleMax }}" step="{{ r.min_increment }}" value="{{ haggleVal }}" bindchange="onHaggleSlider" activeColor="#f6b821" block-size="24" block-color="#fff" />
+      <text class="hg-slider-max">¥{{ haggleMax }}</text>
+    </view>
+    <view class="hg-hint on">
+      💡 {{ isSupply ? '加价越高，成功的概率越大' : '让价越高，成功的概率越大' }}
+    </view>
+
+    <button class="btn hg-submit" bindtap="submitHaggle" loading="{{ bidding }}">确定</button>
+  </view>
+</view>
+
+
+<view wx:if="{{ showAuto }}" class="modal-mask" bindtap="closeAuto">
+  <view class="modal" catchtap="noop">
+    <view class="bold">设置自动报价</view>
+    <view class="muted mt-8">设置最高心理价位，系统将以最低加价帮您报价，直到订下或超出心理价。</view>
+    <view class="input-row mt-16"><view class="label">最高报价</view><input type="digit" model:value="{{ autoMax }}" placeholder="≥ {{ nextLimit }}" /></view>
+    <view class="row mt-16" style="gap: 16rpx;">
+      <button class="btn-plain flex-1" bindtap="closeAuto">取消</button>
+      <button class="btn flex-1" bindtap="setAuto">确认开启</button>
+    </view>
+  </view>
+</view>

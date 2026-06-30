@@ -1,0 +1,37 @@
+<view class="page-pad">
+  <view class="card">
+    <view class="muted" style="line-height: 1.7;">
+      您正在举报：<text class="bold" style="color: #1d1d1f;">{{ targetLabel }}</text><br/>
+      平台收到举报后将在 24 小时内核实处理。如涉及违法犯罪，建议同步报警。
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">举报类型</view>
+    <view class="chip-row">
+      <view wx:for="{{ categories }}" wx:key="*this"
+            class="chip {{ category === item ? 'on' : '' }}"
+            bindtap="pickCat" data-v="{{ item }}">{{ item }}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">详细说明</view>
+    <textarea model:value="{{ description }}" placeholder="请详细描述您发现的问题，便于平台核实（建议 50 字以上）" auto-height maxlength="500" class="ta" />
+    <view class="muted text-r mt-8" style="font-size: 22rpx;">{{ description.length }} / 500</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">证据图片（可选，最多 4 张）</view>
+    <view class="upload-grid">
+      <view wx:for="{{ evidence }}" wx:key="*this" class="upload-thumb">
+        <image src="{{ item }}" mode="aspectFill" />
+        <view class="upload-del" catchtap="delImg" data-i="{{ index }}">×</view>
+      </view>
+      <view wx:if="{{ evidence.length < 4 }}" class="upload-add" bindtap="addImg">+</view>
+    </view>
+  </view>
+
+  <button class="btn mt-16" bindtap="submit" loading="{{ submitting }}">提交举报</button>
+  <view class="muted text-c mt-8" style="font-size: 22rpx;">提交即表示同意《用户协议》中的举报条款</view>
+</view>

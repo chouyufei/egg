@@ -1,0 +1,102 @@
+<view wx:if="{{ order }}" class="page-pad">
+  <view class="card">
+    <view class="row-between">
+      <text class="bold" bindtap="copyOrderNo">订单 {{ order.order_no || ('#' + order.id) }} <text class="muted" style="font-size: 22rpx;">📋</text></text>
+      <view class="row" style="gap: 12rpx;">
+        <text class="tag {{ statusCls }}">{{ statusText }}</text>
+        <text class="report-tag" catchtap="report">⚐ 举报</text>
+      </view>
+    </view>
+    <view class="kv mt-16"><text class="muted">资源</text><text>{{ order.resource.title }}</text></view>
+    <view class="kv"><text class="muted">{{ otherLabel }}</text><text>{{ otherName }}</text></view>
+    <view class="kv"><text class="muted">联系电话</text><text>{{ otherPhone }}</text></view>
+    <view wx:if="{{ distText }}" class="kv kv-link" catchtap="openRouteMap">
+      <text class="muted">📍 距离</text>
+      <view>距您 {{ distText }} <text class="muted" style="font-size: 22rpx;">查看路线 ›</text></view>
+    </view>
+  </view>
+
+  <!-- 资源参数明细：蛋品 / 鸡种 / 蛋黄颜色 / 鲜度 / 次品率 / 规格 / 车型 + 单箱净重各斤值 -->
+  <view wx:if="{{ order.resource }}" class="card">
+    <view class="section-title" style="margin: 0 0 16rpx; font-size: 30rpx;">参数明细</view>
+    <view wx:if="{{ order.resource.egg_color }}" class="kv"><text class="muted">蛋品类目</text><text>{{ order.resource.egg_color }}</text></view>
+    <view wx:if="{{ order.resource.chicken_breed }}" class="kv"><text class="muted">鸡种</text><text>{{ order.resource.chicken_breed }}</text></view>
+    <view wx:if="{{ order.resource.yolk_color }}" class="kv">
+      <text class="muted">蛋黄颜色</text>
+      <text>{{ order.resource.yolk_color }}<text wx:if="{{ order.resource.yolk_shade }}" class="muted" style="font-size: 22rpx;"> · {{ order.resource.yolk_shade }}</text></text>
+    </view>
+    <view wx:if="{{ order.resource.freshness_days }}" class="kv"><text class="muted">鲜度</text><text>{{ order.resource.freshness_days }} 天内</text></view>
+    <view wx:if="{{ order.resource.defect_rate != null }}" class="kv">
+      <text class="muted">次品率</text>
+      <text>{{ order.resource.defect_rate }}%</text>
+    </view>
+    <view wx:if="{{ order.resource.pack_size }}" class="kv"><text class="muted">规格</text><text>{{ order.resource.pack_size }} 枚/箱</text></view>
+    <view wx:if="{{ order.resource.truck_type }}" class="kv"><text class="muted">车型</text><text>{{ order.resource.truck_type }} 米车</text></view>
+    <view wx:if="{{ order.resource.weight_spec }}" class="kv"><text class="muted">单箱净重</text><text>{{ order.resource.weight_spec }}</text></view>
+    <view wx:if="{{ weightSpecsList.length }}" class="weight-specs">
+      <view class="muted" style="font-size: 24rpx; padding: 6rpx 0;">📦 各规格箱数 / 成交价</view>
+      <view wx:for="{{ weightSpecsList }}" wx:key="weight" class="weight-row">
+        <text class="weight-w">{{ item.weight }} 斤箱</text>
+        <text class="weight-b muted">{{ item.boxes }} 箱</text>
+        <text class="weight-p">
+          ¥{{ item.price }}
+          <text wx:if="{{ item.price !== item.startPrice }}" class="muted" style="font-size: 22rpx; text-decoration: line-through; margin-left: 4rpx;">¥{{ item.startPrice }}</text>
+          <text class="muted" style="font-size: 22rpx;">/箱</text>
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 客服企业微信二维码：订单或沟通中有疑问时，扫码联系客服咨询 -->
+  <view wx:if="{{ serviceQr.url }}" class="card qr-card">
+    <view class="qr-title">📲 交易疑问？联系客服</view>
+    <view class="qr-sub">{{ serviceQr.owner || '凤伯乐 · 客服' }}</view>
+    <image src="{{ serviceQr.url }}" mode="aspectFit" class="qr-img" bindtap="previewQr" />
+    <view class="qr-tip">
+      订单履约或买卖双方沟通中如有疑问，可扫码添加客服企业微信进行咨询，由客服协助解答与协调。
+    </view>
+    <view class="row" style="gap: 16rpx; margin-top: 16rpx;">
+      <button class="btn-plain flex-1" bindtap="previewQr">查看大图</button>
+      <button class="btn flex-1" bindtap="saveQr">保存到相册</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">沟通群</view>
+    <view wx:if="{{ !order.group_id }}" class="text-c" style="padding: 20rpx 0;">
+      <view class="muted mt-8">{{ user.role === 'buyer' ? '成交后请尽快建群联系养殖场' : '等待采购商建群，或可主动建群' }}</view>
+      <button class="btn mt-16" bindtap="createGroup">建立沟通群</button>
+    </view>
+    <view wx:else>
+      <view class="muted">群编号：{{ order.group_id }}</view>
+      <scroll-view scroll-y class="chat-box">
+        <view wx:for="{{ chats }}" wx:key="id" class="chat-row {{ item.mine ? 'mine' : '' }}">
+          <view class="chat-meta">{{ item.sender_name }} · {{ item.timeText }}</view>
+          <view class="chat-bubble">{{ item.content }}</view>
+        </view>
+        <view wx:if="{{ !chats.length }}" class="muted text-c" style="padding: 40rpx 0;">还没有消息</view>
+      </scroll-view>
+      <view class="row mt-8" style="gap: 12rpx;">
+        <input class="bid-input" model:value="{{ msg }}" placeholder="输入消息..." bindconfirm="send" />
+        <button class="btn" style="flex-shrink: 0; padding: 14rpx 32rpx;" bindtap="send">发送</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{ isBuyerSide && (order.status === 'communicating' || order.status === 'pending_group') }}" class="card">
+    <button class="btn" bindtap="confirm">确认收货</button>
+    <view class="muted text-c mt-8">7 天未操作系统自动确认</view>
+  </view>
+</view>
+
+<view wx:if="{{ showDispute }}" class="modal-mask" bindtap="closeDispute">
+  <view class="modal" catchtap="noop">
+    <view class="bold">发起纠纷</view>
+    <view class="input-row mt-8"><view class="label">类型</view><input value="{{ dispute.type }}" data-k="type" bindinput="onDisputeInput" bindblur="onDisputeInput" placeholder="如：货不对板/数量不足" /></view>
+    <view class="input-row"><view class="label">描述</view><textarea value="{{ dispute.description }}" data-k="description" bindinput="onDisputeInput" bindblur="onDisputeInput" placeholder="请详细描述" auto-height /></view>
+    <view class="row mt-16" style="gap: 16rpx;">
+      <button class="btn-plain flex-1" bindtap="closeDispute">取消</button>
+      <button class="btn flex-1" bindtap="submitDispute">提交</button>
+    </view>
+  </view>
+</view>

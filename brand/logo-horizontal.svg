@@ -1,0 +1,49 @@
+<svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd84d"/>
+      <stop offset="0.55" stop-color="#f6b821"/>
+      <stop offset="1" stop-color="#f08a00"/>
+    </linearGradient>
+    <linearGradient id="textGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e0a40d"/>
+      <stop offset="1" stop-color="#b78300"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 左侧图标块 -->
+  <g transform="translate(20,20)">
+    <rect width="240" height="240" rx="54" fill="url(#bgGold)"/>
+    <!-- 蛋 -->
+    <path d="M 120 62
+             C 84 62 66 112 66 145
+             C 66 180 90 200 120 200
+             C 150 200 174 180 174 145
+             C 174 112 156 62 120 62 Z"
+          fill="#ffffff"/>
+    <!-- 凤羽 -->
+    <path d="M 116 66
+             C 108 50 110 34 122 26
+             C 119 34 122 40 128 42
+             C 125 47 127 52 133 52
+             C 127 57 131 63 136 62
+             C 130 68 124 70 116 66 Z"
+          fill="#f08a00"/>
+    <!-- 凤 -->
+    <text x="120" y="170"
+          font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+          font-size="70" font-weight="900" text-anchor="middle"
+          fill="#e0a40d">凤</text>
+  </g>
+
+  <!-- 右侧字标 -->
+  <g transform="translate(300,0)">
+    <text x="0" y="170"
+          font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif"
+          font-size="150" font-weight="900"
+          fill="url(#textGold)" letter-spacing="8">凤伯乐</text>
+    <text x="6" y="222"
+          font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+          font-size="30" font-weight="500" fill="#8a6b15" letter-spacing="14">蛋 品 撮 合 平 台</text>
+  </g>
+</svg>

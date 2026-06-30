@@ -1,0 +1,51 @@
+<view class="page-pad">
+  <view class="card">
+    <view class="bold" style="font-size: 32rpx;">{{ isFarm ? '服务保障金' : '服务保障金' }}说明</view>
+    <view class="muted mt-8" style="line-height: 1.8;">
+      <block wx:if="{{ isFarm }}">
+        <view>养殖场需缴纳 <text class="bold">{{ requiredAmount }} 元</text> 服务保障金（一次性）。</view>
+        <view>· 货不对板：按比例扣除 + 退还差价</view>
+        <view>· 长期不发货：扣除保证金 + 退款</view>
+        <view>· 严重违规：永久没收，封禁账号</view>
+      </block>
+      <block wx:else>
+        <view>采购商服务保障金 <text class="bold">按货源单独缴纳</text>，每个 {{ requiredAmount }} 元。</view>
+        <view>· 在货源详情页点报价时缴纳该场保证金</view>
+        <view>· 可同时报价多个货源，各自独立</view>
+        <view>· 被反超 / 未成交 / 报价结束自动退还</view>
+        <view>· 成交后 7 天未拉群：扣除该场保障金</view>
+      </block>
+    </view>
+  </view>
+
+  <view wx:if="{{ isFarm }}" class="card">
+    <view class="row-between">
+      <view>
+        <view class="muted">应缴保证金</view>
+        <view class="price-l">¥ {{ requiredAmount }}</view>
+      </view>
+      <text class="tag {{ paid ? 'tag-g' : '' }}" style="font-size: 26rpx;">{{ paid ? '已缴纳' : '未缴纳' }}</text>
+    </view>
+    <button class="btn mt-16" bindtap="pay" disabled="{{ paid || !approved }}" loading="{{ paying }}">
+      {{ paid ? '已缴纳' : (payMode === 'wechat_pay' ? '微信支付 ¥' : '立即缴纳 ¥') + requiredAmount }}
+    </button>
+    <view wx:if="{{ !approved }}" class="muted text-c mt-8">资质审核通过后方可缴纳</view>
+  </view>
+
+  <view wx:else class="card" style="text-align: center;">
+    <view style="font-size: 60rpx;">🛒</view>
+    <view class="muted mt-8" style="line-height: 1.7;">服务保障金在「货源详情 → 报价」时按场缴纳，无需在此预缴。</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title" style="margin: 0 0 16rpx;">缴纳记录</view>
+    <view wx:for="{{ history }}" wx:key="id" class="row-between" style="padding: 16rpx 0; border-bottom: 1px solid #f0f0f0;">
+      <view>
+        <view>¥{{ item.amount }} <text wx:if="{{ item.resTitle }}" class="muted" style="font-size: 22rpx;">· {{ item.resTitle }}</text></view>
+        <view class="muted" style="font-size: 22rpx;">{{ item.timeText }}</view>
+      </view>
+      <text class="tag {{ item.statusCls }}">{{ item.statusText }}</text>
+    </view>
+    <view wx:if="{{ !history.length }}" class="muted text-c" style="padding: 32rpx 0;">暂无记录</view>
+  </view>
+</view>

@@ -1,0 +1,134 @@
+.bell { position: relative; color: #fff; font-size: 40rpx; }
+.bell-badge {
+  position: absolute; top: -8rpx; right: -16rpx;
+  background: #ee0a24; color: #fff;
+  padding: 2rpx 10rpx; border-radius: 16rpx; font-size: 20rpx;
+}
+
+/* 顶部三段切换：买 / 卖 / 其他 */
+.mode-bar {
+  display: flex;
+  background: rgba(255,255,255,0.18);
+  padding: 8rpx; border-radius: 999rpx;
+}
+.mode-seg {
+  flex: 1; text-align: center;
+  padding: 14rpx 0; border-radius: 999rpx;
+  font-size: 26rpx; font-weight: 600;
+  color: #fff;
+  margin-right: 6rpx;
+}
+.mode-seg:last-child { margin-right: 0; }
+.mode-seg.on {
+  background: #fff; color: #e0a40d;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.08);
+}
+
+/* 合并的检索框（类目 + 区域） */
+.filter-bar {
+  margin-top: 16rpx;
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.92);
+  padding: 16rpx 24rpx; border-radius: 999rpx;
+  font-size: 26rpx;
+}
+.filter-icon { color: #8a8d93; margin-right: 12rpx; }
+.filter-text { flex: 1; color: #1d1d1f; }
+.filter-arrow { color: #8a8d93; margin-left: 8rpx; }
+
+.near-hint {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.95);
+  text-align: left;
+}
+.near-hint-off { text-decoration: underline; }
+
+.near-edit {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  background: rgba(255,255,255,0.95);
+  color: #b78300; font-weight: 600;
+  padding: 6rpx 18rpx; border-radius: 999rpx;
+  margin-left: 12rpx;
+}
+.near-edit-x {
+  padding: 6rpx 12rpx;
+  color: #ee0a24;
+}
+
+/* 子 Tab：在售货源 / 我的采购（并排切换） */
+.sub-tabs {
+  display: flex; background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+.sub-tab {
+  flex: 1; text-align: center;
+  padding: 24rpx 0; font-size: 28rpx; color: #8a8d93;
+  position: relative;
+}
+.sub-tab.on { color: #1d1d1f; font-weight: 700; }
+.sub-tab.on::after {
+  content: ''; position: absolute; bottom: 0; left: 30%; right: 30%;
+  height: 6rpx; background: #f6b821; border-radius: 3rpx;
+}
+
+/* + 发布 CTA */
+.publish-cta {
+  display: flex; align-items: center;
+  margin: 0 0 24rpx; padding: 28rpx 28rpx;
+  background: linear-gradient(135deg, #ffd84d 0%, #f6b821 100%);
+  border-radius: 18rpx;
+  box-shadow: 0 6rpx 18rpx rgba(246,184,33,0.35);
+  color: #1d1d1f;
+}
+.publish-plus {
+  width: 72rpx; height: 72rpx; border-radius: 18rpx;
+  background: rgba(255,255,255,0.9); color: #e0a40d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56rpx; line-height: 1; font-weight: 300;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+.publish-title { font-size: 32rpx; font-weight: 700; }
+.publish-sub { font-size: 22rpx; opacity: 0.75; margin-top: 4rpx; }
+.publish-arrow { font-size: 44rpx; color: rgba(0,0,0,0.5); }
+
+/* 筛选弹层 */
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+.filter-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  border-top-left-radius: 24rpx; border-top-right-radius: 24rpx;
+  padding: 16rpx 0 40rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+}
+.sheet-handle {
+  width: 80rpx; height: 8rpx; background: #d0d0d0;
+  border-radius: 4rpx; margin: 0 auto 24rpx;
+}
+.sheet-title {
+  padding: 16rpx 24rpx 12rpx;
+  font-size: 26rpx; font-weight: 700; color: #1d1d1f;
+}
+.chip-row {
+  display: flex; flex-wrap: wrap;
+  padding: 0 24rpx;
+}
+.chip-scroll {
+  max-height: 320rpx;
+}
+.chip {
+  background: #f5f6f8; color: #1d1d1f;
+  padding: 12rpx 24rpx; margin: 0 12rpx 12rpx 0;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  border: 2rpx solid transparent;
+}
+.chip.on {
+  background: #fff7e0; color: #b78300;
+  border-color: #f6b821; font-weight: 600;
+}

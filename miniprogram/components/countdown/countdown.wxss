@@ -1,0 +1,2 @@
+.cd { display: inline-flex; gap: 6rpx; }
+.cd-box { background: #1d1d1f; color: #ffd84d; padding: 4rpx 10rpx; border-radius: 6rpx; font-size: 24rpx; font-weight: 700; }

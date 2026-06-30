@@ -128,9 +128,10 @@ Page({
       }
 
       const sizeNum = Number(resource.farm_size);
-      const farmSizeText = sizeNum >= 10000
-        ? (sizeNum / 10000).toFixed(sizeNum % 10000 === 0 ? 0 : 1) + ' 万只'
-        : (sizeNum ? sizeNum + ' 只' : '');
+      // 直接按"只"展示（带千分位），不再换算成"万只"
+      const farmSizeText = sizeNum
+        ? String(sizeNum).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' 只'
+        : '';
       // 价格单位（用于还价弹窗显示 "/箱" / "/车"）
       const unitLabel = resource.unit_label || '元/箱';
       const priceUnit = unitLabel.replace(/^元\//, '');

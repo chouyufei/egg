@@ -1,50 +1,14 @@
 <view class="qf-page">
   <!-- 营销 hero -->
   <view class="qf-hero">
-    <view class="qf-hero-title">凤伯乐·鸡场直通车</view>
-    <view class="qf-hero-sub">同区域内首批仅开放 15 个名额 · 严选合作，额满即止</view>
+    <view class="qf-hero-title">凤伯乐·实名认证</view>
+    <view class="qf-hero-sub">认证通过后即可发布货源、报价、收单</view>
   </view>
 
   <view class="qf-intro card">
-    <view class="bold" style="font-size: 30rpx;">尊敬的养殖场合作伙伴：</view>
-    <view class="mt-8" style="line-height: 1.8;">
-      <view>· 您是否希望稳定渠道，提升品牌溢价？</view>
-      <view>· 您是否愿意用品质说话，直接对话实力采购商？</view>
-    </view>
-    <view class="mt-16 muted" style="line-height: 1.8;">
-      平台为最优质的养殖场，精准对接采购客户。通过线上招采会，让您直接向采购商展示实力与产品，砍掉所有中间环节，实现源头直采、面对面直接谈。
-      <text class="brand-text">您卖得越好，我们才越好，和您同坐一条船。</text>
-    </view>
-  </view>
-
-  <view class="qf-feats card">
-    <view class="feat-row">
-      <view class="feat-icon">✅</view>
-      <view class="flex-1">
-        <view class="bold">精准匹配，只为高效成交</view>
-        <view class="muted mt-8">根据您的产能、蛋品特色，从买家库中精准筛选、定向邀请 5-10 家最对口的实力采购商。</view>
-      </view>
-    </view>
-    <view class="feat-row">
-      <view class="feat-icon">✅</view>
-      <view class="flex-1">
-        <view class="bold">专属策划，助您完美亮相</view>
-        <view class="muted mt-8">专属会议经理共同设计流程，打磨展示亮点，制定竞争力"平台标准上车价"。</view>
-      </view>
-    </view>
-    <view class="feat-row">
-      <view class="feat-icon">✅</view>
-      <view class="flex-1">
-        <view class="bold">C 位舞台，深度讲述您的故事</view>
-        <view class="muted mt-8">整场会议您是唯一焦点。30-45 分钟全程由您主导，直播带买家"亲临"现代化鸡场，零距离展示品控细节。</view>
-      </view>
-    </view>
-    <view class="feat-row">
-      <view class="feat-icon">✅</view>
-      <view class="flex-1">
-        <view class="bold">高效对接，杜绝无效社交</view>
-        <view class="muted mt-8">提前为您扫清障碍，到场买家均已知悉您的概况，直接进入实质性洽谈。</view>
-      </view>
+    <view class="mt-8 muted" style="line-height: 1.8;">
+      完成实名认证，让采购商更信任您的鸡场，精准对接、源头直采，
+      <text class="brand-text">您卖得越好，我们才越好。</text>
     </view>
   </view>
 

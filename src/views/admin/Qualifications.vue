@@ -12,7 +12,7 @@
     </div>
 
     <div v-if="!list.length" class="admin-card" style="text-align: center; padding: 60px 0; color: #8a8d93;">
-      暂无{{ tabs.find(t => t.v === status)?.label || '' }}养殖场
+      暂无{{ tabs.find(t => t.v === status)?.label || '' }}资质
     </div>
 
     <div v-for="u in list" :key="u.id" class="admin-card qf-card">
@@ -119,21 +119,25 @@ function applyPending(u) {
   return { ...u, ...p, _pending: true };
 }
 
+// 资质认证与角色无关：采购商 / 养殖场都可提交，所以这里不再按 role 过滤，
+// 只要提交过资质（license_status 非 none / 空）的用户都纳入审核列表。
+const SUBMITTED = ['pending', 'approved', 'rejected'];
+
 async function load() {
-  const params = { role: 'farm' };
+  const params = {};
   if (status.value) params.status = status.value;
   const { users } = await api.get('/admin/users', { params });
-  list.value = users.filter(u => u.license_status !== 'none').map(applyPending);
+  list.value = users.filter(u => SUBMITTED.includes(u.license_status)).map(applyPending);
   await loadCounts();
 }
 
 async function loadCounts() {
   const out = {};
   for (const t of tabs) {
-    const params = { role: 'farm' };
+    const params = {};
     if (t.v) params.status = t.v;
     const { users } = await api.get('/admin/users', { params });
-    out[t.v] = users.filter(u => u.license_status !== 'none').length;
+    out[t.v] = users.filter(u => SUBMITTED.includes(u.license_status)).length;
   }
   Object.assign(counts, out);
 }

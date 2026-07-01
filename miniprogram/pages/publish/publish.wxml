@@ -108,7 +108,7 @@
     <!-- 次品率：仅货源 -->
     <view wx:if="{{ isSupply }}" class="input-row">
       <view class="label">次品率</view>
-      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="默认 0.2" style="width: 140rpx;" />
+      <input type="digit" value="{{ form.defect_rate }}" data-k="defect_rate" bindinput="onInput" bindblur="onInput" placeholder="默认 1.5" style="width: 140rpx;" />
       <text class="muted" style="margin-left: 8rpx;">%</text>
     </view>
     <view wx:if="{{ isSupply }}" class="hint-row">

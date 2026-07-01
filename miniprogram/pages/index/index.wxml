@@ -1,3 +1,5 @@
+<page-meta page-style="{{ pageStyle }}"></page-meta>
+
 <block wx:if="{{ user.role === 'admin' }}">
   <view class="page-pad">
     <view class="card text-c" style="padding: 80rpx 32rpx;">

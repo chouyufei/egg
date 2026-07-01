@@ -1,13 +1,14 @@
 const api = require('../../utils/api');
 const { statusLabel, statusTag } = require('../../utils/format');
 const { defaultShare } = require('../../utils/share');
+const prefs = require('../../utils/prefs');
 const app = getApp();
 
 Page({
   onShareAppMessage() { return defaultShare(); },
   onShareTimeline()   { return defaultShare(); },
   data: {
-    user: null, isGuest: false, unread: 0,
+    user: null, isGuest: false, unread: 0, pageStyle: '',
     licText: '', licCls: '', depositText: '未缴纳 →',
     roleText: '',
     walletBalance: '0.00',
@@ -17,7 +18,9 @@ Page({
   // 点位置 → 回首页选位置
   goSetLoc() { wx.switchTab({ url: '/pages/index/index' }); },
   goLogin() { wx.navigateTo({ url: '/pages/login/login' }); },
+  goSettings() { wx.navigateTo({ url: '/pages/settings/settings' }); },
   async onShow() {
+    this.setData({ pageStyle: prefs.pageStyle() });
     // 游客模式：未登录展示登录引导卡，不强制跳登录页
     if (!app.globalData.token) {
       this.setData({ isGuest: true, user: null, reviewMode: !!app.globalData.reviewMode });

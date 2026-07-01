@@ -1,0 +1,16 @@
+.set-title { font-size: calc(32rpx * var(--fs-scale, 1)); font-weight: 700; }
+.set-sub { margin-top: 6rpx; }
+
+.opt-row { display: flex; gap: 20rpx; margin-top: 24rpx; }
+.opt {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10rpx; padding: 28rpx 0; border-radius: 16rpx;
+  border: 2rpx solid var(--border, #e5e5ea);
+  background: var(--card, #fff);
+}
+.opt.on {
+  border-color: #f6b821;
+  background: rgba(246, 184, 33, 0.12);
+}
+.opt-label { font-size: calc(26rpx * var(--fs-scale, 1)); }
+.opt.on .opt-label { color: #b78300; font-weight: 700; }

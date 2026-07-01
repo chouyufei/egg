@@ -18,6 +18,7 @@
     "pages/withdraw/withdraw",
     "pages/recharge/recharge",
     "pages/route-map/route-map",
+    "pages/settings/settings",
     "pages/about/about",
     "pages/agreement/agreement",
     "pages/privacy/privacy",

@@ -2,6 +2,7 @@ const api = require('../../utils/api');
 const { getAndReportLocation, getLocation, chooseLocation } = require('../../utils/location');
 const { defaultShare } = require('../../utils/share');
 const { requireLogin } = require('../../utils/auth');
+const prefs = require('../../utils/prefs');
 const app = getApp();
 
 const CUSTOM_LOC_KEY = 'customLoc';   // 持久化自选位置
@@ -37,6 +38,7 @@ Page({
   data: {
     user: null,
     isGuest: false,       // 游客模式：未登录浏览
+    pageStyle: '',        // 主题/字体（page-meta 注入）
     unread: 0,
     reviewMode: false,    // 审核模式：藏起金融/复杂功能
 
@@ -81,7 +83,7 @@ Page({
   goLogin() { wx.navigateTo({ url: '/pages/login/login' }); },
 
   async onShow() {
-    this.setData({ reviewMode: !!app.globalData.reviewMode });
+    this.setData({ reviewMode: !!app.globalData.reviewMode, pageStyle: prefs.pageStyle() });
     const isGuest = !app.globalData.token;
     this.setData({ isGuest, user: app.globalData.user || this.data.user || null });
 

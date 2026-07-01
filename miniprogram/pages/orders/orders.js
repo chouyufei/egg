@@ -1,15 +1,16 @@
 const api = require('../../utils/api');
 const { formatTime, statusLabel, statusTag } = require('../../utils/format');
 const { defaultShare } = require('../../utils/share');
+const prefs = require('../../utils/prefs');
 const app = getApp();
 
 Page({
   onShareAppMessage() { return defaultShare(); },
   onShareTimeline()   { return defaultShare(); },
-  data: { orders: [], otherLabel: '', isGuest: false },
+  data: { orders: [], otherLabel: '', isGuest: false, pageStyle: '' },
   goLogin() { wx.navigateTo({ url: '/pages/login/login' }); },
   onShow() {
-    this.setData({ isGuest: !app.globalData.token });
+    this.setData({ isGuest: !app.globalData.token, pageStyle: prefs.pageStyle() });
     this.load();
   },
   async onPullDownRefresh() { await this.load(); wx.stopPullDownRefresh(); },

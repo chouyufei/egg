@@ -1,3 +1,5 @@
+<page-meta page-style="{{ pageStyle }}"></page-meta>
+
 <view class="page-pad">
   <!-- 游客：未登录提示 -->
   <view wx:if="{{ isGuest }}" class="card text-c" style="padding: 80rpx 32rpx;">

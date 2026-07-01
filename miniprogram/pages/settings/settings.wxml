@@ -1,0 +1,44 @@
+<page-meta page-style="{{ pageStyle }}"></page-meta>
+
+<view class="page-pad">
+  <!-- 字体大小 -->
+  <view class="card">
+    <view class="set-title">🔤 字体大小</view>
+    <view class="set-sub muted">调大字体，看得更清楚（适老化）</view>
+    <view class="opt-row">
+      <view wx:for="{{ fontOptions }}" wx:key="v"
+            class="opt {{ fontSize === item.v ? 'on' : '' }}"
+            data-v="{{ item.v }}" bindtap="pickFont">
+        <text style="font-size: {{ item.px }};">Aa</text>
+        <text class="opt-label">{{ item.label }}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主题 -->
+  <view class="card">
+    <view class="set-title">🎨 主题</view>
+    <view class="set-sub muted">白天浅色 / 夜间深色护眼</view>
+    <view class="opt-row">
+      <view wx:for="{{ themeOptions }}" wx:key="v"
+            class="opt {{ theme === item.v ? 'on' : '' }}"
+            data-v="{{ item.v }}" bindtap="pickTheme">
+        <text style="font-size: 44rpx;">{{ item.icon }}</text>
+        <text class="opt-label">{{ item.label }}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 预览 -->
+  <view class="card">
+    <view class="set-title">预览</view>
+    <view class="bold" style="margin-top: 12rpx;">凤伯乐 · 让你的蛋自己定价</view>
+    <view class="muted" style="margin-top: 8rpx;">这是一段示例文字，用来预览当前的字体大小与主题效果。</view>
+    <view class="row-between" style="margin-top: 16rpx;">
+      <text class="price price-l">¥100</text>
+      <text class="muted">元/箱</text>
+    </view>
+  </view>
+
+  <view class="muted" style="text-align: center; margin-top: 12rpx;">设置立即生效并自动保存</view>
+</view>

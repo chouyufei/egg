@@ -7,12 +7,17 @@ App({
     // 金融 / 复杂功能（钱包、保证金、报价、提现），只剩浏览 + 咨询。
     // 提审时打开，过审后关掉。
     reviewMode: false,
+    // 界面偏好
+    theme: 'day',         // day | night
+    fontSize: 'normal',   // normal | large | xlarge
   },
   onLaunch() {
     const token = wx.getStorageSync('token');
     const user = wx.getStorageSync('user');
     if (token) this.globalData.token = token;
     if (user) this.globalData.user = user;
+    this.globalData.theme = wx.getStorageSync('pref_theme') || 'day';
+    this.globalData.fontSize = wx.getStorageSync('pref_font') || 'normal';
     this.fetchAppConfig();
   },
   fetchAppConfig() {

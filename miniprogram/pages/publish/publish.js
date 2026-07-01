@@ -361,7 +361,7 @@ Page({
         'form.pack_size': ps,
         'form.yolk_color': r.yolk_color || '',
         'form.yolk_shade': r.yolk_shade || '',
-        'form.defect_rate': r.defect_rate != null ? String(r.defect_rate) : '0.2',
+        'form.defect_rate': r.defect_rate != null ? String(r.defect_rate) : '1.5',
         'form.defect_note': r.defect_note || '',
         'form.freshness_days': r.freshness_days || 3,
         'form.truck_type': r.truck_type || '',

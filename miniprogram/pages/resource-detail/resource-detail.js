@@ -107,8 +107,8 @@ Page({
       } else if (!isSupply && me.license_status !== 'approved') {
         // 求购需求：仅资质认证通过的养殖场可应标
         blockReason = '应标求购需先完成鸡场资质认证';
-      } else if (!isSupply && allowProvinces.length && !allowProvinces.some(p => String(me.region || '').indexOf(p) >= 0)) {
-        // 求购"允许参与地区"限制
+      } else if (!isSupply && allowProvinces.length && !allowProvinces.some(p => (String(me.region || '') + ' ' + String(me.address || '')).indexOf(p) >= 0)) {
+        // 求购"允许参与地区"限制：同时匹配所在省份与详细地址
         blockReason = `该求购仅限 ${allowProvinces.join('、')} 的养殖场参与`;
       } else {
         // 货源出价：任何登录用户均可（不再限 role）

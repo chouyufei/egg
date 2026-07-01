@@ -107,6 +107,10 @@ Page({
         locSource: 'custom',
         locName: custom.name || '自选位置',
       });
+      // 已登录时把自选位置的名称/地址同步到后端（求购地区匹配以此为准）
+      if (app.globalData.token && (custom.name || custom.address)) {
+        api.post('/auth/location', { lat: custom.lat, lng: custom.lng, name: custom.name, address: custom.address }).catch(() => {});
+      }
     } else {
       getAndReportLocation().then(loc => {
         if (loc) this.setData({ myLoc: loc, locSource: 'gps', locName: '' });
@@ -120,8 +124,8 @@ Page({
     const loc = await chooseLocation();
     if (!loc) return wx.showToast({ title: '已取消', icon: 'none' });
     wx.setStorageSync(CUSTOM_LOC_KEY, loc);
-    // 同步到后端，让发布 / 资源详情等共用
-    try { await api.post('/auth/location', { lat: loc.lat, lng: loc.lng }); } catch (e) {}
+    // 同步到后端（含名称/详细地址），求购"允许参与地区"以此为准
+    try { await api.post('/auth/location', { lat: loc.lat, lng: loc.lng, name: loc.name, address: loc.address }); } catch (e) {}
     this.setData({
       myLoc: { lat: loc.lat, lng: loc.lng },
       locSource: 'custom',

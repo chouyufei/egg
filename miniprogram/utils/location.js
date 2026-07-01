@@ -32,7 +32,7 @@ function setCached(loc) {
 async function getLocation({ force = false } = {}) {
   if (!force) {
     const custom = getCustom();
-    if (custom) return { lat: custom.lat, lng: custom.lng, name: custom.name, source: 'custom' };
+    if (custom) return { lat: custom.lat, lng: custom.lng, name: custom.name, address: custom.address, source: 'custom' };
     const cached = getCached();
     if (cached) return { lat: cached.lat, lng: cached.lng, source: 'cache' };
   }
@@ -74,7 +74,11 @@ function clearCustomLocation() {
 async function getAndReportLocation() {
   const loc = await getLocation();
   if (!loc) return null;
-  try { await api.post('/auth/location', { lat: loc.lat, lng: loc.lng }); } catch (e) {}
+  // 自选位置带 name/address（含省份）时一并上报，供求购地区匹配；GPS 无地址则只报坐标
+  const payload = { lat: loc.lat, lng: loc.lng };
+  if (loc.name) payload.name = loc.name;
+  if (loc.address) payload.address = loc.address;
+  try { await api.post('/auth/location', payload); } catch (e) {}
   return loc;
 }
 

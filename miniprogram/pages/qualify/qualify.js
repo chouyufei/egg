@@ -120,7 +120,6 @@ Page({
       { key: 'address', label: '详细地址', missing: !f.address },
       { key: 'farm_size_wan', label: '养殖规模', missing: !f.farm_size_wan },
       { key: 'main_products', label: '主营蛋品', missing: !f.main_products },
-      { key: 'business_license', label: '营业执照号', missing: !f.business_license },
       { key: 'license_photos', label: '营业执照照片', missing: !f.license_photos.length },
       { key: 'farm_photos', label: '鸡场实景照', missing: !f.farm_photos.length },
     ];

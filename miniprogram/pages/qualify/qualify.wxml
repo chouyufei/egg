@@ -118,7 +118,7 @@
   </view>
 
   <view class="card">
-    <view class="input-row" id="field-business_license"><view class="label">营业执照号 *</view><input value="{{ form.business_license }}" data-k="business_license" bindinput="onInput" bindblur="onInput" placeholder="统一社会信用代码" /></view>
+    <view class="input-row" id="field-business_license"><view class="label">营业执照号</view><input value="{{ form.business_license }}" data-k="business_license" bindinput="onInput" bindblur="onInput" placeholder="统一社会信用代码（选填）" /></view>
 
     <view class="upload-block" id="field-license_photos">
       <view class="upload-title">营业执照照片 *</view>
